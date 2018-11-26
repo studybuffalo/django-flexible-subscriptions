@@ -136,7 +136,7 @@ The content for the Package reference is built using the
 ``flexible_subscriptions.rst`` file for the changes to populate on Read
 the Docs. You can do this with the following command::
 
-    $ pipenv run sphinx-apidoc -fTM -o docs flexible_subscriptions
+    $ pipenv run sphinx-apidoc -fTM -o docs flexible_subscriptions flexible_subscriptions/migrations flexible_subscriptions/urls.py flexible_subscriptions/apps.py flexible_subscriptions/admin.py
 
 Linting documentation
 =====================
