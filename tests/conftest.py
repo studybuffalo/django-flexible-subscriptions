@@ -19,23 +19,19 @@ def pytest_configure():
             'django.contrib.contenttypes',
             'django.contrib.sessions',
             'django.contrib.sites',
-            'helcim',
         },
         'MIDDLEWARE': [
             'django.contrib.sessions.middleware.SessionMiddleware',
             'django.contrib.auth.middleware.AuthenticationMiddleware',
             'django.contrib.messages.middleware.MessageMiddleware',
         ],
-        'ROOT_URLCONF': 'helcim.urls',
+        #'ROOT_URLCONF': 'helcim.urls',
         'TEMPLATES': [
             {
                 'BACKEND': 'django.template.backends.django.DjangoTemplates',
                 'APP_DIRS': True,
             },
         ],
-        'HELCIM_ACCOUNT_ID': '1234567890',
-        'HELCIM_API_TOKEN': 'abcdefghijklmno1234567890',
-        'HELCIM_ENABLE_TOKEN_VAULT': True,
     }
 
     settings.configure(**django_settings)
