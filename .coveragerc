@@ -1,0 +1,7 @@
+[run]
+branch = True
+data_file = reports/.coverage
+source = flexible_subscriptions
+
+[html]
+directory = reports/htmlcov

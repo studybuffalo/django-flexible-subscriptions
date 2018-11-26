@@ -1,0 +1,23 @@
+### Python template
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# Documentation Files
+_build/
+_static/
+_templates/
+
+# Environment Files (to prevent accidental commit to repository)
+*.env
+
+# Testing files and reports
+.coverage
+.tox
+.pytest_cache
+/reports/*
+!reports/.gitkeep
+
+# Distribution files
+*.egg-info
+dist/
+build/
