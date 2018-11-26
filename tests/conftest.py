@@ -25,7 +25,7 @@ def pytest_configure():
             'django.contrib.auth.middleware.AuthenticationMiddleware',
             'django.contrib.messages.middleware.MessageMiddleware',
         ],
-        #'ROOT_URLCONF': 'helcim.urls',
+        #'ROOT_URLCONF': 'flexbile_subscriptions.urls',
         'TEMPLATES': [
             {
                 'BACKEND': 'django.template.backends.django.DjangoTemplates',

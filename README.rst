@@ -1,6 +1,6 @@
-===================
-django-helcim
-===================
+=============================
+django-flexible-subscriptions
+=============================
 
 |PyPI|_ |PythonVersions| |DjangoVersions| |License|_
 

@@ -1,7 +1,7 @@
 """PyPI setup script for the django-flexible-subscriptions package."""
 from setuptools import find_packages, setup
 
-from helcim import __version__
+from flexible_subscriptions import __version__
 
 with open('README.rst', 'r') as readme_file:
     LONG_DESCRIPTION = readme_file.read()

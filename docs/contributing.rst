@@ -75,7 +75,7 @@ You can run all tests with the standard ``pytest`` command::
 
 To check test coverage, you can use the following::
 
-    $ pipenv run py.test --cov=helcim --cov-report=html
+    $ pipenv run py.test --cov=flexible_subscriptions --cov-report=html
 
 You may specify the output of the coverage report by changing the
 ``--cov-report`` option to ``html`` or ``xml``.
