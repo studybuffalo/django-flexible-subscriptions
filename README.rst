@@ -32,7 +32,7 @@ django-helcim
 
 .. _License: https://github.com/studybuffalo/django-flexible-subscriptions/blob/master/LICENSE
 
-Django Flexible Subscriptions provideds subscription and recurrent
+Django Flexible Subscriptions provides subscription and recurrent
 billing for `Django`_ applications. Any payment provider can be quickly
 added by overriding the placeholder functions.
 
