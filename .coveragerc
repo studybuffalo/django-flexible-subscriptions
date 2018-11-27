@@ -2,6 +2,7 @@
 branch = True
 data_file = reports/.coverage
 source = flexible_subscriptions
+omit = flexible_subscriptions/migrations/*, tests/*
 
 [html]
 directory = reports/htmlcov
