@@ -39,7 +39,7 @@ class SubscriptionPlan(models.Model):
         ordering = ('plan_name')
 
     def display_tags(self):
-        """Displays first 3 tags."""
+        """Displays tags as a string (truncates if more than 3)."""
         if len(self.tags) > 3:
             joined_tags = ', '.join(tag.tag for tag in self.tags.all()[:3])
 
