@@ -35,6 +35,18 @@ class SubscriptionPlan(models.Model):
         null=True,
     )
 
+    class Meta:
+        ordering = ('plan_name')
+
+    def display_tags(self):
+        """Displays first 3 tags."""
+        if len(self.tags) > 3:
+            joined_tags = ', '.join(tag.tag for tag in self.tags.all()[:3])
+
+            return '{}...'
+        else:
+            return ', '.join(tag.tag for tag in self.tags.all()[:3])
+
 class PlanCost(models.Model):
     """Cost and frequency of billing for a plan."""
     RECURRENCE_UNITS = (
@@ -75,9 +87,11 @@ class PlanTag(models.Model):
         max_length=64,
     )
 
+    class Meta:
+        ordering = ('tag')
+
     def __str__(self):
         return self.tag
-
 
 class UserSubscription(models.Model):
     """Details of a user's specific subscription."""
@@ -129,6 +143,9 @@ class UserSubscription(models.Model):
         help_text=_('whether this subscription is cancelled or not'),
     )
 
+    class Meta:
+        ordering = ('user', 'date_billing_start')
+
 class SubscriptionTransaction(models.Model):
     """Details for a subscription plan billing."""
     user = models.ForeignKey(
@@ -155,3 +172,6 @@ class SubscriptionTransaction(models.Model):
         max_digits=18,
         null=True,
     )
+
+    class Meta:
+        ordering = ('date_transaction', 'user')
