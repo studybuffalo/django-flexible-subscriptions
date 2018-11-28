@@ -7,9 +7,6 @@ from django.utils.translation import ugettext_lazy as _
 
 class SubscriptionPlan(models.Model):
     """Details for a subscription plan."""
-    # way to handle custom access - students, corporate accounts?
-    #   Have a group associated to determine views?
-    #   Out of scope of app?
     plan_name = models.CharField(
         help_text=_('the name of the subscription plan'),
         max_length=128,
@@ -28,42 +25,6 @@ class SubscriptionPlan(models.Model):
         default=False,
         help_text=_('whether the plan is publically available'),
     )
-    cost_day = models.DecimalField(
-        blank=True,
-        decimal_places=2,
-        help_text=_('the daily cost of the plan'),
-        max_digits=18,
-        null=True,
-    )
-    cost_week = models.DecimalField(
-        blank=True,
-        decimal_places=2,
-        help_text=_('the weekly cost of the plan'),
-        max_digits=18,
-        null=True,
-    )
-    cost_month = models.DecimalField(
-        blank=True,
-        decimal_places=2,
-        help_text=_('the monthly cost of the plan'),
-        max_digits=18,
-        null=True,
-    )
-    cost_year = models.DecimalField(
-        blank=True,
-        decimal_places=2,
-        help_text=_('the yearly cost of the plan'),
-        max_digits=18,
-        null=True,
-    )
-    trial_period = models.PositiveIntegerField(
-        blank=True,
-        help_text=_(
-            'how many days after the initial subscription before billing '
-            'starts'
-        ),
-        null=True,
-    )
     grace_period = models.PositiveIntegerField(
         blank=True,
         help_text=_(
@@ -73,6 +34,53 @@ class SubscriptionPlan(models.Model):
         null=True,
     )
 
+class PlanCost(models.Model):
+    """Cost and frequency of billing for a plan."""
+    RECURRENCE_UNITS = (
+        ('O', _('one-time')),
+        ('D', _('per day')),
+        ('W', _('per week')),
+        ('M', _('per month')),
+        ('Y', _('per year'))
+    )
+
+    plan = models.ForeignKey(
+        SubscriptionPlan,
+        help_text=_('the subscription plan for this user'),
+        null=True,
+        on_delete=models.CASCADE,
+        related_name='costs',
+    )
+    recurrence_period = models.PositiveIntegerField(
+        help_text=_('how often the plan is billed (per recurrence unit)')
+    )
+    recurrence_unit = models.CharField(
+        choices=RECURRENCE_UNITS,
+        help_text=_('the unit of measurement for the recurrence period')
+        max_length=1,
+    )
+    cost = models.DecimalField(
+        blank=True,
+        decimal_places=2,
+        help_text=_('the cost per recurrence of the plan'),
+        max_digits=18,
+        null=True,
+    )
+
+class PlanTag(models.Model):
+    """Tag for a subscription plan."""
+    plan = models.ForeignKey(
+        SubscriptionPlan,
+        help_text=_('the subscription plan for this user'),
+        null=True,
+        on_delete=models.CASCADE,
+        related_name='tags',
+    )
+    tag = models.CharField(
+        help_text=_('the tag name'),
+        max_length=64,
+    )
+
 class UserSubscription(models.Model):
     """Details of a user's specific subscription."""
     user = models.ForeignKey(
@@ -80,6 +88,7 @@ class UserSubscription(models.Model):
         help_text=_('the user this subscription applies to'),
         null=True,
         on_delete=models.CASCADE,
+        related_name='subscriptions',
     )
     plan = models.ForeignKey(
         SubscriptionPlan,
@@ -93,29 +102,25 @@ class UserSubscription(models.Model):
         null=True,
         on_delete=models.CASCADE,
     )
-    auto_renewal = models.BooleanField(
-        default=True,
-        help_text=_('whether this subscription will auto-renew or not'),
+    date_billing_start = models.DateField(
+        blank=True,
+        help_text=_('the date to start billing this subscription'),
+        null=True,
     )
-    date_subscribed = models.DateField(
-        auto_now_add=True,
-        editable=False,
-        help_text=_('the initial date the user subscribed to this plan'),
+    date_billing_end = models.DateField(
+        blank=True,
+        help_text=_('the date to finish billing this subscription'),
+        null=True,
     )
     date_billed_last = models.DateField(
         blank=True,
         help_text=_('the last date this plan was billed'),
-        null=True
+        null=True,
     )
     date_billed_next = models.DateField(
         blank=True,
         help_text=_('the next date billing is due'),
-        null=True
-    )
-    date_expiry = models.DateField(
-        blank=True,
-        help_text=_('the date this subscription ends'),
-        null=True
+        null=True,
     )
     active = models.BooleanField(
         default=True,
@@ -128,7 +133,6 @@ class UserSubscription(models.Model):
 
 class SubscriptionTransaction(models.Model):
     """Details for a subscription plan billing."""
-    # Other fields? Comments?
     user = models.ForeignKey(
         auth.get_user_model(),
         help_text=_('the user that this subscription was billed for'),
