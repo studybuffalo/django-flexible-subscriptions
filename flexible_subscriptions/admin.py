@@ -1,4 +1,4 @@
-"""Admin views for the django_flexible_subscriptions app."""
+"""Admin views for the flexible_subscriptions app."""
 from django.conf import settings
 from django.contrib import admin
 

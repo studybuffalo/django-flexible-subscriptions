@@ -1,4 +1,4 @@
-"""Models for the django-flexible-subscriptions app."""
+"""Models for the flexible_subscriptions app."""
 from django import models
 from django.conf import setings
 from django.contrib import auth
