@@ -21,9 +21,10 @@ class SubscriptionPlan(models.Model):
         null=True,
         on_delete=models.SET_NULL,
     )
-    public = models.BooleanField(
-        default=False,
-        help_text=_('whether the plan is publically available'),
+    tags = models.ManyToManyField(
+        PlanTag
+        help_text=_('any tags associated with this plan'),
+        related_name='plans',
     )
     grace_period = models.PositiveIntegerField(
         blank=True,
@@ -68,18 +69,15 @@ class PlanCost(models.Model):
     )
 
 class PlanTag(models.Model):
-    """Tag for a subscription plan."""
-    plan = models.ForeignKey(
-        SubscriptionPlan,
-        help_text=_('the subscription plan for this user'),
-        null=True,
-        on_delete=models.CASCADE,
-        related_name='tags',
-    )
+    """A tag for a subscription plan."""
     tag = models.CharField(
         help_text=_('the tag name'),
         max_length=64,
     )
+
+    def __str__(self):
+        return self.tag
+
 
 class UserSubscription(models.Model):
     """Details of a user's specific subscription."""
@@ -112,12 +110,12 @@ class UserSubscription(models.Model):
         help_text=_('the date to finish billing this subscription'),
         null=True,
     )
-    date_billed_last = models.DateField(
+    date_billing_last = models.DateField(
         blank=True,
         help_text=_('the last date this plan was billed'),
         null=True,
     )
-    date_billed_next = models.DateField(
+    date_billing_next = models.DateField(
         blank=True,
         help_text=_('the next date billing is due'),
         null=True,
