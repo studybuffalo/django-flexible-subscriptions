@@ -14,7 +14,6 @@ django-debug-toolbar = "*"  # https://github.com/jazzband/django-debug-toolbar
 # ------------------------------------------------------------------------------
 coverage = "*"  # https://github.com/nedbat/coveragepy
 pylint = "*"  # https://github.com/PyCQA/pylint/
-pylint-django = "*"  # https://github.com/PyCQA/pylint-django
 restructuredtext-lint = "*"  # https://github.com/twolfson/restructuredtext-lint
 # Testing
 # ------------------------------------------------------------------------------
