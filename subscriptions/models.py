@@ -1,4 +1,6 @@
 """Models for the Flexible Subscriptions app."""
+from uuid import uuid4
+
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
@@ -11,16 +13,26 @@ class PlanTag(models.Model):
     tag = models.CharField(
         help_text=_('the tag name'),
         max_length=64,
+        unique=True,
     )
 
     class Meta:
         ordering = ('tag')
+        permissions = (
+            ('subscriptions_tags', 'Can interact with Plan tags'),
+        )
 
     def __str__(self):
         return self.tag
 
 class SubscriptionPlan(models.Model):
     """Details for a subscription plan."""
+    id = models.UUIDField(
+        default=uuid4,
+        editable=False,
+        primary_key=True,
+        verbose_name='ID',
+    )
     plan_name = models.CharField(
         help_text=_('the name of the subscription plan'),
         max_length=128,
@@ -54,6 +66,9 @@ class SubscriptionPlan(models.Model):
 
     class Meta:
         ordering = ('plan_name')
+        permissions = (
+            ('')
+        )
 
     def __str__(self):
         return self.plan_name
@@ -102,6 +117,12 @@ class PlanCost(models.Model):
 
 class UserSubscription(models.Model):
     """Details of a user's specific subscription."""
+    id = models.UUIDField(
+        default=uuid4,
+        editable=False,
+        primary_key=True,
+        verbose_name='ID',
+    )
     user = models.ForeignKey(
         get_user_model(),
         help_text=_('the user this subscription applies to'),
@@ -153,6 +174,12 @@ class UserSubscription(models.Model):
 
 class SubscriptionTransaction(models.Model):
     """Details for a subscription plan billing."""
+    id = models.UUIDField(
+        default=uuid4,
+        editable=False,
+        primary_key=True,
+        verbose_name='ID',
+    )
     user = models.ForeignKey(
         get_user_model(),
         help_text=_('the user that this subscription was billed for'),
