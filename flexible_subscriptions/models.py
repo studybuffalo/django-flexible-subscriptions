@@ -118,21 +118,25 @@ class UserSubscription(models.Model):
         blank=True,
         help_text=_('the date to start billing this subscription'),
         null=True,
+        verbose_name='billing start date',
     )
     date_billing_end = models.DateField(
         blank=True,
         help_text=_('the date to finish billing this subscription'),
         null=True,
+        verbose_name='billing start end',
     )
     date_billing_last = models.DateField(
         blank=True,
         help_text=_('the last date this plan was billed'),
         null=True,
+        verbose_name='last billing date',
     )
     date_billing_next = models.DateField(
         blank=True,
         help_text=_('the next date billing is due'),
         null=True,
+        verbose_name='next start date',
     )
     active = models.BooleanField(
         default=True,
@@ -164,6 +168,7 @@ class SubscriptionTransaction(models.Model):
         auto_now_add=True,
         editable=False,
         help_text=_('the datetime the transaction was billed'),
+        verbose_name='transaction date',
     )
     amount = models.DecimalField(
         blank=True,
