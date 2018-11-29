@@ -18,9 +18,6 @@ class PlanTag(models.Model):
 
     class Meta:
         ordering = ('tag')
-        permissions = (
-            ('subscriptions_tags', 'Can interact with Plan tags'),
-        )
 
     def __str__(self):
         return self.tag
@@ -67,7 +64,7 @@ class SubscriptionPlan(models.Model):
     class Meta:
         ordering = ('plan_name')
         permissions = (
-            ('')
+            ('subscriptions_plans', 'Can interact with subscription plans')
         )
 
     def __str__(self):
@@ -100,7 +97,7 @@ class PlanCost(models.Model):
         related_name='costs',
     )
     recurrence_period = models.PositiveIntegerField(
-        help_text=_('how often the plan is billed (per recurrence unit)')
+        help_text=_('how often the plan is billed (per recurrence unit)'),
     )
     recurrence_unit = models.CharField(
         choices=RECURRENCE_UNITS,
