@@ -33,7 +33,6 @@ def pytest_configure():
                 'APP_DIRS': True,
             },
         ],
-        'SUBSCRIPTIONS_PAYMENT_MODEL': 'Payment.Model',
         'SUBSCRIPTIONS_ENABLE_ADMIN': True,
     }
 

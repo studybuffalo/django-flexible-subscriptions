@@ -1,7 +1,15 @@
 """Tests for the models module."""
 import pytest
 
+from unittest import mock
+from unittest.mock import patch
+
 from subscriptions import models
+
+class MockPaymentModel():
+    def __init__(self):
+        pass
+
 
 @pytest.mark.django_db
 def test_subscription_plan_minimal_model_creation():

@@ -1,6 +1,7 @@
 """Models for the Flexible Subscriptions app."""
 from django.conf import settings
-from django.contrib import auth
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -29,7 +30,7 @@ class SubscriptionPlan(models.Model):
         max_length=512,
     )
     group = models.ForeignKey(
-        auth.models.Group,
+        Group,
         blank=True,
         help_text=_('the Django auth group for this plan'),
         null=True,
@@ -102,7 +103,7 @@ class PlanCost(models.Model):
 class UserSubscription(models.Model):
     """Details of a user's specific subscription."""
     user = models.ForeignKey(
-        auth.get_user_model(),
+        get_user_model(),
         help_text=_('the user this subscription applies to'),
         null=True,
         on_delete=models.CASCADE,
@@ -111,12 +112,6 @@ class UserSubscription(models.Model):
     plan = models.ForeignKey(
         SubscriptionPlan,
         help_text=_('the subscription plan for this user'),
-        null=True,
-        on_delete=models.CASCADE,
-    )
-    payment_method = models.ForeignKey(
-        settings.SUBSCRIPTIONS_PAYMENT_MODEL,
-        help_text=_('the payment method to use for recurrent billing'),
         null=True,
         on_delete=models.CASCADE,
     )
@@ -159,7 +154,7 @@ class UserSubscription(models.Model):
 class SubscriptionTransaction(models.Model):
     """Details for a subscription plan billing."""
     user = models.ForeignKey(
-        auth.get_user_model(),
+        get_user_model(),
         help_text=_('the user that this subscription was billed for'),
         null=True,
         on_delete=models.SET_NULL,
