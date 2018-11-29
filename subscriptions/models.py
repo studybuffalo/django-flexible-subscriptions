@@ -17,7 +17,7 @@ class PlanTag(models.Model):
     )
 
     class Meta:
-        ordering = ('tag')
+        ordering = ('tag',)
 
     def __str__(self):
         return self.tag
@@ -62,9 +62,9 @@ class SubscriptionPlan(models.Model):
     )
 
     class Meta:
-        ordering = ('plan_name')
+        ordering = ('plan_name',)
         permissions = (
-            ('subscriptions_plans', 'Can interact with subscription plans')
+            ('subscriptions_plans', 'Can interact with subscription plans'),
         )
 
     def __str__(self):
@@ -167,7 +167,7 @@ class UserSubscription(models.Model):
     )
 
     class Meta:
-        ordering = ('user', 'date_billing_start')
+        ordering = ('user', 'date_billing_start',)
 
 class SubscriptionTransaction(models.Model):
     """Details for a subscription plan billing."""
@@ -191,7 +191,6 @@ class SubscriptionTransaction(models.Model):
     )
     date_transaction = models.DateTimeField(
         auto_now_add=True,
-        editable=False,
         help_text=_('the datetime the transaction was billed'),
         verbose_name='transaction date',
     )
@@ -204,4 +203,4 @@ class SubscriptionTransaction(models.Model):
     )
 
     class Meta:
-        ordering = ('date_transaction', 'user')
+        ordering = ('date_transaction', 'user',)
