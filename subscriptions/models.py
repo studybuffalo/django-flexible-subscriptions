@@ -1,9 +1,22 @@
 """Models for the flexible_subscriptions app."""
-from django import models
-from django.conf import setings
+from django.conf import settings
 from django.contrib import auth
+from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+
+class PlanTag(models.Model):
+    """A tag for a subscription plan."""
+    tag = models.CharField(
+        help_text=_('the tag name'),
+        max_length=64,
+    )
+
+    class Meta:
+        ordering = ('tag')
+
+    def __str__(self):
+        return self.tag
 
 class SubscriptionPlan(models.Model):
     """Details for a subscription plan."""
@@ -17,13 +30,16 @@ class SubscriptionPlan(models.Model):
     )
     group = models.ForeignKey(
         auth.models.Group,
+        blank=True,
         help_text=_('the Django auth group for this plan'),
         null=True,
         on_delete=models.SET_NULL,
     )
     tags = models.ManyToManyField(
-        PlanTag
+        PlanTag,
+        blank=True,
         help_text=_('any tags associated with this plan'),
+        null=True,
         related_name='plans',
     )
     grace_period = models.PositiveIntegerField(
@@ -37,6 +53,9 @@ class SubscriptionPlan(models.Model):
 
     class Meta:
         ordering = ('plan_name')
+
+    def __str__(self):
+        return self.plan_name
 
     def display_tags(self):
         """Displays tags as a string (truncates if more than 3)."""
@@ -69,7 +88,7 @@ class PlanCost(models.Model):
     )
     recurrence_unit = models.CharField(
         choices=RECURRENCE_UNITS,
-        help_text=_('the unit of measurement for the recurrence period')
+        help_text=_('the unit of measurement for the recurrence period'),
         max_length=1,
     )
     cost = models.DecimalField(
@@ -79,19 +98,6 @@ class PlanCost(models.Model):
         max_digits=18,
         null=True,
     )
-
-class PlanTag(models.Model):
-    """A tag for a subscription plan."""
-    tag = models.CharField(
-        help_text=_('the tag name'),
-        max_length=64,
-    )
-
-    class Meta:
-        ordering = ('tag')
-
-    def __str__(self):
-        return self.tag
 
 class UserSubscription(models.Model):
     """Details of a user's specific subscription."""
