@@ -26,13 +26,15 @@ def pytest_configure():
             'django.contrib.auth.middleware.AuthenticationMiddleware',
             'django.contrib.messages.middleware.MessageMiddleware',
         ],
-        #'ROOT_URLCONF': 'flexbile_subscriptions.urls',
+        'ROOT_URLCONF': 'subscriptions.urls',
         'TEMPLATES': [
             {
                 'BACKEND': 'django.template.backends.django.DjangoTemplates',
                 'APP_DIRS': True,
             },
         ],
+        'SUBSCRIPTIONS_PAYMENT_MODEL': 'Payment.Model',
+        'SUBSCRIPTIONS_ENABLE_ADMIN': True,
     }
 
     settings.configure(**django_settings)

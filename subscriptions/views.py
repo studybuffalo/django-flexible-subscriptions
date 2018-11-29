@@ -1,4 +1,4 @@
-"""Views for the flexible_subscriptions app."""
+"""Views for the Flexible Subscriptions app."""
 # Create view and forms to handle creation & update of plans/tags
 # to skip admin if needed
 

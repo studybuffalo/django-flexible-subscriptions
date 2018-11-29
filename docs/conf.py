@@ -71,7 +71,7 @@ language = None
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path .
 exclude_patterns = [
-    '_build', 'Thumbs.db', '.DS_Store', 'flexible_subscriptions/migrations',
+    '_build', 'Thumbs.db', '.DS_Store', 'subscriptions/migrations',
 ]
 
 # The name of the Pygments (syntax highlighting) style to use.
@@ -200,7 +200,7 @@ autodoc_mock_imports = []
 #         'django.contrib.auth.middleware.AuthenticationMiddleware',
 #         'django.contrib.messages.middleware.MessageMiddleware',
 #     ],
-#     'ROOT_URLCONF': 'flexible_subscriptions.urls',
+#     'ROOT_URLCONF': 'subscriptions.urls',
 #     'TEMPLATES': [
 #         {
 #             'BACKEND': 'django.template.backends.django.DjangoTemplates',

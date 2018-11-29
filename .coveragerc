@@ -1,8 +1,8 @@
 [run]
 branch = True
 data_file = reports/.coverage
-source = flexible_subscriptions
-omit = flexible_subscriptions/migrations/*, tests/*
+source = subscriptions
+omit = subscriptions/migrations/*, tests/*
 
 [html]
 directory = reports/htmlcov

@@ -1,3 +1,3 @@
-"""URLs for the flexible_subscriptions app."""
+"""URLs for the Flexible Subscriptions app."""
 
 # Need URLs for all the possible views

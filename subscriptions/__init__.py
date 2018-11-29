@@ -17,4 +17,4 @@ if '1.11' in django.__version__:
     )
 
 # Django configuration details
-default_app_config = 'flexible_subscriptions.apps.FlexibleSubscriptionsConfig'
+default_app_config = 'subscriptions.apps.FlexibleSubscriptionsConfig'

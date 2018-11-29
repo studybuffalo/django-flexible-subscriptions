@@ -1,8 +1,8 @@
-"""Admin views for the flexible_subscriptions app."""
+"""Admin views for the Flexible Subscriptions app."""
 from django.conf import settings
 from django.contrib import admin
 
-from flexible_subscriptions import models
+from subscriptions import models
 
 class SubscriptionPlanAdmin(admin.ModelAdmin):
     """Admin class for the SubscriptionPlan model."""
@@ -45,7 +45,7 @@ class TransactionAdmin(admin.ModelAdmin):
     """Admin class for the SubscriptionTransaction model."""
     pass
 
-if getattr(settings.FLEXIBLE_SUBSCRIPTIONS_ENABLE_ADMIN, False):
+if getattr(settings, 'SUBSCRIPTIONS_ENABLE_ADMIN', False):
     admin.site.register(models.SubscriptionPlan, SubscriptionPlanAdmin)
     admin.site.register(models.UserSubscription, UserSubscriptionAdmin)
     admin.site.register(models.SubscriptionTransaction, TransactionAdmin)

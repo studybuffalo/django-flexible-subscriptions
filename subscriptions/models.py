@@ -1,4 +1,4 @@
-"""Models for the flexible_subscriptions app."""
+"""Models for the Flexible Subscriptions app."""
 from django.conf import settings
 from django.contrib import auth
 from django.db import models
@@ -115,7 +115,7 @@ class UserSubscription(models.Model):
         on_delete=models.CASCADE,
     )
     payment_method = models.ForeignKey(
-        settings.FLEXIBLE_SUBSCRIPTIONS_PAYMENT_MODEL,
+        settings.SUBSCRIPTIONS_PAYMENT_MODEL,
         help_text=_('the payment method to use for recurrent billing'),
         null=True,
         on_delete=models.CASCADE,
