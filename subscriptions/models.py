@@ -49,7 +49,6 @@ class SubscriptionPlan(models.Model):
         PlanTag,
         blank=True,
         help_text=_('any tags associated with this plan'),
-        null=True,
         related_name='plans',
     )
     grace_period = models.PositiveIntegerField(

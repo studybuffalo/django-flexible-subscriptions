@@ -1,11 +1,10 @@
 # pylint: disable=missing-docstring, line-too-long, invalid-name
 
-from __future__ import unicode_literals
-from uuid import uuid4
+import uuid
 
 from django.conf import settings
 from django.db import migrations, models
-from django.utils.translation import ugettext_lazy as _
+import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
@@ -44,7 +43,7 @@ class Migration(migrations.Migration):
                 ('plan_description', models.CharField(help_text='a description of the subscription plan', max_length=512)),
                 ('grace_period', models.PositiveIntegerField(blank=True, help_text='how many days after the subscription ends before the subscription expires', null=True)),
                 ('group', models.ForeignKey(blank=True, help_text='the Django auth group for this plan', null=True, on_delete=django.db.models.deletion.SET_NULL, to='auth.Group')),
-                ('tags', models.ManyToManyField(blank=True, help_text='any tags associated with this plan', null=True, related_name='plans', to='subscriptions.PlanTag')),
+                ('tags', models.ManyToManyField(blank=True, help_text='any tags associated with this plan', related_name='plans', to='subscriptions.PlanTag')),
 
             ],
             options={
