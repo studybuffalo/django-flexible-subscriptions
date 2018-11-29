@@ -11,6 +11,27 @@ class MockPaymentModel():
         pass
 
 
+# PlanTag Model
+# -----------------------------------------------------------------------------
+@pytest.mark.django_db
+def test_plan_tag_minimal_model_creation():
+    """Tests minimal requirements of PlanTag model."""
+    models.PlanTag.objects.create(
+        tag='Test Tag',
+    )
+
+    assert models.PlanTag.objects.all().count() == 1
+
+@pytest.mark.django_db
+def test_plan_tag_transaction_str():
+    tag = models.PlanTag.objects.create(
+        tag='Test Tag',
+    )
+
+    assert str(tag) == 'Test Tag'
+
+# SubscriptionPlan Model
+# -----------------------------------------------------------------------------
 @pytest.mark.django_db
 def test_subscription_plan_minimal_model_creation():
     """Tests minimal requirements of SubscriptionPlan model."""
@@ -29,3 +50,12 @@ def test_subscription_plan_transaction_str():
     )
 
     assert str(plan) == 'Test Plan'
+
+# PlanCost Model
+# -----------------------------------------------------------------------------
+
+# UserSubscription Model
+# -----------------------------------------------------------------------------
+
+# SubscriptionTransaction Model
+# -----------------------------------------------------------------------------
