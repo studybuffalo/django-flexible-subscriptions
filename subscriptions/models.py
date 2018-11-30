@@ -70,12 +70,12 @@ class SubscriptionPlan(models.Model):
 
     def display_tags(self):
         """Displays tags as a string (truncates if more than 3)."""
-        if len(self.tags) > 3:
-            joined_tags = ', '.join(tag.tag for tag in self.tags.all()[:3])
+        if self.tags.count() > 3:
+            return '{}, ...'.format(
+                ', '.join(tag.tag for tag in self.tags.all()[:3])
+            )
 
-            return '{}...'.format(joined_tags)
-        else:
-            return ', '.join(tag.tag for tag in self.tags.all()[:3])
+        return ', '.join(tag.tag for tag in self.tags.all()[:3])
 
 class PlanCost(models.Model):
     """Cost and frequency of billing for a plan."""
