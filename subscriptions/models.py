@@ -1,7 +1,6 @@
 """Models for the Flexible Subscriptions app."""
 from uuid import uuid4
 
-from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.db import models
@@ -74,7 +73,7 @@ class SubscriptionPlan(models.Model):
         if len(self.tags) > 3:
             joined_tags = ', '.join(tag.tag for tag in self.tags.all()[:3])
 
-            return '{}...'
+            return '{}...'.format(joined_tags)
         else:
             return ', '.join(tag.tag for tag in self.tags.all()[:3])
 
