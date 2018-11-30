@@ -51,6 +51,15 @@ def test_subscription_plan_transaction_str():
 
     assert str(plan) == 'Test Plan'
 
+@pytest.mark.django_db
+def test_subscription_plan_transaction_display_tags_0():
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='Test Plan',
+        plan_description='This is a test plan',
+    )
+
+    assert str(plan) == 'Test Plan'
+
 # PlanCost Model
 # -----------------------------------------------------------------------------
 
