@@ -1,5 +1,5 @@
 [MASTER]
-init-hook="from pylint.config import find_pylintrc; sys.path.append(os.path.join(os.path.dirname(find_pylintrc()), 'sandbox'))"
+load-plugins=pylint_django
 
 [FORMAT]
 max-line-length=80
