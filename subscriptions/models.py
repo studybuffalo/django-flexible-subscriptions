@@ -81,6 +81,9 @@ class PlanCost(models.Model):
     """Cost and frequency of billing for a plan."""
     RECURRENCE_UNITS = (
         ('O', _('one-time')),
+        ('S', _('per second')),
+        ('I', _('per minute')),
+        ('H', _('per hour')),
         ('D', _('per day')),
         ('W', _('per week')),
         ('M', _('per month')),

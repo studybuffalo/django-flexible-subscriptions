@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('recurrence_period', models.PositiveIntegerField(help_text='how often the plan is billed (per recurrence unit)')),
-                ('recurrence_unit', models.CharField(choices=[('O', 'one-time'), ('D', 'per day'), ('W', 'per week'), ('M', 'per month'), ('Y', 'per year')], help_text='the unit of measurement for the recurrence period', max_length=1)),
+                ('recurrence_unit', models.CharField(choices=[('O', 'one-time'), ('S', 'per second'), ('I', 'per minute'), ('H', 'per hour'), ('D', 'per day'), ('W', 'per week'), ('M', 'per month'), ('Y', 'per year')], help_text='the unit of measurement for the recurrence period', max_length=1)),
                 ('cost', models.DecimalField(blank=True, decimal_places=2, help_text='the cost per recurrence of the plan', max_digits=18, null=True)),
             ],
         ),
