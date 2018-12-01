@@ -149,12 +149,13 @@ def test_plan_cost_sorted_by_recurrence_unit():
 
     models.PlanCost.objects.create(plan=plan, recurrence_unit='M')
     models.PlanCost.objects.create(plan=plan, recurrence_unit='O')
-    models.PlanCost.objects.create(plan=plan, recurrence_unit='S')
-    models.PlanCost.objects.create(plan=plan, recurrence_unit='I')
     models.PlanCost.objects.create(plan=plan, recurrence_unit='H')
+    models.PlanCost.objects.create(plan=plan, recurrence_unit='S')
     models.PlanCost.objects.create(plan=plan, recurrence_unit='D')
-    models.PlanCost.objects.create(plan=plan, recurrence_unit='W')
+    models.PlanCost.objects.create(plan=plan, recurrence_unit='I')
     models.PlanCost.objects.create(plan=plan, recurrence_unit='Y')
+    models.PlanCost.objects.create(plan=plan, recurrence_unit='W')
+
     costs = plan.costs.sorted_by_recurrence_unit()
 
     assert len(costs) == models.PlanCost.objects.all().count()
