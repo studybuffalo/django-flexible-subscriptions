@@ -101,7 +101,6 @@ def test_subscription_plan_transaction_display_tags_3():
 
     assert plan.display_tags() == 'tag 1, tag 2, tag 3'
 
-
 @pytest.mark.django_db
 def test_subscription_plan_transaction_display_tags_4():
     """Tests display_tags or SubscriptionPlan with 4 tags."""
@@ -120,12 +119,3 @@ def test_subscription_plan_transaction_display_tags_4():
     plan.tags.add(tag_4)
 
     assert plan.display_tags() == 'tag 1, tag 2, tag 3, ...'
-
-# PlanCost Model
-# -----------------------------------------------------------------------------
-
-# UserSubscription Model
-# -----------------------------------------------------------------------------
-
-# SubscriptionTransaction Model
-# -----------------------------------------------------------------------------
