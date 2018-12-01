@@ -3,6 +3,7 @@ from uuid import uuid4
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -77,47 +78,23 @@ class SubscriptionPlan(models.Model):
 
         return ', '.join(tag.tag for tag in self.tags.all()[:3])
 
-class PlanCostManager(models.Manager):
-    """Manager to add custom sorting to PlanCost."""
-    def sorted_by_recurrence_unit(self):
-        """Sorts the PlanCosts by their recurrence unit."""
-        # TODO: add secondary sort for period after unit
-        frequency_conversion = {
-            'O': 1, 'S': 2, 'I': 3, 'H': 4,
-            'D': 5, 'W': 6, 'M': 7, 'Y': 8,
-        }
-        return sorted(
-            self.get_queryset(),
-            key=lambda cost: frequency_conversion[cost.recurrence_unit]
-        )
-
 class PlanCost(models.Model):
     """Cost and frequency of billing for a plan."""
-    RECURRENCE_UNITS = (
-        ('O', _('one-time')),
-        ('S', _('per second')),
-        ('I', _('per minute')),
-        ('H', _('per hour')),
-        ('D', _('per day')),
-        ('W', _('per week')),
-        ('M', _('per month')),
-        ('Y', _('per year'))
-    )
-
     plan = models.ForeignKey(
         SubscriptionPlan,
         help_text=_('the subscription plan for these cost details'),
         on_delete=models.CASCADE,
         related_name='costs',
     )
-    recurrence_period = models.PositiveIntegerField(
+    recurrence_period = models.PositiveSmallIntegerField(
         default=1,
         help_text=_('how often the plan is billed (per recurrence unit)'),
+        validators=[MinValueValidator(1)],
     )
-    recurrence_unit = models.CharField(
-        choices=RECURRENCE_UNITS,
+    recurrence_unit = models.PositiveIntegerField(
+        default=6,
         help_text=_('the unit of measurement for the recurrence period'),
-        max_length=1,
+        validators=[MaxValueValidator(7)],
     )
     cost = models.DecimalField(
         blank=True,
@@ -127,7 +104,35 @@ class PlanCost(models.Model):
         null=True,
     )
 
-    objects = PlanCostManager()
+    class Meta:
+        ordering = ('recurrence_unit', 'recurrence_period', 'cost',)
+
+    def display_recurrent_unit_text(self):
+        """Converts recurrence_unit integer to text."""
+        conversion = [
+            'one-time', 'per second', 'per minute', 'per hour',
+            'per day', 'per week', 'per month', 'per year',
+        ]
+
+        return conversion[self.recurrence_unit]
+
+    def display_billing_frequency_text(self):
+        """Generates a human-readable billing frequency."""
+        conversion = [
+            {'singular': 'one-time'},
+            {'singular': 'per second', 'plural': 'seconds'},
+            {'singular': 'per minute', 'plural': 'minutes'},
+        ]
+
+        if self.recurrence_unit == 0:
+            return conversion[0]
+
+        if self.recurrence_period == 1:
+            return conversion[self.recurrence_period]['singular']
+
+        return 'every {} {}'.format(
+            self.recurrence_period, conversion[self.recurrence_unit]['plural']
+        )
 
 class UserSubscription(models.Model):
     """Details of a user's specific subscription."""
@@ -221,3 +226,14 @@ class SubscriptionTransaction(models.Model):
 
     class Meta:
         ordering = ('date_transaction', 'user',)
+
+
+# Convenience references for units for plan recurrence billing
+ONCE = 0
+SECOND = 1
+MINUTE = 2
+HOUR = 3
+DAY = 4
+WEEK = 5
+MONTH = 6
+YEAR = 7

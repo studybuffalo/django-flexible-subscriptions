@@ -122,6 +122,17 @@ def test_subscription_plan_transaction_display_tags_4():
 
 # PlanTag Model
 # -----------------------------------------------------------------------------
+def test_plan_cost_convenience_unit_reference():
+    """Confirms convenience unit references are correct."""
+    assert models.ONCE == 0
+    assert models.SECOND == 1
+    assert models.MINUTE == 2
+    assert models.HOUR == 3
+    assert models.DAY == 4
+    assert models.WEEK == 5
+    assert models.MONTH == 6
+    assert models.YEAR == 7
+
 @pytest.mark.django_db
 def test_plan_cost_minimal_model_creation():
     """Tests minimal requirements of PlanCost model."""
@@ -133,37 +144,22 @@ def test_plan_cost_minimal_model_creation():
     models.PlanCost.objects.create(
         plan=plan,
         recurrence_period=1,
-        recurrence_unit='O',
+        recurrence_unit=models.SECOND,
         cost='1.00',
     )
 
     assert models.PlanCost.objects.all().count() == 1
 
 @pytest.mark.django_db
-def test_plan_cost_sorted_by_recurrence_unit():
-    """Tests that sorted_by_recurrence_unit sorts as expected."""
+def test_plan_cost_display_recurrent_unit_text_0():
+    """Tests display_recurrent_unit_text for value 0."""
     plan = models.SubscriptionPlan.objects.create(
         plan_name='Test Plan',
         plan_description='This is a test plan',
     )
 
-    models.PlanCost.objects.create(plan=plan, recurrence_unit='M')
-    models.PlanCost.objects.create(plan=plan, recurrence_unit='O')
-    models.PlanCost.objects.create(plan=plan, recurrence_unit='H')
-    models.PlanCost.objects.create(plan=plan, recurrence_unit='S')
-    models.PlanCost.objects.create(plan=plan, recurrence_unit='D')
-    models.PlanCost.objects.create(plan=plan, recurrence_unit='I')
-    models.PlanCost.objects.create(plan=plan, recurrence_unit='Y')
-    models.PlanCost.objects.create(plan=plan, recurrence_unit='W')
+    cost = models.PlanCost.objects.create(
+        plan=plan, recurrence_unit=models.ONCE
+    )
 
-    costs = plan.costs.sorted_by_recurrence_unit()
-
-    assert len(costs) == models.PlanCost.objects.all().count()
-    assert costs[0].recurrence_unit == 'O'
-    assert costs[1].recurrence_unit == 'S'
-    assert costs[2].recurrence_unit == 'I'
-    assert costs[3].recurrence_unit == 'H'
-    assert costs[4].recurrence_unit == 'D'
-    assert costs[5].recurrence_unit == 'W'
-    assert costs[6].recurrence_unit == 'M'
-    assert costs[7].recurrence_unit == 'Y'
+    assert cost.display_recurrent_unit_text() == 'one-time'
