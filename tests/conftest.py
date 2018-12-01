@@ -33,7 +33,6 @@ def pytest_configure():
                 'APP_DIRS': True,
             },
         ],
-        'SUBSCRIPTIONS_ENABLE_ADMIN': True,
     }
 
     settings.configure(**django_settings)
