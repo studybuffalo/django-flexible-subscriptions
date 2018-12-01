@@ -77,6 +77,20 @@ class SubscriptionPlan(models.Model):
 
         return ', '.join(tag.tag for tag in self.tags.all()[:3])
 
+class PlanCostManager(models.Manager):
+    """Manager to add custom sorting to PlanCost."""
+    def sorted_by_recurrence_unit(self):
+        """Sorts the PlanCosts by their recurrence unit."""
+        # TODO: add secondary sort for period after unit
+        frequency_conversion = {
+            'O': 1, 'S': 2, 'I': 3, 'H': 4,
+            'D': 5, 'W': 6, 'M': 7, 'Y': 8,
+        }
+        return sorted(
+            self.get_queryset(),
+            key=lambda cost: frequency_conversion[cost.recurrence_unit]
+        )
+
 class PlanCost(models.Model):
     """Cost and frequency of billing for a plan."""
     RECURRENCE_UNITS = (
@@ -92,12 +106,12 @@ class PlanCost(models.Model):
 
     plan = models.ForeignKey(
         SubscriptionPlan,
-        help_text=_('the subscription plan for this user'),
-        null=True,
+        help_text=_('the subscription plan for these cost details'),
         on_delete=models.CASCADE,
         related_name='costs',
     )
     recurrence_period = models.PositiveIntegerField(
+        default=1,
         help_text=_('how often the plan is billed (per recurrence unit)'),
     )
     recurrence_unit = models.CharField(
@@ -112,6 +126,8 @@ class PlanCost(models.Model):
         max_digits=18,
         null=True,
     )
+
+    objects = PlanCostManager()
 
 class UserSubscription(models.Model):
     """Details of a user's specific subscription."""

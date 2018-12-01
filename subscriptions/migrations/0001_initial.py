@@ -84,6 +84,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='plancost',
             name='plan',
-            field=models.ForeignKey(help_text='the subscription plan for this user', null=True, on_delete=django.db.models.deletion.CASCADE, related_name='costs', to='subscriptions.SubscriptionPlan'),
+            field=models.ForeignKey(help_text='the subscription plan for these cost details', on_delete=django.db.models.deletion.CASCADE, related_name='costs', to='subscriptions.SubscriptionPlan'),
         ),
     ]
