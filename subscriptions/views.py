@@ -30,7 +30,7 @@ class TagCreateView(
     template_name = 'subscriptions/tag_create.html'
 
 class TagUpdateView(
-    PermissionRequiredMixin, SuccessMessageMixin, generic.UpdateView
+        PermissionRequiredMixin, SuccessMessageMixin, generic.UpdateView
 ):
     """View to update the details of a tag."""
     model = models.PlanTag
