@@ -11,7 +11,7 @@ from subscriptions import models
 class TagListView(PermissionRequiredMixin, generic.ListView):
     """List of all tags."""
     model = models.PlanTag
-    permission_required = 'subscriptions.subscriptions_plans'
+    permission_required = 'subscriptions.subscriptions'
     raise_exception = True
     context_object_name = 'tags'
     template_name = 'subscriptions/tag_list.html'
@@ -21,7 +21,7 @@ class TagCreateView(
 ):
     """View to create a new tag."""
     model = models.PlanTag
-    permission_required = 'subscriptions.subscriptions_plans'
+    permission_required = 'subscriptions.subscriptions'
     raise_exception = True
     context_object_name = 'tag'
     fields = ['tag']
@@ -34,7 +34,7 @@ class TagUpdateView(
 ):
     """View to update the details of a tag."""
     model = models.PlanTag
-    permission_required = 'subscriptions.subscriptions_plans'
+    permission_required = 'subscriptions.subscriptions'
     raise_exception = True
     context_object_name = 'tag'
     fields = ['tag']
@@ -46,7 +46,7 @@ class TagUpdateView(
 class TagDeleteView(PermissionRequiredMixin, generic.DeleteView):
     """View to delete a tag."""
     model = models.PlanTag
-    permission_required = 'subscriptions.subscriptions_plans'
+    permission_required = 'subscriptions.subscriptions'
     raise_exception = True
     context_object_name = 'tag'
     pk_url_kwarg = 'tag_id'
