@@ -63,7 +63,7 @@ class SubscriptionPlan(models.Model):
     class Meta:
         ordering = ('plan_name',)
         permissions = (
-            ('subscriptions_plans', 'Can interact with subscription plans'),
+            ('subscriptions', 'Can interact with subscription details'),
         )
 
     def __str__(self):

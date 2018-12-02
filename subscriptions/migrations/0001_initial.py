@@ -51,7 +51,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'ordering': ('plan_name',),
-                'permissions': (('subscriptions_plans', 'Can interact with subscription plans'),),
+                'permissions': (('subscriptions', 'Can interact with subscription details'),),
             },
         ),
         migrations.CreateModel(
