@@ -10,6 +10,7 @@ from subscriptions import models
 
 
 def create_tag(tag_text='test'):
+    """Creates and returns a PlanTag instance."""
     return models.PlanTag.objects.create(tag=tag_text)
 
 # TagListView
