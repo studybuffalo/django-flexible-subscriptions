@@ -107,6 +107,7 @@ class PlanCost(models.Model):
     class Meta:
         ordering = ('recurrence_unit', 'recurrence_period', 'cost',)
 
+    @property
     def display_recurrent_unit_text(self):
         """Converts recurrence_unit integer to text."""
         conversion = [
@@ -116,6 +117,7 @@ class PlanCost(models.Model):
 
         return conversion[self.recurrence_unit]
 
+    @property
     def display_billing_frequency_text(self):
         """Generates a human-readable billing frequency."""
         conversion = [

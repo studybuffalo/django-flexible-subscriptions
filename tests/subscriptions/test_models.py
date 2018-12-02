@@ -162,7 +162,7 @@ def test_plan_cost_display_recurrent_unit_text_0():
         plan=plan, recurrence_unit=models.ONCE
     )
 
-    assert cost.display_recurrent_unit_text() == 'one-time'
+    assert cost.display_recurrent_unit_text == 'one-time'
 
 @pytest.mark.django_db
 def test_plan_cost_display_recurrent_unit_text_1():
@@ -176,7 +176,7 @@ def test_plan_cost_display_recurrent_unit_text_1():
         plan=plan, recurrence_unit=models.SECOND
     )
 
-    assert cost.display_recurrent_unit_text() == 'per second'
+    assert cost.display_recurrent_unit_text == 'per second'
 
 @pytest.mark.django_db
 def test_plan_cost_display_recurrent_unit_text_2():
@@ -190,7 +190,7 @@ def test_plan_cost_display_recurrent_unit_text_2():
         plan=plan, recurrence_unit=models.MINUTE
     )
 
-    assert cost.display_recurrent_unit_text() == 'per minute'
+    assert cost.display_recurrent_unit_text == 'per minute'
 
 @pytest.mark.django_db
 def test_plan_cost_display_recurrent_unit_text_3():
@@ -204,7 +204,7 @@ def test_plan_cost_display_recurrent_unit_text_3():
         plan=plan, recurrence_unit=models.HOUR
     )
 
-    assert cost.display_recurrent_unit_text() == 'per hour'
+    assert cost.display_recurrent_unit_text == 'per hour'
 
 @pytest.mark.django_db
 def test_plan_cost_display_recurrent_unit_text_4():
@@ -218,7 +218,7 @@ def test_plan_cost_display_recurrent_unit_text_4():
         plan=plan, recurrence_unit=models.DAY
     )
 
-    assert cost.display_recurrent_unit_text() == 'per day'
+    assert cost.display_recurrent_unit_text == 'per day'
 
 @pytest.mark.django_db
 def test_plan_cost_display_recurrent_unit_text_5():
@@ -232,7 +232,7 @@ def test_plan_cost_display_recurrent_unit_text_5():
         plan=plan, recurrence_unit=models.WEEK
     )
 
-    assert cost.display_recurrent_unit_text() == 'per week'
+    assert cost.display_recurrent_unit_text == 'per week'
 
 @pytest.mark.django_db
 def test_plan_cost_display_recurrent_unit_text_6():
@@ -246,7 +246,7 @@ def test_plan_cost_display_recurrent_unit_text_6():
         plan=plan, recurrence_unit=models.MONTH
     )
 
-    assert cost.display_recurrent_unit_text() == 'per month'
+    assert cost.display_recurrent_unit_text == 'per month'
 
 @pytest.mark.django_db
 def test_plan_cost_display_recurrent_unit_text_7():
@@ -260,7 +260,7 @@ def test_plan_cost_display_recurrent_unit_text_7():
         plan=plan, recurrence_unit=models.YEAR
     )
 
-    assert cost.display_recurrent_unit_text() == 'per year'
+    assert cost.display_recurrent_unit_text == 'per year'
 
 @pytest.mark.django_db
 def test_plan_cost_display_billing_frequency_text_once_singular():
@@ -274,7 +274,7 @@ def test_plan_cost_display_billing_frequency_text_once_singular():
         plan=plan, recurrence_period=1, recurrence_unit=models.ONCE
     )
 
-    assert cost.display_billing_frequency_text() == 'one-time'
+    assert cost.display_billing_frequency_text == 'one-time'
 
 @pytest.mark.django_db
 def test_plan_cost_display_billing_frequency_text_once_plural():
@@ -288,7 +288,7 @@ def test_plan_cost_display_billing_frequency_text_once_plural():
         plan=plan, recurrence_period=2, recurrence_unit=models.ONCE
     )
 
-    assert cost.display_billing_frequency_text() == 'one-time'
+    assert cost.display_billing_frequency_text == 'one-time'
 
 @pytest.mark.django_db
 def test_plan_cost_display_billing_frequency_text_second_singular():
@@ -302,7 +302,7 @@ def test_plan_cost_display_billing_frequency_text_second_singular():
         plan=plan, recurrence_period=1, recurrence_unit=models.SECOND
     )
 
-    assert cost.display_billing_frequency_text() == 'per second'
+    assert cost.display_billing_frequency_text == 'per second'
 
 @pytest.mark.django_db
 def test_plan_cost_display_billing_frequency_text_second_plural():
@@ -316,7 +316,7 @@ def test_plan_cost_display_billing_frequency_text_second_plural():
         plan=plan, recurrence_period=2, recurrence_unit=models.SECOND
     )
 
-    assert cost.display_billing_frequency_text() == 'every 2 seconds'
+    assert cost.display_billing_frequency_text == 'every 2 seconds'
 
 @pytest.mark.django_db
 def test_plan_cost_display_billing_frequency_text_minute_singular():
@@ -330,7 +330,7 @@ def test_plan_cost_display_billing_frequency_text_minute_singular():
         plan=plan, recurrence_period=1, recurrence_unit=models.MINUTE
     )
 
-    assert cost.display_billing_frequency_text() == 'per minute'
+    assert cost.display_billing_frequency_text == 'per minute'
 
 @pytest.mark.django_db
 def test_plan_cost_display_billing_frequency_text_minute_plural():
@@ -344,7 +344,7 @@ def test_plan_cost_display_billing_frequency_text_minute_plural():
         plan=plan, recurrence_period=2, recurrence_unit=models.MINUTE
     )
 
-    assert cost.display_billing_frequency_text() == 'every 2 minutes'
+    assert cost.display_billing_frequency_text == 'every 2 minutes'
 
 @pytest.mark.django_db
 def test_plan_cost_display_billing_frequency_text_hour_singular():
@@ -358,7 +358,7 @@ def test_plan_cost_display_billing_frequency_text_hour_singular():
         plan=plan, recurrence_period=1, recurrence_unit=models.HOUR
     )
 
-    assert cost.display_billing_frequency_text() == 'per hour'
+    assert cost.display_billing_frequency_text == 'per hour'
 
 @pytest.mark.django_db
 def test_plan_cost_display_billing_frequency_text_hour_plural():
@@ -372,7 +372,7 @@ def test_plan_cost_display_billing_frequency_text_hour_plural():
         plan=plan, recurrence_period=2, recurrence_unit=models.HOUR
     )
 
-    assert cost.display_billing_frequency_text() == 'every 2 hours'
+    assert cost.display_billing_frequency_text == 'every 2 hours'
 
 @pytest.mark.django_db
 def test_plan_cost_display_billing_frequency_text_day_singular():
@@ -386,7 +386,7 @@ def test_plan_cost_display_billing_frequency_text_day_singular():
         plan=plan, recurrence_period=1, recurrence_unit=models.DAY
     )
 
-    assert cost.display_billing_frequency_text() == 'per day'
+    assert cost.display_billing_frequency_text == 'per day'
 
 @pytest.mark.django_db
 def test_plan_cost_display_billing_frequency_text_day_plural():
@@ -400,7 +400,7 @@ def test_plan_cost_display_billing_frequency_text_day_plural():
         plan=plan, recurrence_period=2, recurrence_unit=models.DAY
     )
 
-    assert cost.display_billing_frequency_text() == 'every 2 days'
+    assert cost.display_billing_frequency_text == 'every 2 days'
 
 @pytest.mark.django_db
 def test_plan_cost_display_billing_frequency_text_week_singular():
@@ -414,7 +414,7 @@ def test_plan_cost_display_billing_frequency_text_week_singular():
         plan=plan, recurrence_period=1, recurrence_unit=models.WEEK
     )
 
-    assert cost.display_billing_frequency_text() == 'per week'
+    assert cost.display_billing_frequency_text == 'per week'
 
 @pytest.mark.django_db
 def test_plan_cost_display_billing_frequency_text_week_plural():
@@ -428,7 +428,7 @@ def test_plan_cost_display_billing_frequency_text_week_plural():
         plan=plan, recurrence_period=2, recurrence_unit=models.WEEK
     )
 
-    assert cost.display_billing_frequency_text() == 'every 2 weeks'
+    assert cost.display_billing_frequency_text == 'every 2 weeks'
 
 @pytest.mark.django_db
 def test_plan_cost_display_billing_frequency_text_month_singular():
@@ -442,7 +442,7 @@ def test_plan_cost_display_billing_frequency_text_month_singular():
         plan=plan, recurrence_period=1, recurrence_unit=models.MONTH
     )
 
-    assert cost.display_billing_frequency_text() == 'per month'
+    assert cost.display_billing_frequency_text == 'per month'
 
 @pytest.mark.django_db
 def test_plan_cost_display_billing_frequency_text_month_plural():
@@ -456,7 +456,7 @@ def test_plan_cost_display_billing_frequency_text_month_plural():
         plan=plan, recurrence_period=2, recurrence_unit=models.MONTH
     )
 
-    assert cost.display_billing_frequency_text() == 'every 2 months'
+    assert cost.display_billing_frequency_text == 'every 2 months'
 
 @pytest.mark.django_db
 def test_plan_cost_display_billing_frequency_text_year_singular():
@@ -470,7 +470,7 @@ def test_plan_cost_display_billing_frequency_text_year_singular():
         plan=plan, recurrence_period=1, recurrence_unit=models.YEAR
     )
 
-    assert cost.display_billing_frequency_text() == 'per year'
+    assert cost.display_billing_frequency_text == 'per year'
 
 @pytest.mark.django_db
 def test_plan_cost_display_billing_frequency_text_year_plural():
@@ -484,4 +484,4 @@ def test_plan_cost_display_billing_frequency_text_year_plural():
         plan=plan, recurrence_period=2, recurrence_unit=models.YEAR
     )
 
-    assert cost.display_billing_frequency_text() == 'every 2 years'
+    assert cost.display_billing_frequency_text == 'every 2 years'
