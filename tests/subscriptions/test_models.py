@@ -163,3 +163,325 @@ def test_plan_cost_display_recurrent_unit_text_0():
     )
 
     assert cost.display_recurrent_unit_text() == 'one-time'
+
+@pytest.mark.django_db
+def test_plan_cost_display_recurrent_unit_text_1():
+    """Tests display_recurrent_unit_text for value 1."""
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='Test Plan',
+        plan_description='This is a test plan',
+    )
+
+    cost = models.PlanCost.objects.create(
+        plan=plan, recurrence_unit=models.SECOND
+    )
+
+    assert cost.display_recurrent_unit_text() == 'per second'
+
+@pytest.mark.django_db
+def test_plan_cost_display_recurrent_unit_text_2():
+    """Tests display_recurrent_unit_text for value 2."""
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='Test Plan',
+        plan_description='This is a test plan',
+    )
+
+    cost = models.PlanCost.objects.create(
+        plan=plan, recurrence_unit=models.MINUTE
+    )
+
+    assert cost.display_recurrent_unit_text() == 'per minute'
+
+@pytest.mark.django_db
+def test_plan_cost_display_recurrent_unit_text_3():
+    """Tests display_recurrent_unit_text for value 3."""
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='Test Plan',
+        plan_description='This is a test plan',
+    )
+
+    cost = models.PlanCost.objects.create(
+        plan=plan, recurrence_unit=models.HOUR
+    )
+
+    assert cost.display_recurrent_unit_text() == 'per hour'
+
+@pytest.mark.django_db
+def test_plan_cost_display_recurrent_unit_text_4():
+    """Tests display_recurrent_unit_text for value 4."""
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='Test Plan',
+        plan_description='This is a test plan',
+    )
+
+    cost = models.PlanCost.objects.create(
+        plan=plan, recurrence_unit=models.DAY
+    )
+
+    assert cost.display_recurrent_unit_text() == 'per day'
+
+@pytest.mark.django_db
+def test_plan_cost_display_recurrent_unit_text_5():
+    """Tests display_recurrent_unit_text for value 5."""
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='Test Plan',
+        plan_description='This is a test plan',
+    )
+
+    cost = models.PlanCost.objects.create(
+        plan=plan, recurrence_unit=models.WEEK
+    )
+
+    assert cost.display_recurrent_unit_text() == 'per week'
+
+@pytest.mark.django_db
+def test_plan_cost_display_recurrent_unit_text_6():
+    """Tests display_recurrent_unit_text for value 6."""
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='Test Plan',
+        plan_description='This is a test plan',
+    )
+
+    cost = models.PlanCost.objects.create(
+        plan=plan, recurrence_unit=models.MONTH
+    )
+
+    assert cost.display_recurrent_unit_text() == 'per month'
+
+@pytest.mark.django_db
+def test_plan_cost_display_recurrent_unit_text_7():
+    """Tests display_recurrent_unit_text for value 7."""
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='Test Plan',
+        plan_description='This is a test plan',
+    )
+
+    cost = models.PlanCost.objects.create(
+        plan=plan, recurrence_unit=models.YEAR
+    )
+
+    assert cost.display_recurrent_unit_text() == 'per year'
+
+@pytest.mark.django_db
+def test_plan_cost_display_billing_frequency_text_once_singular():
+    """Tests display_billing_frequency_text for singular one-time billing."""
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='Test Plan',
+        plan_description='This is a test plan',
+    )
+
+    cost = models.PlanCost.objects.create(
+        plan=plan, recurrence_period=1, recurrence_unit=models.ONCE
+    )
+
+    assert cost.display_billing_frequency_text() == 'one-time'
+
+@pytest.mark.django_db
+def test_plan_cost_display_billing_frequency_text_once_plural():
+    """Tests display_billing_frequency_text for plural one-time billing."""
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='Test Plan',
+        plan_description='This is a test plan',
+    )
+
+    cost = models.PlanCost.objects.create(
+        plan=plan, recurrence_period=2, recurrence_unit=models.ONCE
+    )
+
+    assert cost.display_billing_frequency_text() == 'one-time'
+
+@pytest.mark.django_db
+def test_plan_cost_display_billing_frequency_text_second_singular():
+    """Tests display_billing_frequency_text for singular per second billing."""
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='Test Plan',
+        plan_description='This is a test plan',
+    )
+
+    cost = models.PlanCost.objects.create(
+        plan=plan, recurrence_period=1, recurrence_unit=models.SECOND
+    )
+
+    assert cost.display_billing_frequency_text() == 'per second'
+
+@pytest.mark.django_db
+def test_plan_cost_display_billing_frequency_text_second_plural():
+    """Tests display_billing_frequency_text for plural per second billing."""
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='Test Plan',
+        plan_description='This is a test plan',
+    )
+
+    cost = models.PlanCost.objects.create(
+        plan=plan, recurrence_period=2, recurrence_unit=models.SECOND
+    )
+
+    assert cost.display_billing_frequency_text() == 'every 2 seconds'
+
+@pytest.mark.django_db
+def test_plan_cost_display_billing_frequency_text_minute_singular():
+    """Tests display_billing_frequency_text for singular per minute billing."""
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='Test Plan',
+        plan_description='This is a test plan',
+    )
+
+    cost = models.PlanCost.objects.create(
+        plan=plan, recurrence_period=1, recurrence_unit=models.MINUTE
+    )
+
+    assert cost.display_billing_frequency_text() == 'per minute'
+
+@pytest.mark.django_db
+def test_plan_cost_display_billing_frequency_text_minute_plural():
+    """Tests display_billing_frequency_text for plural per minute billing."""
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='Test Plan',
+        plan_description='This is a test plan',
+    )
+
+    cost = models.PlanCost.objects.create(
+        plan=plan, recurrence_period=2, recurrence_unit=models.MINUTE
+    )
+
+    assert cost.display_billing_frequency_text() == 'every 2 minutes'
+
+@pytest.mark.django_db
+def test_plan_cost_display_billing_frequency_text_hour_singular():
+    """Tests display_billing_frequency_text for singular per hour billing."""
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='Test Plan',
+        plan_description='This is a test plan',
+    )
+
+    cost = models.PlanCost.objects.create(
+        plan=plan, recurrence_period=1, recurrence_unit=models.HOUR
+    )
+
+    assert cost.display_billing_frequency_text() == 'per hour'
+
+@pytest.mark.django_db
+def test_plan_cost_display_billing_frequency_text_hour_plural():
+    """Tests display_billing_frequency_text for plural per hour billing."""
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='Test Plan',
+        plan_description='This is a test plan',
+    )
+
+    cost = models.PlanCost.objects.create(
+        plan=plan, recurrence_period=2, recurrence_unit=models.HOUR
+    )
+
+    assert cost.display_billing_frequency_text() == 'every 2 hours'
+
+@pytest.mark.django_db
+def test_plan_cost_display_billing_frequency_text_day_singular():
+    """Tests display_billing_frequency_text for singular per day billing."""
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='Test Plan',
+        plan_description='This is a test plan',
+    )
+
+    cost = models.PlanCost.objects.create(
+        plan=plan, recurrence_period=1, recurrence_unit=models.DAY
+    )
+
+    assert cost.display_billing_frequency_text() == 'per day'
+
+@pytest.mark.django_db
+def test_plan_cost_display_billing_frequency_text_day_plural():
+    """Tests display_billing_frequency_text for plural per day billing."""
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='Test Plan',
+        plan_description='This is a test plan',
+    )
+
+    cost = models.PlanCost.objects.create(
+        plan=plan, recurrence_period=2, recurrence_unit=models.DAY
+    )
+
+    assert cost.display_billing_frequency_text() == 'every 2 days'
+
+@pytest.mark.django_db
+def test_plan_cost_display_billing_frequency_text_week_singular():
+    """Tests display_billing_frequency_text for singular per week billing."""
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='Test Plan',
+        plan_description='This is a test plan',
+    )
+
+    cost = models.PlanCost.objects.create(
+        plan=plan, recurrence_period=1, recurrence_unit=models.WEEK
+    )
+
+    assert cost.display_billing_frequency_text() == 'per week'
+
+@pytest.mark.django_db
+def test_plan_cost_display_billing_frequency_text_week_plural():
+    """Tests display_billing_frequency_text for plural per week billing."""
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='Test Plan',
+        plan_description='This is a test plan',
+    )
+
+    cost = models.PlanCost.objects.create(
+        plan=plan, recurrence_period=2, recurrence_unit=models.WEEK
+    )
+
+    assert cost.display_billing_frequency_text() == 'every 2 weeks'
+
+@pytest.mark.django_db
+def test_plan_cost_display_billing_frequency_text_month_singular():
+    """Tests display_billing_frequency_text for singular per month billing."""
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='Test Plan',
+        plan_description='This is a test plan',
+    )
+
+    cost = models.PlanCost.objects.create(
+        plan=plan, recurrence_period=1, recurrence_unit=models.MONTH
+    )
+
+    assert cost.display_billing_frequency_text() == 'per month'
+
+@pytest.mark.django_db
+def test_plan_cost_display_billing_frequency_text_month_plural():
+    """Tests display_billing_frequency_text for plural per month billing."""
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='Test Plan',
+        plan_description='This is a test plan',
+    )
+
+    cost = models.PlanCost.objects.create(
+        plan=plan, recurrence_period=2, recurrence_unit=models.MONTH
+    )
+
+    assert cost.display_billing_frequency_text() == 'every 2 months'
+
+@pytest.mark.django_db
+def test_plan_cost_display_billing_frequency_text_year_singular():
+    """Tests display_billing_frequency_text for singular per year billing."""
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='Test Plan',
+        plan_description='This is a test plan',
+    )
+
+    cost = models.PlanCost.objects.create(
+        plan=plan, recurrence_period=1, recurrence_unit=models.YEAR
+    )
+
+    assert cost.display_billing_frequency_text() == 'per year'
+
+@pytest.mark.django_db
+def test_plan_cost_display_billing_frequency_text_year_plural():
+    """Tests display_billing_frequency_text for plural per year billing."""
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='Test Plan',
+        plan_description='This is a test plan',
+    )
+
+    cost = models.PlanCost.objects.create(
+        plan=plan, recurrence_period=2, recurrence_unit=models.YEAR
+    )
+
+    assert cost.display_billing_frequency_text() == 'every 2 years'

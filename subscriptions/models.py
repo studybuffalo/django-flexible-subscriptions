@@ -119,16 +119,21 @@ class PlanCost(models.Model):
     def display_billing_frequency_text(self):
         """Generates a human-readable billing frequency."""
         conversion = [
-            {'singular': 'one-time'},
+            'one-time',
             {'singular': 'per second', 'plural': 'seconds'},
             {'singular': 'per minute', 'plural': 'minutes'},
+            {'singular': 'per hour', 'plural': 'hours'},
+            {'singular': 'per day', 'plural': 'days'},
+            {'singular': 'per week', 'plural': 'weeks'},
+            {'singular': 'per month', 'plural': 'months'},
+            {'singular': 'per year', 'plural': 'years'},
         ]
 
         if self.recurrence_unit == 0:
             return conversion[0]
 
         if self.recurrence_period == 1:
-            return conversion[self.recurrence_period]['singular']
+            return conversion[self.recurrence_unit]['singular']
 
         return 'every {} {}'.format(
             self.recurrence_period, conversion[self.recurrence_unit]['plural']
@@ -226,7 +231,6 @@ class SubscriptionTransaction(models.Model):
 
     class Meta:
         ordering = ('date_transaction', 'user',)
-
 
 # Convenience references for units for plan recurrence billing
 ONCE = 0
