@@ -1,0 +1,20 @@
+<h1>Django Flexible Subscriptions Sandbox Site</h1>
+
+{% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li {% if message.tags %}class="{{ message.tags }}"{% endif %}>
+        {{ message }}
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+<ul>
+  {% if user.is_authenticated %}
+    <li><a href="{% url 'logout' %}">Logout</a></li>
+  {% else %}
+    <li><a href="{% url 'login' %}">Login</a></li>
+  {% endif %}
+  <li><a href="{% url 'subscriptions_tag_list' %}">Tags</a></li>
+</ul>

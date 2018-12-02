@@ -16,13 +16,9 @@ SQL_DEBUG = True
 
 # BASE DJANGO SETTINGS
 SECRET_KEY = ENV('DJANGO_SECRET_KEY', default='214dfsdf7ughfgdasd3446@FDF46#')
-
 SITE_ID = 1
-
 INTERNAL_IPS = ('127.0.0.1',)
-
 ROOT_URLCONF = 'urls'
-
 APPEND_SLASH = True
 
 # ADMIN SETTINGS
@@ -111,8 +107,8 @@ TEMPLATES = [
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
-LOGIN_REDIRECT_URL = '/accounts/'
-
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 # STATIC SETTINGS
 STATIC_URL = '/static/'
 STATIC_ROOT = ROOT_DIR.path('static')
