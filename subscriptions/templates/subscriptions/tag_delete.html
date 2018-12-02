@@ -1,0 +1,25 @@
+{% load i18n %}
+
+<h1>Subscription Plan Tag Deletion</h1>
+
+{% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+<p>
+  <strong>Are you sure you want to delete this tag?</strong>
+
+  <ul>
+    <li><strong>Tag:</strong> {{ token.tag }}</li>
+  </ul>
+</p>
+
+<form method="POST">
+  {% csrf_token %}
+  <input type="submit" value="Delete">
+  <a href="{% url 'subscriptions_tag_delete' tag.id %}">Cancel</a>
+</form>
