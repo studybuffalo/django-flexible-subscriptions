@@ -97,9 +97,9 @@ class PlanCost(models.Model):
     )
     cost = models.DecimalField(
         blank=True,
-        decimal_places=2,
+        decimal_places=4,
         help_text=_('the cost per recurrence of the plan'),
-        max_digits=18,
+        max_digits=19,
         null=True,
     )
 
@@ -222,11 +222,10 @@ class SubscriptionTransaction(models.Model):
         help_text=_('the datetime the transaction was billed'),
         verbose_name='transaction date',
     )
-    amount = models.DecimalField(
+    amount = models.CharField(
         blank=True,
-        decimal_places=2,
         help_text=_('how much was billed for the user'),
-        max_digits=18,
+        max_length=32,
         null=True,
     )
 

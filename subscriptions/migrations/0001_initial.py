@@ -59,7 +59,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False, verbose_name='ID')),
                 ('date_transaction', models.DateTimeField(auto_now_add=True, help_text='the datetime the transaction was billed', verbose_name='transaction date')),
-                ('amount', models.DecimalField(blank=True, decimal_places=2, help_text='how much was billed for the user', max_digits=18, null=True)),
+                ('amount', models.DecimalField(blank=True, help_text='how much was billed for the user', max_length=32, null=True)),
                 ('plan', models.ForeignKey(help_text='the subscription plan that was billed', null=True, on_delete=django.db.models.deletion.SET_NULL, to='subscriptions.SubscriptionPlan')),
                 ('user', models.ForeignKey(help_text='the user that this subscription was billed for', null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
             ],
