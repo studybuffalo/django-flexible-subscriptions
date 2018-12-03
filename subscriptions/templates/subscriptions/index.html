@@ -3,6 +3,8 @@
 <h1>Subscriptions</h1>
 
 <ul>
-    <li><a href="{% url 'subscriptions_tag_list' %}">Tags</a></li>
-    <li><a href="{% url 'subscriptions_plan_list' %}">Subscription plans</a></li>
+    <li><a href="{% url 'subscriptions_tag_list' %}">{% trans 'Tags' %}</a></li>
+    <li><a href="{% url 'subscriptions_plan_list' %}">{% trans 'Subscription plans' %}</a></li>
+    <li><a href="{% url 'subscriptions_subscription_list' %}">{% trans 'User subscriptions' %}</a></li>
+    <li><a href="{% url 'subscriptions_transaction_list' %}">{% trans 'Subscription payment transactions' %}</a></li>
 </ul>
