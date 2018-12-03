@@ -52,12 +52,11 @@ class SubscriptionPlan(models.Model):
         related_name='plans',
     )
     grace_period = models.PositiveIntegerField(
-        blank=True,
+        default=0,
         help_text=_(
             'how many days after the subscription ends before the '
             'subscription expires'
         ),
-        null=True,
     )
 
     class Meta:
