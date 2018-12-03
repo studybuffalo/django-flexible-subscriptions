@@ -1,5 +1,6 @@
 """Views for the Flexible Subscriptions app."""
 from django.contrib import messages
+from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.forms.models import inlineformset_factory
@@ -239,7 +240,83 @@ class PlanDeleteView(PermissionRequiredMixin, generic.DeleteView):
         messages.success(self.request, self.success_message)
         return super(PlanDeleteView, self).delete(request, *args, **kwargs)
 
-# Create view to display transactions
-#   Will need pagination
 
-# Create view to view subscriptions +/- modify?
+# User Subscription Views
+# -----------------------------------------------------------------------------.
+class SubscriptionListView(PermissionRequiredMixin, generic.ListView):
+    """List of all subscriptions for the users"""
+    model = get_user_model()
+    permission_required = 'subscriptions.subscriptions'
+    raise_exception = True
+    context_object_name = 'users'
+    queryset = model.objects.all().exclude(subscriptions=None).order_by('username') # pylint: disable=line-too-long
+    paginate_by = 100
+    template_name = 'subscriptions/subscription_list.html'
+
+class SubscriptionCreateView(
+        PermissionRequiredMixin, SuccessMessageMixin, generic.CreateView
+):
+    """View to create a new user subscription."""
+    model = models.UserSubscription
+    permission_required = 'subscriptions.subscriptions'
+    raise_exception = True
+    context_object_name = 'subscription'
+    fields = ['user', 'plan', 'date_billing_start', 'date_billing_end']
+    success_message = 'User subscription successfully added'
+    success_url = reverse_lazy('subscriptions_subscription_list')
+    template_name = 'subscriptions/subscription_create.html'
+
+class SubscriptionUpdateView(
+        PermissionRequiredMixin, SuccessMessageMixin, generic.UpdateView
+):
+    """View to update the details of a user subscription."""
+    model = models.UserSubscription
+    permission_required = 'subscriptions.subscriptions'
+    raise_exception = True
+    context_object_name = 'subscription'
+    fields = [
+        'plan', 'date_billing_start', 'date_billing_end', 'date_billing_last',
+        'date_billing_next', 'active', 'cancelled'
+    ]
+    pk_url_kwarg = 'subscription_id'
+    success_message = 'User subscription successfully updated'
+    success_url = reverse_lazy('subscriptions_subscription_list')
+    template_name = 'subscriptions/subscription_update.html'
+
+class SubscriptionDeleteView(PermissionRequiredMixin, generic.DeleteView):
+    """View to delete a user subscription."""
+    model = models.UserSubscription
+    permission_required = 'subscriptions.subscriptions'
+    raise_exception = True
+    context_object_name = 'subscription'
+    pk_url_kwarg = 'subscription_id'
+    success_message = 'User subscription successfully deleted'
+    success_url = reverse_lazy('subscriptions_subscription_list')
+    template_name = 'subscriptions/subscription_delete.html'
+
+    def delete(self, request, *args, **kwargs):
+        """Override delete to allow success message to be added."""
+        messages.success(self.request, self.success_message)
+        return super(SubscriptionDeleteView, self).delete(
+            request, *args, **kwargs
+        )
+
+
+# Subscription Transaction Views
+# -----------------------------------------------------------------------------
+class TransactionListView(PermissionRequiredMixin, generic.ListView):
+    """List of all subscription payment transactions."""
+    model = models.SubscriptionTransaction
+    permission_required = 'subscriptions.subscriptions'
+    raise_exception = True
+    context_object_name = 'transactions'
+    paginate_by = 100
+    template_name = 'subscriptions/transaction_list.html'
+
+class TransactionDetailView(PermissionRequiredMixin, generic.DetailView):
+    """Shows details of a specific subscription payment transaction."""
+    model = models.SubscriptionTransaction
+    permission_required = 'subscriptions.subscriptions'
+    raise_exception = True
+    context_object_name = 'transaction'
+    template_name = 'subscriptions/transaction_detail.html'

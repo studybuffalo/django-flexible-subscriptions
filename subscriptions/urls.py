@@ -58,12 +58,12 @@ urlpatterns = [
         name='subscriptions_subscription_create',
     ),
     url(
-        r'subscriptions/(?P<plan_id>[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12})/$',
+        r'subscriptions/(?P<subscription_id>[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12})/$',
         views.SubscriptionUpdateView.as_view(),
         name='subscriptions_subscription_update',
     ),
     url(
-        r'subscriptions/(?P<plan_id>[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12})/delete/$',
+        r'subscriptions/(?P<subscription_id>[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12})/delete/$',
         views.SubscriptionDeleteView.as_view(),
         name='subscriptions_subscription_delete',
     ),
