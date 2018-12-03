@@ -29,7 +29,7 @@ def test_tag_create_exists_at_desired_location(admin_client):
 @pytest.mark.django_db
 def test_tag_create_exists_at_desired_url(admin_client):
     """Tests that tag create URL works."""
-    response = admin_client.get('/tags/add/')
+    response = admin_client.get('/tags/create/')
 
     assert response.status_code == 200
 
