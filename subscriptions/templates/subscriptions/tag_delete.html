@@ -21,5 +21,8 @@
 <form method="POST">
   {% csrf_token %}
   <input type="submit" value="Delete">
-  <a href="{% url 'subscriptions_tag_delete' tag.id %}">Cancel</a>
 </form>
+
+<div>
+  <a href="{% url 'subscriptions_tag_list' %}">Cancel</a>
+</div>

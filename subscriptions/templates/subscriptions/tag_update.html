@@ -1,6 +1,12 @@
 {% load i18n %}
 
+<h1>Subscription Plan Tag Update</h1>
+
 <form method="post">{% csrf_token %}
   {{ form.as_ul }}
   <input type="submit" value="Save">
 </form>
+
+<div>
+  <a href="{% url 'subscriptions_tag_list' %}">Cancel</a>
+</div>

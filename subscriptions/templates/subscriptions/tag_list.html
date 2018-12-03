@@ -11,7 +11,11 @@
 {% endif %}
 
 <div>
-  <a href="{% url 'subscriptions_tag_create' %}">Add new tag</a>
+  <a href="{% url 'subscriptions_index' %}">Back to dashboard</a>
+</div>
+
+<div>
+  <a href="{% url 'subscriptions_tag_create' %}">Create new tag</a>
 </div>
 
 {% if tags %}
