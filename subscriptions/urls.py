@@ -80,7 +80,7 @@ urlpatterns = [
     url(
         r'^$',
         TemplateView.as_view(template_name='subscriptions/dashboard.html'),
-        name='subscriptions_index',
+        name='subscriptions_dashboard',
     ),
 ]
 
