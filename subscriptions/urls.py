@@ -48,6 +48,36 @@ urlpatterns = [
         name='subscriptions_plan_delete',
     ),
     url(
+        r'subscriptions/$',
+        views.SubscriptionListView.as_view(),
+        name='subscriptions_subscription_list',
+    ),
+    url(
+        r'subscriptions/create/$',
+        views.SubscriptionCreateView.as_view(),
+        name='subscriptions_subscription_create',
+    ),
+    url(
+        r'subscriptions/(?P<plan_id>[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12})/$',
+        views.SubscriptionUpdateView.as_view(),
+        name='subscriptions_subscription_update',
+    ),
+    url(
+        r'subscriptions/(?P<plan_id>[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12})/delete/$',
+        views.SubscriptionDeleteView.as_view(),
+        name='subscriptions_subscription_delete',
+    ),
+    url(
+        r'transactions/$',
+        views.TransactionListView.as_view(),
+        name='subscriptions_transaction_list',
+    ),
+    url(
+        r'transactions/(?P<transaction_id>[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12})/$',
+        views.TransactionDetailView.as_view(),
+        name='subscriptions_transaction_detail',
+    ),
+    url(
         r'^$',
         TemplateView.as_view(template_name='subscriptions/index.html'),
         name='subscriptions_index',
