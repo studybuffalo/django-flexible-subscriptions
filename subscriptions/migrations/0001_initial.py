@@ -76,7 +76,7 @@ class Migration(migrations.Migration):
                 ('date_billing_last', models.DateField(blank=True, help_text='the last date this plan was billed', null=True, verbose_name='last billing date')),
                 ('date_billing_next', models.DateField(blank=True, help_text='the next date billing is due', null=True, verbose_name='next start date')),
                 ('active', models.BooleanField(default=True, help_text='whether this subscription is active or not')),
-                ('cancelled', models.BooleanField(default=True, help_text='whether this subscription is cancelled or not')),
+                ('cancelled', models.BooleanField(default=False, help_text='whether this subscription is cancelled or not')),
                 ('plan', models.ForeignKey(help_text='the subscription plan for this user', null=True, on_delete=django.db.models.deletion.CASCADE, to='subscriptions.SubscriptionPlan')),
                 ('user', models.ForeignKey(help_text='the user this subscription applies to', null=True, on_delete=django.db.models.deletion.CASCADE, related_name='subscriptions', to=settings.AUTH_USER_MODEL)),
             ],
