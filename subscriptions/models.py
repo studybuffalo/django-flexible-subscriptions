@@ -222,10 +222,11 @@ class SubscriptionTransaction(models.Model):
         help_text=_('the datetime the transaction was billed'),
         verbose_name='transaction date',
     )
-    amount = models.CharField(
+    amount = models.DecimalField(
         blank=True,
+        decimal_places=4,
         help_text=_('how much was billed for the user'),
-        max_length=32,
+        max_digits=19,
         null=True,
     )
 
