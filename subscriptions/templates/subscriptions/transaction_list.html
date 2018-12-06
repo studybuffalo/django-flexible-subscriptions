@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load currency_filters %}
 
 <h1>Subscription payment transactions</h1>
 
@@ -31,7 +32,7 @@
           <td>{{ transaction.user }}</td>
           <td>{{ transaction.plan }}</td>
           <td>{{ transaction.date_transaction }}</td>
-          <td>${{ transaction.amount }}</td>
+          <td>{{ transaction.amount|currency }}</td>
           <td>
             <a href="{% url 'subscriptions_transaction_detail' transaction.id %}">
               {% trans "View" %}

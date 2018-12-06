@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load currency_filters %}
 
 <h1>Subscription Plans</h1>
 
@@ -39,7 +40,10 @@
           <td>
             <ul>
               {% for cost in plan.costs.all %}
-                <li>{{ cost.display_billing_frequency_text }}</li>
+                <li>
+                  {{ cost.cost|currency }}
+                  {{ cost.display_billing_frequency_text }}
+                </li>
               {% endfor %}
             </ul>
           </td>

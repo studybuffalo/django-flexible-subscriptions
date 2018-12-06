@@ -110,6 +110,7 @@ AUTHENTICATION_BACKENDS = (
 )
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
 # STATIC SETTINGS
 STATIC_URL = '/static/'
 STATIC_ROOT = ROOT_DIR.path('static')
@@ -162,3 +163,7 @@ LOGGING = {
         },
     }
 }
+
+# django-flexible-subscriptions settings
+# -----------------------------------------------------------------------------
+SUBSCRIPTIONS_CURRENCY_LOCALE = 'en_ca'
