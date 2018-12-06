@@ -192,7 +192,7 @@ CURRENCY = {
         frac_digits=2,
         int_frac_digits=2,
         positive_sign='',
-        negative_sign='-'
+        negative_sign='-',
         p_sign_posn=3,
         n_sign_posn=0,
     ),
