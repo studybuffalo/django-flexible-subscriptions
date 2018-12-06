@@ -199,7 +199,7 @@ class PlanUpdateView(
 
         self.object = self.get_object()
         form = self.get_form(self.get_form_class())
-        cost_forms = PlanCostFormSet(instance=self.object)
+        cost_forms = PlanCostFormSet(self.request.POST, instance=self.object)
 
         if form.is_valid() and cost_forms.is_valid():
             return self.form_valid(form, cost_forms)

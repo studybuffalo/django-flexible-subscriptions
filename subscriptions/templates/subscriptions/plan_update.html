@@ -4,6 +4,8 @@
 
 <form method="post">{% csrf_token %}
   <ul>
+    {{ form.non_field_errors }}
+    {{ form.errors }}
     {{ form.as_ul }}
   </ul>
   <fieldset>
@@ -12,6 +14,8 @@
     {{ cost_forms.non_form_errors }}
     {% for cost_form in cost_forms %}
       <ul>
+        {{ cost_form.non_field_errors }}
+        {{ cost_form.errors }}
         {{ cost_form.as_ul }}
       </ul>
     {% endfor %}
