@@ -149,9 +149,9 @@ def compile_settings():
     )
     # CURRENCY SETTINGS
     # -------------------------------------------------------------------------
-    currency_locale = getattr(
+    currency_locale = str(getattr(
         settings, 'SUBSCRIPTIONS_CURRENCY_LOCALE', 'en_us'
-    ).lower()
+    )).lower()
 
     return {
         'enable_admin': enable_admin,
