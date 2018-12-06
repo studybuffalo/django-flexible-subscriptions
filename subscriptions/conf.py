@@ -30,14 +30,14 @@ class Currency():
             n_sign_posn (int):
     """
     def __init__(self, **kwargs):
-        self.currency_symbol = kwargs.get('currency_symbol', '$')
-        self.int_curr_symbol = kwargs.get('int_curr_symbol', 'USD')
+        self.currency_symbol = kwargs.get('currency_symbol', '')
+        self.int_curr_symbol = kwargs.get('int_curr_symbol', '')
         self.p_cs_precedes = kwargs.get('p_cs_precedes', True)
         self.n_cs_precedes = kwargs.get('n_cs_precedes', True)
         self.p_sep_by_space = kwargs.get('p_sep_by_space', False)
         self.n_sep_by_space = kwargs.get('n_sep_by_space', False)
         self.mon_decimal_point = kwargs.get('mon_decimal_point', '.')
-        self.mon_thousands_sep = kwargs.get('mon_thousands_sep', ',')
+        self.mon_thousands_sep = kwargs.get('mon_thousands_sep', '')
         self.mon_grouping = kwargs.get('mon_grouping', 3)
         self.frac_digits = kwargs.get('frac_digits', 2)
         self.int_frac_digits = kwargs.get('int_frac_digits', 2)
