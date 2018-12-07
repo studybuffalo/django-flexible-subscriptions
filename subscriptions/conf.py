@@ -1,5 +1,5 @@
 """Functions for general package configuration."""
-from decimal import Decimal
+from decimal import Decimal, ROUND_HALF_UP
 
 from django.conf import settings
 
@@ -59,7 +59,9 @@ class Currency():
         """
         # Convert value to decimal and round to proper number of digits
         digits = self.int_frac_digits if international else self.frac_digits
-        value = Decimal(value).quantize(Decimal(10) ** -digits)
+        value = Decimal(value).quantize(
+            Decimal(10) ** -digits, rounding=ROUND_HALF_UP,
+        )
 
         # Split decimal into whole and fractions
         num_whole, num_frac = str(value).split('.')
