@@ -57,14 +57,20 @@ class Currency():
             Returns:
                 str: The formatted currency value.
         """
-        # Convert value to decimal and round to proper number of digits
+        # Convert value to decimal for future operations
+        value = Decimal(value)
+
+        # Round to required number of digits:
+        #   - uses ROUND_HALF_UP, to give the most intuitive result to a
+        #     typical user
+        #   - uses absolute value as negative signs will be applied later
         digits = self.int_frac_digits if international else self.frac_digits
-        value = Decimal(value).quantize(
+        decimal_str = abs(value).quantize(
             Decimal(10) ** -digits, rounding=ROUND_HALF_UP,
         )
 
         # Split decimal into whole and fractions
-        num_whole, num_frac = str(value).split('.')
+        num_whole, num_frac = str(decimal_str).split('.')
 
         # Apply any grouping to the whole number component
         group_sep = self.mon_thousands_sep
@@ -163,6 +169,13 @@ def compile_settings():
 
 SETTINGS = compile_settings()
 
+# Convenience values for sign positions
+SIGN_PARANTHESES = 0
+SIGN_PRECEDE_VALUE_SYMBOL = 1
+SIGN_FOLLOW_VALUE_SYMBOL = 2
+SIGN_PRECEDE_VALUE = 3
+SIGN_FOLLOW_VALUE= 4
+
 CURRENCY = {
     'en_ca': Currency(
         currency_symbol='$',
@@ -178,8 +191,8 @@ CURRENCY = {
         int_frac_digits=2,
         positive_sign='',
         negative_sign='-',
-        p_sign_posn=3,
-        n_sign_posn=3,
+        p_sign_posn=SIGN_PRECEDE_VALUE,
+        n_sign_posn=SIGN_PRECEDE_VALUE,
     ),
     'en_us': Currency(
         currency_symbol='$',
@@ -195,8 +208,8 @@ CURRENCY = {
         int_frac_digits=2,
         positive_sign='',
         negative_sign='-',
-        p_sign_posn=3,
-        n_sign_posn=0,
+        p_sign_posn=SIGN_PRECEDE_VALUE,
+        n_sign_posn=SIGN_PARANTHESES,
     ),
     'fr_ca': Currency(
         currency_symbol='$',
@@ -212,7 +225,7 @@ CURRENCY = {
         int_frac_digits=2,
         positive_sign='',
         negative_sign='-',
-        p_sign_posn=1,
-        n_sign_posn=0,
+        p_sign_posn=SIGN_PRECEDE_VALUE_SYMBOL,
+        n_sign_posn=SIGN_PARANTHESES,
     ),
 }
