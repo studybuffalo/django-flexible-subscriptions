@@ -44,6 +44,7 @@ class SubscriptionPlan(models.Model):
         help_text=_('the Django auth group for this plan'),
         null=True,
         on_delete=models.SET_NULL,
+        related_name='plans',
     )
     tags = models.ManyToManyField(
         PlanTag,

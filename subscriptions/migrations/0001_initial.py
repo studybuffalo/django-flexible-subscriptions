@@ -45,7 +45,7 @@ class Migration(migrations.Migration):
                 ('plan_name', models.CharField(help_text='the name of the subscription plan', max_length=128)),
                 ('plan_description', models.CharField(help_text='a description of the subscription plan', max_length=512)),
                 ('grace_period', models.PositiveIntegerField(default=0, help_text='how many days after the subscription ends before the subscription expires')),
-                ('group', models.ForeignKey(blank=True, help_text='the Django auth group for this plan', null=True, on_delete=django.db.models.deletion.SET_NULL, to='auth.Group')),
+                ('group', models.ForeignKey(blank=True, help_text='the Django auth group for this plan', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='plans', to='auth.Group')),
                 ('tags', models.ManyToManyField(blank=True, help_text='any tags associated with this plan', related_name='plans', to='subscriptions.PlanTag')),
 
             ],
