@@ -75,9 +75,7 @@ class PlanListView(PermissionRequiredMixin, generic.ListView):
     context_object_name = 'plans'
     template_name = 'subscriptions/plan_list.html'
 
-class PlanCreateView(
-        PermissionRequiredMixin, SuccessMessageMixin, generic.CreateView
-):
+class PlanCreateView(PermissionRequiredMixin, generic.CreateView):
     """View to create a new subscription plan"""
     # pylint: disable=arguments-differ, attribute-defined-outside-init
     model = models.SubscriptionPlan
@@ -138,6 +136,9 @@ class PlanCreateView(
         cost_forms.instance = self.object
         cost_forms.save()
 
+        # Generate the success message
+        messages.success(self.request, self.success_message)
+
         return HttpResponseRedirect(self.get_success_url())
 
     def form_invalid(self, form, cost_forms):
@@ -149,9 +150,7 @@ class PlanCreateView(
             )
         )
 
-class PlanUpdateView(
-        PermissionRequiredMixin, SuccessMessageMixin, generic.UpdateView
-):
+class PlanUpdateView(PermissionRequiredMixin, generic.UpdateView):
     """View to update a subscription plan"""
     # pylint: disable=arguments-differ, attribute-defined-outside-init
     model = models.SubscriptionPlan
@@ -212,6 +211,9 @@ class PlanUpdateView(
         self.object = form.save()
         cost_forms.instance = self.object
         cost_forms.save()
+
+        # Generate the success message
+        messages.success(self.request, self.success_message)
 
         return HttpResponseRedirect(self.get_success_url())
 
@@ -319,4 +321,5 @@ class TransactionDetailView(PermissionRequiredMixin, generic.DetailView):
     permission_required = 'subscriptions.subscriptions'
     raise_exception = True
     context_object_name = 'transaction'
+    pk_url_kwarg = 'transaction_id'
     template_name = 'subscriptions/transaction_detail.html'
