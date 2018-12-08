@@ -1,4 +1,4 @@
-"""Tests for the django-flexible-subscriptions views module."""
+"""Tests for the django-flexible-subscriptions PlanTag views."""
 import pytest
 
 from django.contrib.auth.models import Permission
@@ -52,6 +52,20 @@ def test_tag_list_200_if_authorized(client, django_user_model):
 
     assert response.status_code == 200
 
+@pytest.mark.django_db
+def test_tag_list_retrives_all_tags(admin_client):
+    """Tests that the list view retrieves all the tags."""
+    # Create tags to retrieve
+    create_tag('3')
+    create_tag('1')
+    create_tag('2')
+
+    response = admin_client.get(reverse('subscriptions_tag_list'))
+
+    assert len(response.context['tags']) == 3
+    assert response.context['tags'][0].tag == '1'
+    assert response.context['tags'][1].tag == '2'
+    assert response.context['tags'][2].tag == '3'
 
 # TagCreateView
 # -----------------------------------------------------------------------------
@@ -92,6 +106,22 @@ def test_tag_create_200_if_authorized(client, django_user_model):
 
     assert response.status_code == 200
 
+@pytest.mark.django_db
+def test_tag_create_create_and_success(admin_client):
+    """Tests that tag creation and success message works as expected."""
+    tag_count = models.PlanTag.objects.all().count()
+
+    response = admin_client.post(
+        reverse('subscriptions_tag_create'),
+        {'tag': '1'},
+        follow=True,
+    )
+
+    messages = [message for message in get_messages(response.wsgi_request)]
+
+    assert models.PlanTag.objects.all().count() == tag_count + 1
+    assert messages[0].tags == 'success'
+    assert messages[0].message == 'Tag successfully added'
 
 # TagUpdateView
 # -----------------------------------------------------------------------------
@@ -144,6 +174,25 @@ def test_tag_update_200_if_authorized(client, django_user_model):
 
     assert response.status_code == 200
 
+@pytest.mark.django_db
+def test_tag_update_update_and_success(admin_client):
+    """Tests that tag update and success message works as expected."""
+    # Setup initial tag for update
+    tag = create_tag('1')
+    tag_count = models.PlanTag.objects.all().count()
+
+    response = admin_client.post(
+        reverse('subscriptions_tag_update', kwargs={'tag_id': tag.id}),
+        {'tag': '2'},
+        follow=True,
+    )
+
+    messages = [message for message in get_messages(response.wsgi_request)]
+
+    assert models.PlanTag.objects.all().count() == tag_count
+    assert models.PlanTag.objects.get(id=tag.id).tag == '2'
+    assert messages[0].tags == 'success'
+    assert messages[0].message == 'Tag successfully updated'
 
 # TagDeleteView
 # -----------------------------------------------------------------------------
@@ -197,9 +246,10 @@ def test_tag_delete_200_if_authorized(client, django_user_model):
     assert response.status_code == 200
 
 @pytest.mark.django_db
-def test_tag_delete_message_on_success(admin_client):
+def test_tag_delete_delete_and_success_message(admin_client):
     """Tests for success message on successful deletion."""
     tag = create_tag()
+    tag_count = models.PlanTag.objects.all().count()
 
     response = admin_client.post(
         reverse('subscriptions_tag_delete', kwargs={'tag_id': tag.id}),
@@ -208,6 +258,6 @@ def test_tag_delete_message_on_success(admin_client):
 
     messages = [message for message in get_messages(response.wsgi_request)]
 
-    assert response.status_code == 200
+    assert models.PlanTag.objects.all().count() == tag_count - 1
     assert messages[0].tags == 'success'
     assert messages[0].message == 'Tag successfully deleted'
