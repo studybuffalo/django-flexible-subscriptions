@@ -4,7 +4,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.forms.models import inlineformset_factory
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
+from django.shortcuts import get_object_or_404
 from django.views import generic
 from django.urls import reverse_lazy
 
@@ -323,3 +324,162 @@ class TransactionDetailView(PermissionRequiredMixin, generic.DetailView):
     context_object_name = 'transaction'
     pk_url_kwarg = 'transaction_id'
     template_name = 'subscriptions/transaction_detail.html'
+
+
+# Subscribe Views
+# -----------------------------------------------------------------------------
+class SubscribeView(generic.TemplateView):
+    """View to handle all aspects of the subscribing process."""
+    confirmation = False
+    payment_form = forms.PaymentForm
+    billing_address_form = forms.BillingAddressForm
+    subscription_plan = None
+    success_url = 'subscriptions_dashboard'
+    template_extends = 'subscriptions/base.html'
+    template_preview = 'subscriptions/subscribe_preview.html'
+    template_confirmation = 'subscriptions/subscribe_confirmation.html'
+
+    def get_context_data(self, **kwargs):
+        """Overriding get_context_data to add additional context."""
+        context = super(SubscribeView, self).get_context_data(**kwargs)
+
+        # Provides the base template to extend from
+        context['template_extends'] = self.template_extends
+
+        # Whether this is a preview or confirmation step
+        context['confirmation'] = self.confirmation
+
+        # The plan instance to use for generating plan details
+        context['plan'] = self.subscription_plan
+
+        return context
+
+    def get_template_names(self):
+        conf_templates = [self.template_confirmation]
+        prev_templates = [self.template_preview]
+
+        return conf_templates if self.confirmation else prev_templates
+
+    def get_success_url(self):
+        """Returns the success URL."""
+        return reverse_lazy(self.success_url)
+
+    def post(self, request, *args, **kwargs):
+        """Handles all POST requests to the SubscribeView.
+
+            The 'action' POST argument is used to determine which
+            context to render.
+        """
+        # Get the subscription plan for this POST
+        try:
+            self.subscription_plan = get_object_or_404(
+                models.SubscriptionPlan, id=request.POST['plan_id']
+            )
+        except KeyError:
+            raise Http404('No subscription plan selected.')
+
+        # Determine POST action and direct to proper function
+        post_action = request.POST.get('action', None)
+
+        if post_action == 'confirm':
+            # DO SOME VALIDATION OF THE DATA
+            return self.render_confirmation(request)
+
+        if post_action == 'process':
+            # REPEAT VALIDATION OF THE DATA
+            return self.process_subscription(request)
+
+        # No action - assumes payment details need to be collected
+        return self.render_preview(request)
+
+    def render_preview(self, request, **kwargs):
+        """Renders preview of subscription and collect payment details."""
+        self.confirmation = False
+        context = self.get_context_data(**kwargs)
+
+        # Forms to collect billing details
+        context['payment_form'] = self.payment_form()
+        context['billing_address_form'] = self.billing_address_form()
+
+        return self.render_to_response(context)
+
+    def render_confirmation(self, request, **kwargs):
+        """Renders a confirmation page before processing payment."""
+        self.confirmation = True
+        context = self.get_context_data(**kwargs)
+
+        # Forms to process payment (hidden to prevent editing)
+        hidden_payment_form = self.hidden_payment_form()
+        hidden_billing_address_form = self.hidden_billing_address_form()
+
+        context['payment_form'] = hidden_payment_form(request.POST)
+        context['billing_address_form'] = hidden_billing_address_form(
+            request.POST
+        )
+
+        return self.render_to_response(context)
+
+    def process_subscription(self, request, **kwargs):
+        """Moves forward with payment & subscription processing."""
+        # Attempt to process payment
+        payment_success = self.process_payment(request)
+
+        if payment_success:
+            # Payment successful - can handle subscription processing
+            self.setup_subscription()
+
+            return HttpResponseRedirect(self.get_success_url())
+
+        # Payment unsuccessful, return to confirmation page
+        messages.error(request, 'Error processing payment')
+
+        self.confirmation = True
+        context = self.get_context_data(**kwargs)
+
+        # Forms to process payment (hidden to prevent editing)
+        hidden_payment_form = self.hidden_payment_form()
+        hidden_billing_address_form = self.hidden_billing_address_form()
+
+        context['payment_form'] = hidden_payment_form(request.POST)
+        context['billing_address_form'] = hidden_billing_address_form(
+            request.POST
+        )
+
+        return self.render_to_response(context)
+
+    def hidden_payment_form(self):
+        """Returns payment_form with hidden input widgets."""
+        return forms.convert_widgets_to_hidden(self.payment_form)
+
+    def hidden_billing_address_form(self):
+        """Returns billing_address_form with hidden input widgets."""
+        return forms.convert_widgets_to_hidden(self.billing_address_form)
+
+    def process_payment(self, request):
+        """Processes payment and confirms if payment is accepted.
+
+            This method needs to be overriden in a project to handle
+            payment processing with the appropriate payment provider.
+
+            Returns:
+                bool: True if payment is successful, False if an error
+                    has occurred.
+        """
+        return True
+
+    def setup_subscription(self):
+        """Adds subscription to user and adds them to required group."""
+
+class ThankYouView(generic.DetailView):
+    """A thank you page and summary for a new subscription."""
+    template_name = 'subscriptions/subscribe_thank_you.html'
+    context_object_name = 'transaction'
+
+    def get_object(self, queryset=None):
+        """Returns the provided transaction instance."""
+        transaction = get_object_or_404(
+            models.SubscriptionTransaction,
+            id=self.request.GET.get('transaction_id', None)
+        )
+
+        return transaction

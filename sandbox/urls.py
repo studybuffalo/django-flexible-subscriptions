@@ -7,7 +7,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import include
 from django.views.generic import TemplateView
 
-from subscriptions import urls as subscriptions_urls
+from subscriptions import models, urls as subscriptions_urls, views
 
 
 admin.autodiscover()
@@ -39,8 +39,26 @@ urlpatterns = [
         ),
         name='logout',
     ),
+    url(
+        r'subscribe/$',
+        views.SubscribeView.as_view(),
+        name='subscriptions_subscribe',
+    ),
+    url(
+        r'thank-you/$',
+        views.ThankYouView.as_view(),
+        name='subscriptions_thank_you',
+    ),
     url(r'^subscriptions/', include(subscriptions_urls)),
-    url(r'^$', TemplateView.as_view(template_name='sandbox/index.html')),
+    url(
+        r'^$',
+        TemplateView.as_view(
+            extra_context={
+                'plans': models.SubscriptionPlan.objects.all()
+            },
+            template_name='sandbox/index.html'
+        )
+    ),
 ]
 
 if settings.DEBUG:

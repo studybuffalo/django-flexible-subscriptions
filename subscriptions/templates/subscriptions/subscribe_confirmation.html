@@ -1,0 +1,19 @@
+{% extends template_extends %}
+
+{% load i18n %}
+
+{% block content %}
+  <h1>Confirm subscriptions</h1>
+  <!--
+    Will need to have hidden forms here that take payment details and hide them
+    Will also need to hide the selected cost
+  -->
+  <form method="post" action="{% url 'subscriptions_subscribe' %}">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="process">
+    <input type="hidden" name="plan_id" value="{{ plan.id }}">
+    {{ payment_form.as_p }}
+    {{ billing_address_form.as_p }}
+    <button type="submit">Subscribe</button>
+  </form>
+{% endblock %}

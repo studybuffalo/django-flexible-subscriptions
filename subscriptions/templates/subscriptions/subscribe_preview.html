@@ -1,0 +1,17 @@
+{% extends template_extends %}
+
+{% load i18n %}
+
+{% block content %}
+  <h1>Subscribe</h1>
+
+  <form method="post" action="{% url 'subscriptions_subscribe' %}">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="confirm">
+    <input type="hidden" name="plan_id" value="{{ plan.id }}">
+    {% include 'subscriptions/snippets/choose_plan.html' with plan=plan %}
+    {% include 'subscriptions/snippets/payment_details.html' with form=payment_form %}
+    {% include 'subscriptions/snippets/billing_address.html' with form=billing_address_form %}
+    <button type="submit">Confirm order</button>
+  </form>
+{% endblock %}
