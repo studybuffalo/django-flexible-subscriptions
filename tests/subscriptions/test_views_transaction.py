@@ -15,10 +15,16 @@ def create_plan(plan_name='1', plan_description='2'):
         plan_name=plan_name, plan_description=plan_description
     )
 
-def create_transaction(user, plan, amount='1.00'):
+def create_cost(plan=None, period=1, unit=6, cost='1.00'):
+    """Creates and returns PlanCost instance."""
+    return models.PlanCost.objects.create(
+        plan=plan, recurrence_period=period, recurrence_unit=unit, cost=cost
+    )
+
+def create_transaction(user, cost, amount='1.00'):
     """Creates and returns a PlanTag instance."""
     return models.SubscriptionTransaction.objects.create(
-        user=user, plan=plan, amount=amount
+        user=user, subscription=cost, amount=amount
     )
 
 # TransactionListView
@@ -65,10 +71,10 @@ def test_transaction_list_retrives_all(admin_client, django_user_model):
     """Tests that the list view retrieves all the transactions."""
     # Create transactions to retrieve
     user = django_user_model.objects.create_user(username='a', password='b')
-    plan = create_plan()
-    create_transaction(user, plan, '1.00')
-    create_transaction(user, plan, '2.00')
-    create_transaction(user, plan, '3.00')
+    cost = create_cost(plan=create_plan())
+    create_transaction(user, cost, '1.00')
+    create_transaction(user, cost, '2.00')
+    create_transaction(user, cost, '3.00')
 
     response = admin_client.get(reverse('subscriptions_transaction_list'))
 
@@ -83,8 +89,8 @@ def test_transaction_list_retrives_all(admin_client, django_user_model):
 def test_transaction_detail_template(admin_client, django_user_model):
     """Tests for proper transaction_detail template."""
     user = django_user_model.objects.create_user(username='a', password='b')
-    plan = create_plan()
-    transaction = create_transaction(user, plan)
+    cost = create_cost(plan=create_plan())
+    transaction = create_transaction(user, cost)
 
     response = admin_client.get(
         reverse(
@@ -101,8 +107,8 @@ def test_transaction_detail_template(admin_client, django_user_model):
 def test_transaction_detail_403_if_not_authorized(client, django_user_model):
     """Tests  403 error for transaction detail if inadequate permissions."""
     user = django_user_model.objects.create_user(username='a', password='b')
-    plan = create_plan()
-    transaction = create_transaction(user, plan)
+    cost = create_cost(plan=create_plan())
+    transaction = create_transaction(user, cost)
 
     django_user_model.objects.create_user(username='user', password='password')
     client.login(username='user', password='password')
@@ -120,8 +126,8 @@ def test_transaction_detail_403_if_not_authorized(client, django_user_model):
 def test_transaction_detail_200_if_authorized(client, django_user_model):
     """Tests 200 response for transaction detail with adequate permissions."""
     user = django_user_model.objects.create_user(username='a', password='b')
-    plan = create_plan()
-    transaction = create_transaction(user, plan)
+    cost = create_cost(plan=create_plan())
+    transaction = create_transaction(user, cost)
 
     # Retrieve proper permission, add to user, and login
     content = ContentType.objects.get_for_model(models.SubscriptionPlan)

@@ -266,7 +266,7 @@ class SubscriptionCreateView(
     permission_required = 'subscriptions.subscriptions'
     raise_exception = True
     context_object_name = 'subscription'
-    fields = ['user', 'plan', 'date_billing_start', 'date_billing_end']
+    fields = ['user', 'subscription', 'date_billing_start', 'date_billing_end']
     success_message = 'User subscription successfully added'
     success_url = reverse_lazy('subscriptions_subscription_list')
     template_name = 'subscriptions/subscription_create.html'
@@ -280,8 +280,8 @@ class SubscriptionUpdateView(
     raise_exception = True
     context_object_name = 'subscription'
     fields = [
-        'plan', 'date_billing_start', 'date_billing_end', 'date_billing_last',
-        'date_billing_next', 'active', 'cancelled'
+        'subscription', 'date_billing_start', 'date_billing_end',
+        'date_billing_last', 'date_billing_next', 'active', 'cancelled'
     ]
     pk_url_kwarg = 'subscription_id'
     success_message = 'User subscription successfully updated'

@@ -15,9 +15,15 @@ def create_plan(plan_name='1', plan_description='2'):
         plan_name=plan_name, plan_description=plan_description
     )
 
-def create_subscription(user, plan):
-    """Creates and returns a PlanTag instance."""
-    return models.UserSubscription.objects.create(user=user, plan=plan)
+def create_cost(plan=None, period=1, unit=6, cost='1.00'):
+    """Creates and returns PlanCost instance."""
+    return models.PlanCost.objects.create(
+        plan=plan, recurrence_period=period, recurrence_unit=unit, cost=cost
+    )
+
+def create_subscription(user, cost):
+    """Creates and returns a UserSubscription instance."""
+    return models.UserSubscription.objects.create(user=user, subscription=cost)
 
 # SubscriptionListView
 # -----------------------------------------------------------------------------
@@ -73,10 +79,10 @@ def test_subscription_list_retrives_all_users(admin_client, django_user_model):
     user_3 = django_user_model.objects.create_user(
         username='user_3', password='password'
     )
-    plan = create_plan()
-    create_subscription(user_3, plan)
-    create_subscription(user_1, plan)
-    create_subscription(user_2, plan)
+    cost = create_cost(plan=create_plan())
+    create_subscription(user_3, cost)
+    create_subscription(user_1, cost)
+    create_subscription(user_2, cost)
 
     response = admin_client.get(reverse('subscriptions_subscription_list'))
 
@@ -131,10 +137,10 @@ def test_subscription_create_and_success(admin_client, django_user_model):
     """Tests subscription creation and success message works as expected."""
     subscription_count = models.UserSubscription.objects.all().count()
     user = django_user_model.objects.create_user(username='a', password='b')
-    plan = create_plan()
+    cost = create_cost(plan=create_plan())
     post_data = {
         'user': user.id,
-        'plan': plan.id,
+        'subscription': cost.id,
     }
 
     response = admin_client.post(
@@ -157,8 +163,8 @@ def test_subscription_create_and_success(admin_client, django_user_model):
 def test_subscription_update_template(admin_client, django_user_model):
     """Tests for proper subscription_update template."""
     user = django_user_model.objects.create_user(username='a', password='b')
-    plan = create_plan()
-    subscription = create_subscription(user, plan)
+    cost = create_cost(plan=create_plan())
+    subscription = create_subscription(user, cost)
 
     response = admin_client.get(
         reverse(
@@ -177,8 +183,8 @@ def test_subscription_update_template(admin_client, django_user_model):
 def test_subscription_update_403_if_not_authorized(client, django_user_model):
     """Tests 403 error for subscription update if inadequate permissions."""
     user = django_user_model.objects.create_user(username='a', password='b')
-    plan = create_plan()
-    subscription = create_subscription(user, plan)
+    cost = create_cost(plan=create_plan())
+    subscription = create_subscription(user, cost)
 
     django_user_model.objects.create_user(username='user', password='password')
     client.login(username='user', password='password')
@@ -196,8 +202,8 @@ def test_subscription_update_403_if_not_authorized(client, django_user_model):
 def test_subscription_update_200_if_authorized(client, django_user_model):
     """Tests 200 response for subscription update with adequate permissions."""
     user = django_user_model.objects.create_user(username='a', password='b')
-    plan = create_plan()
-    subscription = create_subscription(user, plan)
+    cost = create_cost(plan=create_plan())
+    subscription = create_subscription(user, cost)
 
     # Retrieve proper permission, add to user, and login
     content = ContentType.objects.get_for_model(models.SubscriptionPlan)
@@ -224,11 +230,11 @@ def test_subscription_update_and_success(admin_client, django_user_model):
     """Tests that subscription update and success message works as expected."""
     # Setup initial tag for update
     user = django_user_model.objects.create_user(username='a', password='b')
-    plan = create_plan()
-    subscription = create_subscription(user, plan)
+    cost = create_cost(plan=create_plan())
+    subscription = create_subscription(user, cost)
     subscription_count = models.UserSubscription.objects.all().count()
     post_data = {
-        'plan': plan.id,
+        'subscription': cost.id,
         'active': False,
     }
 
@@ -253,8 +259,8 @@ def test_subscription_update_and_success(admin_client, django_user_model):
 def test_subscription_delete_template(admin_client, django_user_model):
     """Tests for proper subscription_delete template."""
     user = django_user_model.objects.create_user(username='a', password='b')
-    plan = create_plan()
-    subscription = create_subscription(user, plan)
+    cost = create_cost(plan=create_plan())
+    subscription = create_subscription(user, cost)
 
     response = admin_client.get(
         reverse(
@@ -273,8 +279,8 @@ def test_subscription_delete_template(admin_client, django_user_model):
 def test_subscription_delete_403_if_not_authorized(client, django_user_model):
     """Tests 403 error for subscription delete if inadequate permissions."""
     user = django_user_model.objects.create_user(username='a', password='b')
-    plan = create_plan()
-    subscription = create_subscription(user, plan)
+    cost = create_cost(plan=create_plan())
+    subscription = create_subscription(user, cost)
 
     django_user_model.objects.create_user(username='user', password='password')
     client.login(username='user', password='password')
@@ -292,8 +298,8 @@ def test_subscription_delete_403_if_not_authorized(client, django_user_model):
 def test_subscription_delete_200_if_authorized(client, django_user_model):
     """Tests 200 response for subscription delete with adequate permissions."""
     user = django_user_model.objects.create_user(username='a', password='b')
-    plan = create_plan()
-    subscription = create_subscription(user, plan)
+    cost = create_cost(plan=create_plan())
+    subscription = create_subscription(user, cost)
 
     # Retrieve proper permission, add to user, and login
     content = ContentType.objects.get_for_model(models.SubscriptionPlan)
@@ -319,8 +325,8 @@ def test_subscription_delete_200_if_authorized(client, django_user_model):
 def test_subscription_delete_and_success(admin_client, django_user_model):
     """Tests for success message on successful deletion."""
     user = django_user_model.objects.create_user(username='a', password='b')
-    plan = create_plan()
-    subscription = create_subscription(user, plan)
+    cost = create_cost(plan=create_plan())
+    subscription = create_subscription(user, cost)
     subscription_count = models.UserSubscription.objects.all().count()
 
     response = admin_client.post(
