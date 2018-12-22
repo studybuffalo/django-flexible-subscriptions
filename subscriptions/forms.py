@@ -3,6 +3,7 @@
 from django import forms
 from django.forms import ModelForm, Select
 
+from subscriptions.conf import CURRENCY, SETTINGS
 from subscriptions.models import SubscriptionPlan, PlanCost
 
 
@@ -57,14 +58,11 @@ class PaymentForm(forms.Form):
         label='Card CVV',
         max_length=4,
     )
-
-class BillingAddressForm(forms.Form):
-    """Form to collect billing address deetails."""
-    title = forms.CharField(
+    address_title = forms.CharField(
         label='Title',
         max_length=32,
     )
-    name = forms.CharField(
+    address_name = forms.CharField(
         label='Name',
         max_length=128,
     )
@@ -80,26 +78,44 @@ class BillingAddressForm(forms.Form):
         label='Line 3',
         max_length=256,
     )
-    city = forms.CharField(
+    address_city = forms.CharField(
         label='City',
         max_length=128,
     )
-    province = forms.CharField(
+    address_province = forms.CharField(
         label='Province/State',
         max_length=128,
     )
-    postcode = forms.CharField(
+    address_postcode = forms.CharField(
         label='Postcode',
         max_length=16,
     )
-    country = forms.CharField(
+    address_country = forms.CharField(
         label='Country',
         max_length=128,
     )
 
-def convert_widgets_to_hidden(form):
-    """Converts all widgets for provided form to hidden inputs."""
-    for _, field in form.__dict__['declared_fields'].items():
-        field.widget = forms.HiddenInput()
+class SubscriptionPlanCostForm(forms.Form):
+    """Form to handle choosing a subscription plan for payment."""
+    plan_cost = forms.UUIDField(
+        label='Choose subscription',
+        widget=forms.RadioSelect()
+    )
 
-    return form
+    def __init__(self, *args, **kwargs):
+        costs = kwargs.pop('subscription_plan').costs.all()
+        PLAN_COST_CHOICES = []
+
+        for cost in costs:
+            radio_text = '{} {}'.format(
+                CURRENCY[SETTINGS['currency_locale']].format_currency(
+                    cost.cost
+                ),
+                cost.display_billing_frequency_text
+            )
+            PLAN_COST_CHOICES.append((cost.id, radio_text))
+
+        super(SubscriptionPlanCostForm, self).__init__(*args, **kwargs)
+
+        # Update the radio widget with proper choices
+        self.fields['plan_cost'].widget.choices = PLAN_COST_CHOICES

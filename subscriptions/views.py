@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.forms import HiddenInput
 from django.forms.models import inlineformset_factory
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404
@@ -11,6 +12,7 @@ from django.urls import reverse_lazy
 
 from subscriptions import models, forms
 
+# TODO: Extend views to include a setting to specify the base template
 
 # Tag Views
 # -----------------------------------------------------------------------------
@@ -332,7 +334,6 @@ class SubscribeView(generic.TemplateView):
     """View to handle all aspects of the subscribing process."""
     confirmation = False
     payment_form = forms.PaymentForm
-    billing_address_form = forms.BillingAddressForm
     subscription_plan = None
     success_url = 'subscriptions_dashboard'
     template_extends = 'subscriptions/base.html'
@@ -382,11 +383,9 @@ class SubscribeView(generic.TemplateView):
         post_action = request.POST.get('action', None)
 
         if post_action == 'confirm':
-            # DO SOME VALIDATION OF THE DATA
             return self.render_confirmation(request)
 
         if post_action == 'process':
-            # REPEAT VALIDATION OF THE DATA
             return self.process_subscription(request)
 
         # No action - assumes payment details need to be collected
@@ -397,65 +396,78 @@ class SubscribeView(generic.TemplateView):
         self.confirmation = False
         context = self.get_context_data(**kwargs)
 
-        # Forms to collect billing details
+        # Forms to collect subscription details
+        context['plan_cost_form'] = forms.SubscriptionPlanCostForm(
+            subscription_plan=self.subscription_plan
+        )
         context['payment_form'] = self.payment_form()
-        context['billing_address_form'] = self.billing_address_form()
 
         return self.render_to_response(context)
 
     def render_confirmation(self, request, **kwargs):
         """Renders a confirmation page before processing payment."""
-        self.confirmation = True
-        context = self.get_context_data(**kwargs)
-
-        # Forms to process payment (hidden to prevent editing)
-        hidden_payment_form = self.hidden_payment_form()
-        hidden_billing_address_form = self.hidden_billing_address_form()
-
-        context['payment_form'] = hidden_payment_form(request.POST)
-        context['billing_address_form'] = hidden_billing_address_form(
-            request.POST
+        # Retrive form details
+        plan_cost_form = forms.SubscriptionPlanCostForm(
+            request.POST, subscription_plan=self.subscription_plan
         )
+        payment_form = self.payment_form(request.POST)
+
+        # Validate form submission
+        if payment_form.is_valid() and plan_cost_form.is_valid():
+            self.confirmation = True
+            context = self.get_context_data(**kwargs)
+
+            # Forms to process payment (hidden to prevent editing)
+            context['plan_cost_form'] = self.hide_form(plan_cost_form)
+            context['payment_form'] = self.hide_form(payment_form)
+
+            return self.render_to_response(context)
+
+        # Invalid form submission - render preview again
+        self.confirmation = False
+        context = self.get_context_data(**kwargs)
+        context['plan_cost_form'] = plan_cost_form
+        context['payment_form'] = payment_form
 
         return self.render_to_response(context)
 
     def process_subscription(self, request, **kwargs):
         """Moves forward with payment & subscription processing."""
-        # Attempt to process payment
-        payment_success = self.process_payment(request)
+        # Validate payment details again incase anything changed
+        plan_cost_form = forms.SubscriptionPlanCostForm(
+            request.POST, subscription_plan=self.subscription_plan
+        )
+        payment_form = self.payment_form(request.POST)
 
-        if payment_success:
-            # Payment successful - can handle subscription processing
-            self.setup_subscription()
+        if payment_form.is_valid() and plan_cost_form.is_valid():
+            # Attempt to process payment
+            payment_success = self.process_payment(payment_form)
 
-            return HttpResponseRedirect(self.get_success_url())
+            if payment_success:
+                # Payment successful - can handle subscription processing
+                self.setup_subscription(request.user)
 
-        # Payment unsuccessful, return to confirmation page
-        messages.error(request, 'Error processing payment')
+                return HttpResponseRedirect(self.get_success_url())
 
+            # Payment unsuccessful, add message for confirmation page
+            messages.error(request, 'Error processing payment')
+
+        # Invalid form submission/payment - render confirmation again
         self.confirmation = True
         context = self.get_context_data(**kwargs)
-
-        # Forms to process payment (hidden to prevent editing)
-        hidden_payment_form = self.hidden_payment_form()
-        hidden_billing_address_form = self.hidden_billing_address_form()
-
-        context['payment_form'] = hidden_payment_form(request.POST)
-        context['billing_address_form'] = hidden_billing_address_form(
-            request.POST
-        )
+        context['plan_cost_form'] = self.hide_form(plan_cost_form)
+        context['payment_form'] = self.hide_form(payment_form)
 
         return self.render_to_response(context)
 
-    def hidden_payment_form(self):
-        """Returns payment_form with hidden input widgets."""
-        return forms.convert_widgets_to_hidden(self.payment_form)
+    def hide_form(self, form):
+        """Returns form with hidden input widgets."""
+        for _, field in form.fields.items():
+            field.widget = HiddenInput()
 
-    def hidden_billing_address_form(self):
-        """Returns billing_address_form with hidden input widgets."""
-        return forms.convert_widgets_to_hidden(self.billing_address_form)
+        return form
 
-    def process_payment(self, request):
+    def process_payment(self, payment_form): # pylint: disable=unused-argument
         """Processes payment and confirms if payment is accepted.
 
             This method needs to be overriden in a project to handle
@@ -467,8 +479,12 @@ class SubscribeView(generic.TemplateView):
         """
         return True
 
-    def setup_subscription(self):
+    def setup_subscription(self, request_user):
         """Adds subscription to user and adds them to required group."""
+        # Get the subscription plan
+        # Get the subscribing user
+        # Add the user to the subscription plan
+        # Add the user to the subscription plan group
 
 class ThankYouView(generic.DetailView):
     """A thank you page and summary for a new subscription."""
