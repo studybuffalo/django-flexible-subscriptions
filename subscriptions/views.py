@@ -5,7 +5,8 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.forms import HiddenInput
 from django.forms.models import inlineformset_factory
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect
+from django.http.response import HttpResponseNotFound
 from django.shortcuts import get_object_or_404
 from django.views import generic
 from django.urls import reverse_lazy
@@ -377,7 +378,7 @@ class SubscribeView(generic.TemplateView):
                 models.SubscriptionPlan, id=request.POST['plan_id']
             )
         except KeyError:
-            raise Http404('No subscription plan selected.')
+            return HttpResponseNotFound('No subscription plan selected.')
 
         # Determine POST action and direct to proper function
         post_action = request.POST.get('action', None)
