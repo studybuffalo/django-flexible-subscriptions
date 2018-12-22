@@ -48,6 +48,11 @@ urlpatterns = [
         name='subscriptions_plan_delete',
     ),
     url(
+        r'subscribe/$',
+        views.SubscribeView.as_view(),
+        name='subscriptions_subscribe',
+    ),
+    url(
         r'subscriptions/$',
         views.SubscriptionListView.as_view(),
         name='subscriptions_subscription_list',
@@ -81,5 +86,10 @@ urlpatterns = [
         r'^$',
         TemplateView.as_view(template_name='subscriptions/dashboard.html'),
         name='subscriptions_dashboard',
+    ),
+    url(
+        r'thank-you/$',
+        views.ThankYouView.as_view(),
+        name='subscriptions_thank_you',
     ),
 ]
