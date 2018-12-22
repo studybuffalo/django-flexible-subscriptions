@@ -3,7 +3,7 @@ import pytest
 
 from django.urls import reverse
 
-from subscriptions import models, views
+from subscriptions import models, views, forms
 
 
 def create_plan(plan_name='1', plan_description='2'):
@@ -72,6 +72,64 @@ def test_subscribe_view_post_preview_200_response(admin_client):
 
     post_data = {
         'action': None,
+        'plan_id': plan.id,
+    }
+
+    response = admin_client.post(
+        reverse('subscriptions_subscribe'),
+        post_data,
+        follow=True,
+    )
+
+    assert response.status_code == 200
+
+@pytest.mark.django_db
+def test_subscribe_view_post_preview_added_context(admin_client):
+    """Tests preview POST adds required forms to context."""
+    plan = create_plan()
+    post_data = {
+        'action': None,
+        'plan_id': plan.id,
+    }
+
+    response = admin_client.post(
+        reverse('subscriptions_subscribe'),
+        post_data,
+        follow=True,
+    )
+
+    assert 'plan_cost_form' in response.context
+    assert isinstance(
+        response.context['plan_cost_form'], forms.SubscriptionPlanCostForm
+    )
+    assert 'payment_form' in response.context
+    assert isinstance(response.context['payment_form'], forms.PaymentForm)
+
+@pytest.mark.django_db
+def test_subscribe_view_post_confirmation_200_response(admin_client):
+    """Tests post returns 200 response on confirmation request."""
+    plan = create_plan()
+
+    post_data = {
+        'action': 'confirm',
+        'plan_id': plan.id,
+    }
+
+    response = admin_client.post(
+        reverse('subscriptions_subscribe'),
+        post_data,
+        follow=True,
+    )
+
+    assert response.status_code == 200
+
+@pytest.mark.django_db
+def test_subscribe_view_post_process_200_response(admin_client):
+    """Tests post returns 200 response on process request."""
+    plan = create_plan()
+
+    post_data = {
+        'action': 'process',
         'plan_id': plan.id,
     }
 
