@@ -80,6 +80,12 @@ class SubscriptionPlan(models.Model):
 
 class PlanCost(models.Model):
     """Cost and frequency of billing for a plan."""
+    id = models.UUIDField(
+        default=uuid4,
+        editable=False,
+        primary_key=True,
+        verbose_name='ID',
+    )
     plan = models.ForeignKey(
         SubscriptionPlan,
         help_text=_('the subscription plan for these cost details'),
@@ -156,11 +162,12 @@ class UserSubscription(models.Model):
         on_delete=models.CASCADE,
         related_name='subscriptions',
     )
-    plan = models.ForeignKey(
-        SubscriptionPlan,
-        help_text=_('the subscription plan for this user'),
+    subscription = models.ForeignKey(
+        PlanCost,
+        help_text=_('the plan costs and billing frequency for this user'),
         null=True,
         on_delete=models.CASCADE,
+        related_name='subscriptions'
     )
     date_billing_start = models.DateField(
         blank=True,
@@ -211,12 +218,14 @@ class SubscriptionTransaction(models.Model):
         help_text=_('the user that this subscription was billed for'),
         null=True,
         on_delete=models.SET_NULL,
+        related_name='subscription_transactions'
     )
-    plan = models.ForeignKey(
-        SubscriptionPlan,
-        help_text=_('the subscription plan that was billed'),
+    subscription = models.ForeignKey(
+        PlanCost,
+        help_text=_('the plan costs that were billed'),
         null=True,
         on_delete=models.SET_NULL,
+        related_name='transactions'
     )
     date_transaction = models.DateTimeField(
         auto_now_add=True,

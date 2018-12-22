@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='PlanCost',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False, verbose_name='ID')),
                 ('recurrence_period', models.PositiveSmallIntegerField(default=1, help_text='how often the plan is billed (per recurrence unit)', validators=[django.core.validators.MinValueValidator(1)])),
                 ('recurrence_unit', models.PositiveIntegerField(default=6, help_text='the unit of measurement for the recurrence period', validators=[django.core.validators.MaxValueValidator(7)])),
                 ('cost', models.DecimalField(blank=True, decimal_places=4, help_text='the cost per recurrence of the plan', max_digits=19, null=True)),
@@ -60,8 +60,8 @@ class Migration(migrations.Migration):
                 ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False, verbose_name='ID')),
                 ('date_transaction', models.DateTimeField(auto_now_add=True, help_text='the datetime the transaction was billed', verbose_name='transaction date')),
                 ('amount', models.DecimalField(blank=True, decimal_places=4, help_text='how much was billed for the user', max_digits=19, null=True)),
-                ('plan', models.ForeignKey(help_text='the subscription plan that was billed', null=True, on_delete=django.db.models.deletion.SET_NULL, to='subscriptions.SubscriptionPlan')),
-                ('user', models.ForeignKey(help_text='the user that this subscription was billed for', null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
+                ('subscription', models.ForeignKey(help_text='the plan costs that were billed', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='transactions', to='subscriptions.PlanCost')),
+                ('user', models.ForeignKey(help_text='the user that this subscription was billed for', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='subscription_transactions', to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'ordering': ('date_transaction', 'user',),
@@ -77,7 +77,7 @@ class Migration(migrations.Migration):
                 ('date_billing_next', models.DateField(blank=True, help_text='the next date billing is due', null=True, verbose_name='next start date')),
                 ('active', models.BooleanField(default=True, help_text='whether this subscription is active or not')),
                 ('cancelled', models.BooleanField(default=False, help_text='whether this subscription is cancelled or not')),
-                ('plan', models.ForeignKey(help_text='the subscription plan for this user', null=True, on_delete=django.db.models.deletion.CASCADE, to='subscriptions.SubscriptionPlan')),
+                ('subscription', models.ForeignKey(help_text='the plan costs and billing frequency for this user', null=True, on_delete=django.db.models.deletion.CASCADE, related_name='subscriptions', to='subscriptions.PlanCost')),
                 ('user', models.ForeignKey(help_text='the user this subscription applies to', null=True, on_delete=django.db.models.deletion.CASCADE, related_name='subscriptions', to=settings.AUTH_USER_MODEL)),
             ],
             options={
