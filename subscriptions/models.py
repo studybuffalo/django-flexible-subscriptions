@@ -1,10 +1,7 @@
 """Models for the Flexible Subscriptions app."""
-from datetime import datetime, timedelta
+from datetime import timedelta
 from uuid import uuid4
 
-import pytz
-
-from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.core.validators import MaxValueValidator, MinValueValidator
