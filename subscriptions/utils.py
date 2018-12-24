@@ -43,14 +43,18 @@ class Manager():
         """Handles processing of expired/cancelled subscriptions."""
         # Get all user subscriptions
         user = subscription.user
-        user_subscriptions = user.subscriptions
+        user_subscriptions = user.subscriptions.all()
+        subscription_group = subscription.subscription.plan.group
+        group_matches = 0
 
-        # Remove all user groups
-        user.groups.clear()
-
-        # Re-add all active user groups
+        # Check if there is another subscription for this group
         for user_subscription in user_subscriptions:
-            user_subscription.plan.group.add(user)
+            if user_subscription.subscription.plan.group == subscription_group:
+                group_matches += 1
+
+        # If no other subscription, can remove user from group
+        if group_matches < 2:
+            subscription_group.user_set.remove(user)
 
         # Update this specific UserSubscription instance
         subscription.active = False
