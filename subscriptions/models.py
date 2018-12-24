@@ -148,15 +148,11 @@ class PlanCost(models.Model):
             self.recurrence_period, conversion[self.recurrence_unit]['plural']
         )
 
-    @property
     def next_billing_datetime(self, current):
         """Calculates next billing date for provided datetime."""
         # TODO: need to streamline handling of months and years
         # (e.g. bill at end of month for Feb 28 when date is the 30th)
         # This is currently a placeholder to get the first version out
-        if self.recurrence_unit == 0:
-            return None
-
         if self.recurrence_unit == 1:
             return current + timedelta(seconds=self.recurrence_period)
 
@@ -177,6 +173,8 @@ class PlanCost(models.Model):
 
         if self.recurrence_unit == 7:
             return current + timedelta(years=self.recurrence_period * 365.2425)
+
+        return None
 
 class UserSubscription(models.Model):
     """Details of a user's specific subscription."""

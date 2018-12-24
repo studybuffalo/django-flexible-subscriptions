@@ -3,6 +3,7 @@ from unittest.mock import patch
 
 import pytest
 
+from django.contrib.auth.models import Group
 from django.contrib.messages import get_messages
 from django.forms import HiddenInput
 from django.urls import reverse
@@ -404,6 +405,27 @@ def test_subscribe_view_hide_form():
 
     for _, field in hidden_form.fields.items():
         assert isinstance(field.widget, HiddenInput)
+
+def test_subscribe_view_setup_subscription_user_group(django_user_model):
+    """Tests that user is properly added to group."""
+    user = django_user_model.objects.create_user(username='a', password='b')
+    group, _ = Group.objects.get_or_create(name='test')
+
+    plan = create_plan()
+    plan.group = group
+    cost = create_cost(plan=plan)
+
+    view = views.SubscribeView()
+    view.subscription_plan = plan
+    view.setup_subscription(user, cost.id)
+
+    assert user in group.user_set.all()
+
+def test_subscribe_view_setup_subscription_user_subscription():
+    """Tests that user subscription entry is setup properly."""
+
+def test_subscribe_view_setup_subscription_no_group():
+    """Tests that setup handles subscriptions with no groups."""
 
 @pytest.mark.django_db
 def test_thank_you_view_returns_object(admin_client):
