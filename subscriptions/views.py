@@ -10,6 +10,7 @@ from django.http.response import HttpResponseNotFound
 from django.shortcuts import get_object_or_404
 from django.views import generic
 from django.urls import reverse_lazy
+from django.utils import timezone
 
 from subscriptions import models, forms
 
@@ -446,7 +447,9 @@ class SubscribeView(generic.TemplateView):
 
             if payment_success:
                 # Payment successful - can handle subscription processing
-                self.setup_subscription(request.user)
+                self.setup_subscription(
+                    request.user, plan_cost_form.cleaned_data['plan_cost']
+                )
 
                 return HttpResponseRedirect(self.get_success_url())
 
@@ -480,12 +483,25 @@ class SubscribeView(generic.TemplateView):
         """
         return True
 
-    def setup_subscription(self, request_user):
+    def setup_subscription(self, request_user, plan_cost):
         """Adds subscription to user and adds them to required group."""
-        # Get the subscription plan
-        # Get the subscribing user
-        # Add the user to the subscription plan
-        # Add the user to the subscription plan group
+        current_date = timezone.now()
+
+        # Add subscription plan to user
+        models.UserSubscription.objects.create(
+            user=request_user,
+            subscription=plan_cost,
+            date_billing_start=current_date,
+            date_billing_end=None,
+            date_billing_last=current_date,
+            date_billing_next=plan_cost.next_billing_datetime(current_date),
+            active=True,
+            cancelled=False,
+        )
+
+        # Add user to the proper group
+        group = self.subscription_plan.group
+        group.user_set.add(request_user)
 
 class ThankYouView(generic.DetailView):
     """A thank you page and summary for a new subscription."""
