@@ -70,8 +70,12 @@ class Manager():
         )
 
         if payment_success:
-            # Add user to proper group
-            subscription.subscription.plan.group.add(subscription.user)
+            # Add user to the proper group
+            try:
+                subscription.subscription.plan.group.add(subscription.user)
+            except AttributeError:
+                # No group available to add user to
+                pass
 
             # Update subscription details
             current = timezone.now()
