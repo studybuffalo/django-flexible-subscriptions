@@ -1,4 +1,6 @@
 """Tests for the models module."""
+from datetime import datetime
+
 import pytest
 
 from subscriptions import models
@@ -485,3 +487,168 @@ def test_plan_cost_display_billing_frequency_text_year_plural():
     )
 
     assert cost.display_billing_frequency_text == 'every 2 years'
+
+@pytest.mark.django_db
+def test_plan_cost_next_billing_datetime_seconds():
+    """Tests next_billing_datetime with 'seconds'."""
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='Test Plan',
+        plan_description='This is a test plan',
+    )
+    cost = models.PlanCost.objects.create(
+        plan=plan, recurrence_period=1, recurrence_unit=models.SECOND
+    )
+    current = datetime(2018, 1, 1, 1, 1, 1)
+    next_billing = cost.next_billing_datetime(current)
+
+    assert next_billing == datetime(2018, 1, 1, 1, 1, 2)
+
+@pytest.mark.django_db
+def test_plan_cost_next_billing_datetime_minutes():
+    """Tests next_billing_datetime with 'minutes'."""
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='Test Plan',
+        plan_description='This is a test plan',
+    )
+    cost = models.PlanCost.objects.create(
+        plan=plan, recurrence_period=1, recurrence_unit=models.MINUTE
+    )
+    current = datetime(2018, 1, 1, 1, 1, 1)
+    next_billing = cost.next_billing_datetime(current)
+
+    assert next_billing == datetime(2018, 1, 1, 1, 2, 1)
+
+@pytest.mark.django_db
+def test_plan_cost_next_billing_datetime_hours():
+    """Tests next_billing_datetime with 'hours'."""
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='Test Plan',
+        plan_description='This is a test plan',
+    )
+    cost = models.PlanCost.objects.create(
+        plan=plan, recurrence_period=1, recurrence_unit=models.HOUR
+    )
+    current = datetime(2018, 1, 1, 1, 1, 1)
+    next_billing = cost.next_billing_datetime(current)
+
+    assert next_billing == datetime(2018, 1, 1, 2, 1, 1)
+
+@pytest.mark.django_db
+def test_plan_cost_next_billing_datetime_days():
+    """Tests next_billing_datetime with 'days'."""
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='Test Plan',
+        plan_description='This is a test plan',
+    )
+    cost = models.PlanCost.objects.create(
+        plan=plan, recurrence_period=1, recurrence_unit=models.DAY
+    )
+    current = datetime(2018, 1, 1, 1, 1, 1)
+    next_billing = cost.next_billing_datetime(current)
+
+    assert next_billing == datetime(2018, 1, 2, 1, 1, 1)
+
+@pytest.mark.django_db
+def test_plan_cost_next_billing_datetime_weeks():
+    """Tests next_billing_datetime with 'weeks'."""
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='Test Plan',
+        plan_description='This is a test plan',
+    )
+    cost = models.PlanCost.objects.create(
+        plan=plan, recurrence_period=1, recurrence_unit=models.WEEK
+    )
+    current = datetime(2018, 1, 1, 1, 1, 1)
+    next_billing = cost.next_billing_datetime(current)
+
+    assert next_billing == datetime(2018, 1, 8, 1, 1, 1)
+
+@pytest.mark.django_db
+def test_plan_cost_next_billing_datetime_months():
+    """Tests next_billing_datetime with 'months'."""
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='Test Plan',
+        plan_description='This is a test plan',
+    )
+    cost = models.PlanCost.objects.create(
+        plan=plan, recurrence_period=1, recurrence_unit=models.MONTH
+    )
+    current = datetime(2018, 1, 1, 1, 1, 1)
+    next_billing = cost.next_billing_datetime(current)
+
+    assert next_billing == datetime(2018, 1, 31, 11, 30, 0, 520000)
+
+@pytest.mark.django_db
+def test_plan_cost_next_billing_datetime_12_months():
+    """Tests next_billing_datetime with 'months'."""
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='Test Plan',
+        plan_description='This is a test plan',
+    )
+    cost = models.PlanCost.objects.create(
+        plan=plan, recurrence_period=12, recurrence_unit=models.MONTH
+    )
+    current = datetime(2018, 1, 1, 1, 1, 1)
+    next_billing = cost.next_billing_datetime(current)
+
+    assert next_billing == datetime(2019, 1, 1, 6, 48, 55, 240000)
+
+@pytest.mark.django_db
+def test_plan_cost_next_billing_datetime_48_months():
+    """Tests next_billing_datetime with 12 'months'."""
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='Test Plan',
+        plan_description='This is a test plan',
+    )
+    cost = models.PlanCost.objects.create(
+        plan=plan, recurrence_period=48, recurrence_unit=models.MONTH
+    )
+    current = datetime(2018, 1, 1, 1, 1, 1)
+    next_billing = cost.next_billing_datetime(current)
+
+    assert next_billing == datetime(2022, 1, 1, 0, 12, 37, 960000)
+
+@pytest.mark.django_db
+def test_plan_cost_next_billing_datetime_years():
+    """Tests next_billing_datetime with 48 'months'."""
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='Test Plan',
+        plan_description='This is a test plan',
+    )
+    cost = models.PlanCost.objects.create(
+        plan=plan, recurrence_period=1, recurrence_unit=models.YEAR
+    )
+    current = datetime(2018, 1, 1, 1, 1, 1)
+    next_billing = cost.next_billing_datetime(current)
+
+    assert next_billing == datetime(2019, 1, 1, 6, 50, 13)
+
+@pytest.mark.django_db
+def test_plan_cost_next_billing_datetime_4_years():
+    """Tests next_billing_datetime with 4 'years'."""
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='Test Plan',
+        plan_description='This is a test plan',
+    )
+    cost = models.PlanCost.objects.create(
+        plan=plan, recurrence_period=4, recurrence_unit=models.YEAR
+    )
+    current = datetime(2018, 1, 1, 1, 1, 1)
+    next_billing = cost.next_billing_datetime(current)
+
+    assert next_billing == datetime(2022, 1, 1, 0, 17, 49)
+
+@pytest.mark.django_db
+def test_plan_cost_next_billing_datetime_once():
+    """Tests next_billing_datetime with period of 'once'."""
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='Test Plan',
+        plan_description='This is a test plan',
+    )
+    cost = models.PlanCost.objects.create(
+        plan=plan, recurrence_period=1, recurrence_unit=models.ONCE
+    )
+    current = datetime(2018, 1, 1, 1, 1, 1)
+    next_billing = cost.next_billing_datetime(current)
+
+    assert next_billing is None
