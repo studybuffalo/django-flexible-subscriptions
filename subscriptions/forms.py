@@ -61,6 +61,7 @@ class PaymentForm(forms.Form):
     address_title = forms.CharField(
         label='Title',
         max_length=32,
+        required=False,
     )
     address_name = forms.CharField(
         label='Name',
@@ -73,10 +74,12 @@ class PaymentForm(forms.Form):
     address_line_2 = forms.CharField(
         label='Line 2',
         max_length=256,
+        required=False,
     )
     address_line_3 = forms.CharField(
         label='Line 3',
         max_length=256,
+        required=False,
     )
     address_city = forms.CharField(
         label='City',
@@ -89,6 +92,7 @@ class PaymentForm(forms.Form):
     address_postcode = forms.CharField(
         label='Postcode',
         max_length=16,
+        required=False,
     )
     address_country = forms.CharField(
         label='Country',
