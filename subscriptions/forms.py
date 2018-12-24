@@ -41,22 +41,27 @@ class PaymentForm(forms.Form):
     cardholder_name = forms.CharField(
         label='Cardholder name',
         max_length=255,
+        min_length=1,
     )
     card_number = forms.CharField(
         label='Card number',
         max_length=16,
+        min_length=16,
     )
     card_expiry_month = forms.CharField(
         label='Card expiry (month)',
         max_length=2,
+        min_length=1,
     )
     card_expiry_year = forms.CharField(
         label='Card expiry (year)',
-        max_length=4
+        max_length=4,
+        min_length=2
     )
     card_cvv = forms.CharField(
         label='Card CVV',
         max_length=4,
+        min_length=3,
     )
     address_title = forms.CharField(
         label='Title',
@@ -84,10 +89,12 @@ class PaymentForm(forms.Form):
     address_city = forms.CharField(
         label='City',
         max_length=128,
+        min_length=1,
     )
     address_province = forms.CharField(
         label='Province/State',
         max_length=128,
+        min_length=1,
     )
     address_postcode = forms.CharField(
         label='Postcode',
@@ -97,6 +104,7 @@ class PaymentForm(forms.Form):
     address_country = forms.CharField(
         label='Country',
         max_length=128,
+        min_length=1,
     )
 
 class SubscriptionPlanCostForm(forms.Form):
