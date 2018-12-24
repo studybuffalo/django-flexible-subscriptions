@@ -1,4 +1,5 @@
 """Models for the Flexible Subscriptions app."""
+from datetime import timedelta
 from uuid import uuid4
 
 from django.contrib.auth import get_user_model
@@ -147,6 +148,36 @@ class PlanCost(models.Model):
             self.recurrence_period, conversion[self.recurrence_unit]['plural']
         )
 
+    @property
+    def next_billing_datetime(self, current):
+        """Calculates next billing date for provided datetime."""
+        # TODO: need to streamline handling of months and years
+        # (e.g. bill at end of month for Feb 28 when date is the 30th)
+        # This is currently a placeholder to get the first version out
+        if self.recurrence_unit == 0:
+            return None
+
+        if self.recurrence_unit == 1:
+            return current + timedelta(seconds=self.recurrence_period)
+
+        if self.recurrence_unit == 2:
+            return current + timedelta(minutes=self.recurrence_period)
+
+        if self.recurrence_unit == 3:
+            return current + timedelta(hours=self.recurrence_period)
+
+        if self.recurrence_unit == 4:
+            return current + timedelta(days=self.recurrence_period)
+
+        if self.recurrence_unit == 5:
+            return current + timedelta(weeks=self.recurrence_period)
+
+        if self.recurrence_unit == 6:
+            return current + timedelta(days=self.recurrence_period * 30.4368)
+
+        if self.recurrence_unit == 7:
+            return current + timedelta(years=self.recurrence_period * 365.2425)
+
 class UserSubscription(models.Model):
     """Details of a user's specific subscription."""
     id = models.UUIDField(
@@ -169,25 +200,25 @@ class UserSubscription(models.Model):
         on_delete=models.CASCADE,
         related_name='subscriptions'
     )
-    date_billing_start = models.DateField(
+    date_billing_start = models.DateTimeField(
         blank=True,
         help_text=_('the date to start billing this subscription'),
         null=True,
         verbose_name='billing start date',
     )
-    date_billing_end = models.DateField(
+    date_billing_end = models.DateTimeField(
         blank=True,
         help_text=_('the date to finish billing this subscription'),
         null=True,
         verbose_name='billing start end',
     )
-    date_billing_last = models.DateField(
+    date_billing_last = models.DateTimeField(
         blank=True,
         help_text=_('the last date this plan was billed'),
         null=True,
         verbose_name='last billing date',
     )
-    date_billing_next = models.DateField(
+    date_billing_next = models.DateTimeField(
         blank=True,
         help_text=_('the next date billing is due'),
         null=True,
