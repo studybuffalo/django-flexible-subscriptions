@@ -1,7 +1,10 @@
 """Models for the Flexible Subscriptions app."""
-from datetime import timedelta
+from datetime import datetime, timedelta
 from uuid import uuid4
 
+import pytz
+
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -169,10 +172,20 @@ class PlanCost(models.Model):
             return current + timedelta(weeks=self.recurrence_period)
 
         if self.recurrence_unit == 6:
-            return current + timedelta(days=self.recurrence_period * 30.4368)
+            # Adds the average number of days per month as per:
+            # http://en.wikipedia.org/wiki/Month#Julian_and_Gregorian_calendars
+            # This handle any issues with months < 31 days and leap years
+            return current + timedelta(
+                days=30.4368 * self.recurrence_period
+            )
 
         if self.recurrence_unit == 7:
-            return current + timedelta(years=self.recurrence_period * 365.2425)
+            # Adds the average number of days per year as per:
+            # http://en.wikipedia.org/wiki/Year#Calendar_year
+            # This handle any issues with leap years
+            return current + timedelta(
+                days=365.2425 * self.recurrence_period
+            )
 
         return None
 
