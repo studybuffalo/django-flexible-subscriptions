@@ -483,8 +483,9 @@ class SubscribeView(generic.TemplateView):
         """
         return True
 
-    def setup_subscription(self, request_user, plan_cost):
+    def setup_subscription(self, request_user, plan_cost_id):
         """Adds subscription to user and adds them to required group."""
+        plan_cost = models.PlanCost.objects.get(id=plan_cost_id)
         current_date = timezone.now()
 
         # Add subscription plan to user
@@ -500,8 +501,12 @@ class SubscribeView(generic.TemplateView):
         )
 
         # Add user to the proper group
-        group = self.subscription_plan.group
-        group.user_set.add(request_user)
+        try:
+            group = self.subscription_plan.group
+            group.user_set.add(request_user)
+        except AttributeError:
+            # No group available to add user to
+            pass
 
 class ThankYouView(generic.DetailView):
     """A thank you page and summary for a new subscription."""
