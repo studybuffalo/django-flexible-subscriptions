@@ -489,8 +489,19 @@ class SubscribeView(generic.TemplateView):
 
 class ThankYouView(generic.DetailView):
     """A thank you page and summary for a new subscription."""
+    object = None
     template_name = 'subscriptions/subscribe_thank_you.html'
+    template_extends = 'subscriptions/base.html'
     context_object_name = 'transaction'
+
+    def get_context_data(self, **kwargs):
+        """Overriding get_context_data to add additional context."""
+        context = super(ThankYouView, self).get_context_data(**kwargs)
+
+        # Provides the base template to extend from
+        context['template_extends'] = self.template_extends
+
+        return context
 
     def get_object(self, queryset=None):
         """Returns the provided transaction instance."""
