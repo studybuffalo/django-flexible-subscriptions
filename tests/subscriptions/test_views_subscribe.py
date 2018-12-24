@@ -406,8 +406,29 @@ def test_subscribe_view_hide_form():
     for _, field in hidden_form.fields.items():
         assert isinstance(field.widget, HiddenInput)
 
+@pytest.mark.django_db
 def test_subscribe_view_setup_subscription_user_group(django_user_model):
     """Tests that user is properly added to group."""
+    user = django_user_model.objects.create_user(username='a', password='b')
+    group, _ = Group.objects.get_or_create(name='test')
+    user_count = group.user_set.all().count()
+
+    plan = create_plan()
+    plan.group = group
+    cost = create_cost(plan=plan)
+
+    view = views.SubscribeView()
+    view.subscription_plan = plan
+    view.setup_subscription(user, cost.id)
+
+    assert user in group.user_set.all()
+    assert group.user_set.all().count() == user_count + 1
+
+@pytest.mark.django_db
+def test_subscribe_view_setup_subscription_user_subscription(django_user_model):
+    """Tests that user subscription entry is setup properly."""
+    sub_count = models.UserSubscription.objects.all().count()
+
     user = django_user_model.objects.create_user(username='a', password='b')
     group, _ = Group.objects.get_or_create(name='test')
 
@@ -419,13 +440,24 @@ def test_subscribe_view_setup_subscription_user_group(django_user_model):
     view.subscription_plan = plan
     view.setup_subscription(user, cost.id)
 
-    assert user in group.user_set.all()
+    assert models.UserSubscription.objects.all().count() == sub_count + 1
 
-def test_subscribe_view_setup_subscription_user_subscription():
-    """Tests that user subscription entry is setup properly."""
-
-def test_subscribe_view_setup_subscription_no_group():
+@pytest.mark.django_db
+def test_subscribe_view_setup_subscription_no_group(django_user_model):
     """Tests that setup handles subscriptions with no groups."""
+    user = django_user_model.objects.create_user(username='a', password='b')
+    group, _ = Group.objects.get_or_create(name='test')
+    user_count = group.user_set.all().count()
+
+    plan = create_plan()
+    cost = create_cost(plan=plan)
+
+    view = views.SubscribeView()
+    view.subscription_plan = plan
+    view.setup_subscription(user, cost.id)
+
+    assert user not in group.user_set.all()
+    assert group.user_set.all().count() == user_count
 
 @pytest.mark.django_db
 def test_thank_you_view_returns_object(admin_client):
