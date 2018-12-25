@@ -6,7 +6,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.forms import HiddenInput
 from django.forms.models import inlineformset_factory
 from django.http import HttpResponseRedirect
-from django.http.response import HttpResponseNotFound
+from django.http.response import HttpResponseNotFound, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404
 from django.views import generic
 from django.urls import reverse_lazy
@@ -347,6 +347,7 @@ class SubscribeView(generic.TemplateView):
         return get_object_or_404(
             models.SubscriptionPlan, id=request.POST.get('plan_id', None)
         )
+
     def get_context_data(self, **kwargs):
         """Overriding get_context_data to add additional context."""
         context = super(SubscribeView, self).get_context_data(**kwargs)
@@ -371,6 +372,10 @@ class SubscribeView(generic.TemplateView):
     def get_success_url(self):
         """Returns the success URL."""
         return reverse_lazy(self.success_url)
+
+    def get(self, request, *args, **kwargs):
+        """Returns 404 error as this method is not implemented."""
+        return HttpResponseNotAllowed(['POST'])
 
     def post(self, request, *args, **kwargs):
         """Handles all POST requests to the SubscribeView.
