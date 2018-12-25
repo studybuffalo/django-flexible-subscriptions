@@ -126,7 +126,7 @@ class PlanCost(models.Model):
 
     @property
     def display_billing_frequency_text(self):
-        """Generates a human-readable billing frequency."""
+        """Generates human-readable billing frequency."""
         conversion = [
             'one-time',
             {'singular': 'per second', 'plural': 'seconds'},
@@ -149,7 +149,15 @@ class PlanCost(models.Model):
         )
 
     def next_billing_datetime(self, current):
-        """Calculates next billing date for provided datetime."""
+        """Calculates next billing date for provided datetime.
+
+            Parameters:
+                current (datetime): The current datetime to compare
+                    against.
+
+            Returns:
+                datetime: The next time billing will be due.
+        """
         if self.recurrence_unit == 1:
             return current + timedelta(seconds=self.recurrence_period)
 

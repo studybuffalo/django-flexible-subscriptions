@@ -54,7 +54,14 @@ class TagUpdateView(
     template_name = 'subscriptions/tag_update.html'
 
 class TagDeleteView(PermissionRequiredMixin, abstract.DeleteView):
-    """View to delete a tag."""
+    """View to delete a tag.
+
+        View is extended to handle additional attributes noted below.
+
+        Attributes:
+            success_message (str): Message to display on successful deletion.
+            success_url (str): URL to redirect to on successful deletion.
+    """
     model = models.PlanTag
     permission_required = 'subscriptions.subscriptions'
     raise_exception = True
@@ -70,10 +77,10 @@ class TagDeleteView(PermissionRequiredMixin, abstract.DeleteView):
         return super(TagDeleteView, self).delete(request, *args, **kwargs)
 
 
-# Plan Views
+# Subscription Plan Views
 # -----------------------------------------------------------------------------
 class PlanListView(PermissionRequiredMixin, abstract.ListView):
-    """List of all subscription plans"""
+    """List of all subscription plans."""
     model = models.SubscriptionPlan
     permission_required = 'subscriptions.subscriptions'
     raise_exception = True
@@ -81,7 +88,14 @@ class PlanListView(PermissionRequiredMixin, abstract.ListView):
     template_name = 'subscriptions/plan_list.html'
 
 class PlanCreateView(PermissionRequiredMixin, abstract.CreateView):
-    """View to create a new subscription plan"""
+    """View to create a new subscription plan.
+
+        View is extended to handle additional attributes noted below.
+
+        Attributes:
+            success_message (str): Message to display on successful creation.
+            success_url (str): URL to redirect to on successful creation.
+    """
     # pylint: disable=arguments-differ, attribute-defined-outside-init
     model = models.SubscriptionPlan
     permission_required = 'subscriptions.subscriptions'
@@ -135,7 +149,16 @@ class PlanCreateView(PermissionRequiredMixin, abstract.CreateView):
             return self.form_invalid(form, cost_forms)
 
     def form_valid(self, form, cost_forms):
-        """Handles processing of valid forms."""
+        """Handles processing of valid forms.
+
+            Parameters:
+                form (obj): Parent SubscriptionPlanForm instance to
+                    process.
+                cost_forms (obj): PlanCostFormSet instance to process.
+
+            Returns:
+                obj: HttpResponseRedirect object to ``success_url``.
+        """
         # Save the models
         self.object = form.save()
         cost_forms.instance = self.object
@@ -147,7 +170,15 @@ class PlanCreateView(PermissionRequiredMixin, abstract.CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
     def form_invalid(self, form, cost_forms):
-        """Handles re-rendering invalid forms with errors."""
+        """Handles re-rendering invalid forms with errors.
+
+            Parameters:
+                form (obj): Parent SubscriptionPlanForm instance to
+                    return.
+                cost_forms (obj): PlanCostFormSet instance to return.
+
+            Returns:
+                obj: Renders original page with form content."""
         return self.render_to_response(
             self.get_context_data(
                 form=form,
@@ -156,7 +187,15 @@ class PlanCreateView(PermissionRequiredMixin, abstract.CreateView):
         )
 
 class PlanUpdateView(PermissionRequiredMixin, abstract.UpdateView):
-    """View to update a subscription plan"""
+    """View to update a subscription plan.
+
+        View is extended to handle additional attributes noted below.
+
+        Attributes:
+            success_message (str): Message to display on successful creation.
+            success_url (str): URL to redirect to on successful creation.
+
+    """
     # pylint: disable=arguments-differ, attribute-defined-outside-init
     model = models.SubscriptionPlan
     permission_required = 'subscriptions.subscriptions'
@@ -211,7 +250,16 @@ class PlanUpdateView(PermissionRequiredMixin, abstract.UpdateView):
             return self.form_invalid(form, cost_forms)
 
     def form_valid(self, form, cost_forms):
-        """Handles processing of valid forms."""
+        """Handles processing of valid forms.
+
+            Parameters:
+                form (obj): Parent SubscriptionPlanForm instance to
+                    process.
+                cost_forms (obj): PlanCostFormSet instance to process.
+
+            Returns:
+                obj: HttpResponseRedirect object to ``success_url``.
+        """
         # Save the models
         self.object = form.save()
         cost_forms.instance = self.object
@@ -223,7 +271,15 @@ class PlanUpdateView(PermissionRequiredMixin, abstract.UpdateView):
         return HttpResponseRedirect(self.get_success_url())
 
     def form_invalid(self, form, cost_forms):
-        """Handles re-rendering invalid forms with errors."""
+        """Handles re-rendering invalid forms with errors.
+
+            Parameters:
+                form (obj): Parent SubscriptionPlanForm instance to
+                    return.
+                cost_forms (obj): PlanCostFormSet instance to return.
+
+            Returns:
+                obj: Renders original page with form content."""
         return self.render_to_response(
             self.get_context_data(
                 form=form,
@@ -232,7 +288,14 @@ class PlanUpdateView(PermissionRequiredMixin, abstract.UpdateView):
         )
 
 class PlanDeleteView(PermissionRequiredMixin, abstract.DeleteView):
-    """View to delete a subscription plan"""
+    """View to delete a subscription plan.
+
+        View is extended to handle additional attributes noted below.
+
+        Attributes:
+            success_message (str): Message to display on successful creation.
+            success_url (str): URL to redirect to on successful creation.
+    """
     model = models.SubscriptionPlan
     permission_required = 'subscriptions.subscriptions'
     raise_exception = True
@@ -291,7 +354,14 @@ class SubscriptionUpdateView(
     template_name = 'subscriptions/subscription_update.html'
 
 class SubscriptionDeleteView(PermissionRequiredMixin, abstract.DeleteView):
-    """View to delete a user subscription."""
+    """View to delete a user subscription.
+
+        View is extended to handle additional attributes noted below.
+
+        Attributes:
+            success_message (str): Message to display on successful creation.
+            success_url (str): URL to redirect to on successful creation.
+    """
     model = models.UserSubscription
     permission_required = 'subscriptions.subscriptions'
     raise_exception = True
@@ -333,7 +403,31 @@ class TransactionDetailView(PermissionRequiredMixin, abstract.DetailView):
 # Subscribe Views
 # -----------------------------------------------------------------------------
 class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
-    """View to handle all aspects of the subscribing process."""
+    """View to handle all aspects of the subscribing process.
+
+        This view will need to be subclassed and some methods
+        overridden to implement the payment solution.
+
+        Additionally, this view is extended from a TemplateView with
+        the additional attributes noted below.
+
+        Attributes:
+            payment_form (obj): Django Form to handle subscription
+                payment.
+            subscription_plan (obj): A SubscriptionPlan instance. Will
+                be set by methods during processing.
+            success_url (str): URL to redirect to on successful
+                creation.
+            template_preview (str): Path to HTML template for the
+                preview view.
+            template_confirmation (str): Path to HTML template for the
+                confirmation view.
+
+        Notes:
+            View only accessible via POST requests. The request must
+            include an ID to a SubscriptionPlan +/- associated PlanCost
+            instance (if past the preview view).
+    """
     confirmation = False
     payment_form = forms.PaymentForm
     subscription_plan = None
@@ -360,6 +454,7 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
         return context
 
     def get_template_names(self):
+        """Returns the proper template name based on payment stage."""
         conf_templates = [self.template_confirmation]
         prev_templates = [self.template_preview]
 
@@ -378,6 +473,13 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
 
             The 'action' POST argument is used to determine which
             context to render.
+
+            Notes:
+                The ``action`` POST parameter determines what stage to
+                progress view to. ``None`` directs to preview
+                processing, ``confirm`` directs to confirmation
+                processing, and ``process`` directs to payment and
+                subscription processing.
         """
         # Get the subscription plan for this POST
         self.subscription_plan = self.get_object()
@@ -408,7 +510,11 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
         return self.render_to_response(context)
 
     def render_confirmation(self, request, **kwargs):
-        """Renders a confirmation page before processing payment."""
+        """Renders a confirmation page before processing payment.
+
+            If forms are invalid will return to preview view for user
+            to correct errors.
+        """
         # Retrive form details
         plan_cost_form = forms.SubscriptionPlanCostForm(
             request.POST, subscription_plan=self.subscription_plan
@@ -435,7 +541,11 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
         return self.render_to_response(context)
 
     def process_subscription(self, request, **kwargs):
-        """Moves forward with payment & subscription processing."""
+        """Moves forward with payment & subscription processing.
+
+            If forms are invalid will move back to confirmation page
+            for user to correct errors.
+        """
         # Validate payment details again incase anything changed
         plan_cost_form = forms.SubscriptionPlanCostForm(
             request.POST, subscription_plan=self.subscription_plan
@@ -466,13 +576,20 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
         return self.render_to_response(context)
 
     def hide_form(self, form):
-        """Returns form with hidden input widgets."""
+        """Replaces form widgets with hidden inputs.
+
+            Parameters:
+                form (obj): A form instance.
+
+            Returns:
+                obj: The modified form instance.
+        """
         for _, field in form.fields.items():
             field.widget = HiddenInput()
 
         return form
 
-    def process_payment(self, payment_form): # pylint: disable=unused-argument
+    def process_payment(self, *args, **kwargs): # pylint: disable=unused-argument
         """Processes payment and confirms if payment is accepted.
 
             This method needs to be overriden in a project to handle
@@ -485,7 +602,12 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
         return True
 
     def setup_subscription(self, request_user, plan_cost_id):
-        """Adds subscription to user and adds them to required group."""
+        """Adds subscription to user and adds them to required group.
+
+            Parameters:
+                request_user (obj): A Django user instance.
+                plan_cost_id (str): A PlanCost ID.
+        """
         plan_cost = models.PlanCost.objects.get(id=plan_cost_id)
         current_date = timezone.now()
 
@@ -516,6 +638,7 @@ class SubscribeList(LoginRequiredMixin, abstract.ListView):
     template_name = 'subscriptions/subscribe_list.html'
 
     def get_queryset(self):
+        """Overrides get_queryset to restrict list to logged in user."""
         return self.model.objects.filter(user=self.request.user)
 
 class SubscribeThankYouView(LoginRequiredMixin, abstract.TemplateView):
@@ -543,7 +666,14 @@ class SubscribeThankYouView(LoginRequiredMixin, abstract.TemplateView):
         return context
 
 class SubscribeCancelView(LoginRequiredMixin, abstract.DetailView):
-    """View to handle cancelling of subscription."""
+    """View to handle cancelling of subscription.
+
+        View is extended to handle additional attributes noted below.
+
+        Attributes:
+            success_message (str): Message to display on successful creation.
+            success_url (str): URL to redirect to on successful creation.
+    """
     model = models.UserSubscription
     context_object_name = 'subscription'
     pk_url_kwarg = 'subscription_id'
@@ -552,6 +682,7 @@ class SubscribeCancelView(LoginRequiredMixin, abstract.DetailView):
     template_name = 'subscriptions/subscribe_cancel.html'
 
     def get_object(self, queryset=None):
+        """Overrides get_object to restrict to logged in user."""
         return get_object_or_404(
             self.model,
             user=self.request.user,

@@ -40,7 +40,11 @@ class Manager():
             self.process_payment(subscription.user, subscription.subscription)
 
     def process_expired(self, subscription):
-        """Handles processing of expired/cancelled subscriptions."""
+        """Handles processing of expired/cancelled subscriptions.
+
+            Parameters:
+                subscription (obj): A UserSubscription instance.
+        """
         # Get all user subscriptions
         user = subscription.user
         user_subscriptions = user.subscriptions.all()
@@ -64,7 +68,11 @@ class Manager():
         self.notify_expired(subscription)
 
     def process_new(self, subscription):
-        """Handles processing of a new subscription."""
+        """Handles processing of a new subscription.
+
+            Parameters:
+                subscription (obj): A UserSubscription instance.
+        """
         user = subscription.user
         cost = subscription.subscription
         plan = cost.plan
@@ -96,19 +104,39 @@ class Manager():
             This method needs to be overriden in a project to handle
             payment processing with the appropriate payment provider.
 
+            Parameters:
+                user (obj): User instance.
+                cost (str): The amount to process for payment.
+
             Returns:
                 bool: True if payment successful, otherwise false.
         """
         return True
 
     def notify_expired(self, subscription):
-        """Sends notification of expired subscription."""
+        """Sends notification of expired subscription.
+
+            Parameters:
+                subscription (obj): A UserSubscription instance.
+        """
 
     def notify_new(self, subscription):
-        """Sends notification of newly active subscription."""
+        """Sends notification of newly active subscription
+
+            Parameters:
+                subscription (obj): A UserSubscription instance.
+        """
 
     def notify_payment_error(self, subscription):
-        """Sends notification of a payment error."""
+        """Sends notification of a payment error
+
+            Parameters:
+                subscription (obj): A UserSubscription instance.
+        """
 
     def notify_payment_success(self, subscription):
-        """Sends notifiation of a payment success."""
+        """Sends notifiation of a payment success
+
+            Parameters:
+                subscription (obj): A UserSubscription instance.
+        """

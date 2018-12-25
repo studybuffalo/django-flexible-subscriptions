@@ -17,7 +17,6 @@ class SubscriptionPlanForm(ModelForm):
 
 class PlanCostForm(ModelForm):
     """Form to use with inlineformset_factory and SubscriptionPlanForm."""
-
     class Meta:
         RECURRENCE_UNIT_CHOICES = (
             (0, 'one-time'),
@@ -115,6 +114,14 @@ class SubscriptionPlanCostForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
+        """Overrides the plan_cost widget with available selections.
+
+            For a provided subscription plan, provides a widget that
+            lists all possible plan costs for selection.
+
+            Keyword Arguments:
+                subscription_plan (obj): A SubscriptionPlan instance.
+        """
         costs = kwargs.pop('subscription_plan').costs.all()
         PLAN_COST_CHOICES = []
 

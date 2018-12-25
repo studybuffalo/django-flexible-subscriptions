@@ -5,7 +5,12 @@ from django.views import generic
 BASE_TEMPLATE = 'subscriptions/base.html'
 
 class TemplateView(generic.TemplateView):
-    """Extends TemplateView to specify of extensible HTML template."""
+    """Extends TemplateView to specify of extensible HTML template.
+
+        Attributes:
+            template_extends (str): Path to HTML template that this
+                view extends.
+    """
     template_extends = BASE_TEMPLATE
 
     def get_context_data(self, **kwargs):
@@ -18,7 +23,12 @@ class TemplateView(generic.TemplateView):
         return context
 
 class ListView(generic.ListView):
-    """Extends ListView to specify of extensible HTML template."""
+    """Extends ListView to specify of extensible HTML template
+
+        Attributes:
+            template_extends (str): Path to HTML template that this
+                view extends.
+    """
     template_extends = BASE_TEMPLATE
 
     def get_context_data(self, *, object_list=None, **kwargs): # pylint: disable=unused-argument
@@ -31,7 +41,12 @@ class ListView(generic.ListView):
         return context
 
 class DetailView(generic.DetailView):
-    """Extends DetailView to specify of extensible HTML template."""
+    """Extends DetailView to specify of extensible HTML template
+
+        Attributes:
+            template_extends (str): Path to HTML template that this
+                view extends.
+    """
     template_extends = BASE_TEMPLATE
 
     def get_context_data(self, **kwargs):
@@ -44,7 +59,12 @@ class DetailView(generic.DetailView):
         return context
 
 class CreateView(generic.CreateView):
-    """Extends CreateView to specify of extensible HTML template."""
+    """Extends CreateView to specify of extensible HTML template
+
+        Attributes:
+            template_extends (str): Path to HTML template that this
+                view extends.
+    """
     template_extends = BASE_TEMPLATE
 
     def get_context_data(self, **kwargs):
@@ -57,7 +77,12 @@ class CreateView(generic.CreateView):
         return context
 
 class UpdateView(generic.UpdateView):
-    """Extends UpdateView to specify of extensible HTML template."""
+    """Extends UpdateView to specify of extensible HTML template
+
+        Attributes:
+            template_extends (str): Path to HTML template that this
+                view extends.
+    """
     template_extends = BASE_TEMPLATE
 
     def get_context_data(self, **kwargs):
@@ -70,7 +95,12 @@ class UpdateView(generic.UpdateView):
         return context
 
 class DeleteView(generic.DeleteView):
-    """Extends DeleteView to specify of extensible HTML template."""
+    """Extends DeleteView to specify of extensible HTML template
+
+        Attributes:
+            template_extends (str): Path to HTML template that this
+                view extends.
+    """
     template_extends = BASE_TEMPLATE
 
     def get_context_data(self, **kwargs):

@@ -12,22 +12,43 @@ class Currency():
         process: https://docs.python.org/3/library/locale.html
 
         Keyword Arguments:
-            currency_symbol (str): The symbol used for this currency
-                (**default:** `$`)
-            int_currency_symbol (str):
-            p_cs_precedes (bool):
-            n_cs_precedes (bool):
-            p_sep_by_space (bool):
-            n_sep_by_space (bool):
-            mon_decimal_point (str):
-            mon_thousands_sep (str):
-            mon_grouping (int):
-            frac_digits (int):
-            int_frac_digits (int):
-            positive_sign (str):
-            negative_sign (str):
-            p_sign_posn (int):
-            n_sign_posn (int):
+            currency_symbol (str): The symbol used for this currency.
+            int_currency_symbol (str): The symbol used for this
+                currency for international formatting.
+            p_cs_precedes (bool): Whether the currency symbol precedes
+                positive values.
+            n_cs_precedes (bool): Whether the currency symbol precedes
+                negative values.
+            p_sep_by_space (bool): Whether the currency symbol is
+                separated from positive values by a space.
+            n_sep_by_space (bool): Whether the currency symbol is
+                separated from negative values by a space.
+            mon_decimal_point (str): The character used for decimal
+                points.
+            mon_thousands_sep (str): The character used for separating
+                groups of numbers.
+            mon_grouping (int): The number of digits per groups.
+            frac_digits (int): The number of digits following the
+                decimal place.
+            int_frac_digits (int): The number of digits following the
+                decimal place for international formatting.
+            positive_sign (str): The symbol to use for the positive
+                sign.
+            negative_sign (str): The symbol to use for the negative
+                sign.
+            p_sign_posn (int): How the positive sign should be
+                positioned relative to the currency symbol and value
+                (see below).
+            n_sign_posn (int): How the positive sign should be
+                positioned relative to the currency symbol and value
+                (see below).
+
+        Sign Position (``sign_posn``):
+            0: Currency and value are surrounded by parentheses.
+            1: The sign should precede the value and currency symbol.
+            2: The sign should follow the value and currency symbol.
+            3: The sign should immediately precede the value.
+            4: The sign should immediately follow the value.
     """
     def __init__(self, **kwargs):
         self.currency_symbol = kwargs.get('currency_symbol', '')
@@ -142,7 +163,7 @@ class Currency():
         return formatted_currency
 
 def compile_settings():
-    """Compiles and validates all package settings and deaults.
+    """Compiles and validates all package settings and defaults.
 
         Provides basic checks to ensure required settings are declared
         and applies defaults for all missing settings.
@@ -174,7 +195,7 @@ SIGN_PARANTHESES = 0
 SIGN_PRECEDE_VALUE_SYMBOL = 1
 SIGN_FOLLOW_VALUE_SYMBOL = 2
 SIGN_PRECEDE_VALUE = 3
-SIGN_FOLLOW_VALUE= 4
+SIGN_FOLLOW_VALUE = 4
 
 CURRENCY = {
     'en_ca': Currency(
