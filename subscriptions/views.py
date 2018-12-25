@@ -12,13 +12,12 @@ from django.views import generic
 from django.urls import reverse_lazy
 from django.utils import timezone
 
-from subscriptions import models, forms
+from subscriptions import models, forms, abstract
 
-# TODO: Extend views to include a setting to specify the base template
 
 # Tag Views
 # -----------------------------------------------------------------------------
-class TagListView(PermissionRequiredMixin, generic.ListView):
+class TagListView(PermissionRequiredMixin, abstract.ListView):
     """List of all tags."""
     model = models.PlanTag
     permission_required = 'subscriptions.subscriptions'
@@ -27,7 +26,7 @@ class TagListView(PermissionRequiredMixin, generic.ListView):
     template_name = 'subscriptions/tag_list.html'
 
 class TagCreateView(
-        PermissionRequiredMixin, SuccessMessageMixin, generic.CreateView
+        PermissionRequiredMixin, SuccessMessageMixin, abstract.CreateView
 ):
     """View to create a new tag."""
     model = models.PlanTag
@@ -40,7 +39,7 @@ class TagCreateView(
     template_name = 'subscriptions/tag_create.html'
 
 class TagUpdateView(
-        PermissionRequiredMixin, SuccessMessageMixin, generic.UpdateView
+        PermissionRequiredMixin, SuccessMessageMixin, abstract.UpdateView
 ):
     """View to update the details of a tag."""
     model = models.PlanTag
@@ -53,7 +52,7 @@ class TagUpdateView(
     pk_url_kwarg = 'tag_id'
     template_name = 'subscriptions/tag_update.html'
 
-class TagDeleteView(PermissionRequiredMixin, generic.DeleteView):
+class TagDeleteView(PermissionRequiredMixin, abstract.DeleteView):
     """View to delete a tag."""
     model = models.PlanTag
     permission_required = 'subscriptions.subscriptions'
@@ -72,7 +71,7 @@ class TagDeleteView(PermissionRequiredMixin, generic.DeleteView):
 
 # Plan Views
 # -----------------------------------------------------------------------------
-class PlanListView(PermissionRequiredMixin, generic.ListView):
+class PlanListView(PermissionRequiredMixin, abstract.ListView):
     """List of all subscription plans"""
     model = models.SubscriptionPlan
     permission_required = 'subscriptions.subscriptions'
@@ -80,7 +79,7 @@ class PlanListView(PermissionRequiredMixin, generic.ListView):
     context_object_name = 'plans'
     template_name = 'subscriptions/plan_list.html'
 
-class PlanCreateView(PermissionRequiredMixin, generic.CreateView):
+class PlanCreateView(PermissionRequiredMixin, abstract.CreateView):
     """View to create a new subscription plan"""
     # pylint: disable=arguments-differ, attribute-defined-outside-init
     model = models.SubscriptionPlan
@@ -155,7 +154,7 @@ class PlanCreateView(PermissionRequiredMixin, generic.CreateView):
             )
         )
 
-class PlanUpdateView(PermissionRequiredMixin, generic.UpdateView):
+class PlanUpdateView(PermissionRequiredMixin, abstract.UpdateView):
     """View to update a subscription plan"""
     # pylint: disable=arguments-differ, attribute-defined-outside-init
     model = models.SubscriptionPlan
@@ -231,7 +230,7 @@ class PlanUpdateView(PermissionRequiredMixin, generic.UpdateView):
             )
         )
 
-class PlanDeleteView(PermissionRequiredMixin, generic.DeleteView):
+class PlanDeleteView(PermissionRequiredMixin, abstract.DeleteView):
     """View to delete a subscription plan"""
     model = models.SubscriptionPlan
     permission_required = 'subscriptions.subscriptions'
@@ -250,7 +249,7 @@ class PlanDeleteView(PermissionRequiredMixin, generic.DeleteView):
 
 # User Subscription Views
 # -----------------------------------------------------------------------------.
-class SubscriptionListView(PermissionRequiredMixin, generic.ListView):
+class SubscriptionListView(PermissionRequiredMixin, abstract.ListView):
     """List of all subscriptions for the users"""
     model = get_user_model()
     permission_required = 'subscriptions.subscriptions'
@@ -274,7 +273,7 @@ class SubscriptionCreateView(
     template_name = 'subscriptions/subscription_create.html'
 
 class SubscriptionUpdateView(
-        PermissionRequiredMixin, SuccessMessageMixin, generic.UpdateView
+        PermissionRequiredMixin, SuccessMessageMixin, abstract.UpdateView
 ):
     """View to update the details of a user subscription."""
     model = models.UserSubscription
@@ -290,7 +289,7 @@ class SubscriptionUpdateView(
     success_url = reverse_lazy('subscriptions_subscription_list')
     template_name = 'subscriptions/subscription_update.html'
 
-class SubscriptionDeleteView(PermissionRequiredMixin, generic.DeleteView):
+class SubscriptionDeleteView(PermissionRequiredMixin, abstract.DeleteView):
     """View to delete a user subscription."""
     model = models.UserSubscription
     permission_required = 'subscriptions.subscriptions'
@@ -311,7 +310,7 @@ class SubscriptionDeleteView(PermissionRequiredMixin, generic.DeleteView):
 
 # Subscription Transaction Views
 # -----------------------------------------------------------------------------
-class TransactionListView(PermissionRequiredMixin, generic.ListView):
+class TransactionListView(PermissionRequiredMixin, abstract.ListView):
     """List of all subscription payment transactions."""
     model = models.SubscriptionTransaction
     permission_required = 'subscriptions.subscriptions'
@@ -320,7 +319,7 @@ class TransactionListView(PermissionRequiredMixin, generic.ListView):
     paginate_by = 100
     template_name = 'subscriptions/transaction_list.html'
 
-class TransactionDetailView(PermissionRequiredMixin, generic.DetailView):
+class TransactionDetailView(PermissionRequiredMixin, abstract.DetailView):
     """Shows details of a specific subscription payment transaction."""
     model = models.SubscriptionTransaction
     permission_required = 'subscriptions.subscriptions'
@@ -332,13 +331,12 @@ class TransactionDetailView(PermissionRequiredMixin, generic.DetailView):
 
 # Subscribe Views
 # -----------------------------------------------------------------------------
-class SubscribeView(generic.TemplateView):
+class SubscribeView(abstract.TemplateView):
     """View to handle all aspects of the subscribing process."""
     confirmation = False
     payment_form = forms.PaymentForm
     subscription_plan = None
     success_url = 'subscriptions_dashboard'
-    template_extends = 'subscriptions/base.html'
     template_preview = 'subscriptions/subscribe_preview.html'
     template_confirmation = 'subscriptions/subscribe_confirmation.html'
 
@@ -351,9 +349,6 @@ class SubscribeView(generic.TemplateView):
     def get_context_data(self, **kwargs):
         """Overriding get_context_data to add additional context."""
         context = super(SubscribeView, self).get_context_data(**kwargs)
-
-        # Provides the base template to extend from
-        context['template_extends'] = self.template_extends
 
         # Whether this is a preview or confirmation step
         context['confirmation'] = self.confirmation
@@ -513,10 +508,9 @@ class SubscribeView(generic.TemplateView):
             # No group available to add user to
             pass
 
-class ThankYouView(generic.TemplateView):
+class ThankYouView(abstract.TemplateView):
     """A thank you page and summary for a new subscription."""
     template_name = 'subscriptions/subscribe_thank_you.html'
-    template_extends = 'subscriptions/base.html'
     context_object_name = 'transaction'
 
     def get_object(self):
@@ -535,12 +529,9 @@ class ThankYouView(generic.TemplateView):
         # Adds the context object
         context[self.context_object_name] = self.get_object()
 
-        # Provides the base HTML template to extend from
-        context['template_extends'] = self.template_extends
-
         return context
 
-class SubscribeCancelView(PermissionRequiredMixin, generic.DetailView):
+class SubscribeCancelView(PermissionRequiredMixin, abstract.DetailView):
     """View to handle cancelling of subscription."""
     model = models.UserSubscription
     context_object_name = 'subscription'
@@ -549,17 +540,7 @@ class SubscribeCancelView(PermissionRequiredMixin, generic.DetailView):
     raise_exception = True
     success_message = 'Subscription successfully cancelled'
     success_url = 'subscriptions_subscription_list'
-    template_extends = 'subscriptions/base.html'
     template_name = 'subscriptions/subscribe_cancel.html'
-
-    def get_context_data(self, **kwargs):
-        """Overriding get_context_data to add additional context."""
-        context = super(SubscribeCancelView, self).get_context_data(**kwargs)
-
-        # Provides the base template to extend from
-        context['template_extends'] = self.template_extends
-
-        return context
 
     def get_success_url(self):
         """Returns the success URL."""
