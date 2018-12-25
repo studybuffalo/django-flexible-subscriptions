@@ -342,10 +342,10 @@ class SubscribeView(generic.TemplateView):
     template_preview = 'subscriptions/subscribe_preview.html'
     template_confirmation = 'subscriptions/subscribe_confirmation.html'
 
-    def get_object(self, request):
+    def get_object(self):
         """Gets the subscription plan object."""
         return get_object_or_404(
-            models.SubscriptionPlan, id=request.POST.get('plan_id', None)
+            models.SubscriptionPlan, id=self.request.POST.get('plan_id', None)
         )
 
     def get_context_data(self, **kwargs):
@@ -384,7 +384,7 @@ class SubscribeView(generic.TemplateView):
             context to render.
         """
         # Get the subscription plan for this POST
-        self.subscription_plan = self.get_object(request)
+        self.subscription_plan = self.get_object()
 
         # Determine POST action and direct to proper function
         post_action = request.POST.get('action', None)
@@ -513,9 +513,8 @@ class SubscribeView(generic.TemplateView):
             # No group available to add user to
             pass
 
-class ThankYouView(generic.DetailView):
+class ThankYouView(generic.TemplateView):
     """A thank you page and summary for a new subscription."""
-    object = None
     template_name = 'subscriptions/subscribe_thank_you.html'
     template_extends = 'subscriptions/base.html'
     context_object_name = 'transaction'
@@ -524,23 +523,23 @@ class ThankYouView(generic.DetailView):
         """Overriding get_context_data to add additional context."""
         context = super(ThankYouView, self).get_context_data(**kwargs)
 
-        # Provides the base template to extend from
+        # Adds the context object
+        context[self.context_object_name] = self.get_object()
+
+        # Provides the base HTML template to extend from
         context['template_extends'] = self.template_extends
 
         return context
 
-    def get_object(self, queryset=None):
+    def get_object(self):
         """Returns the provided transaction instance."""
-        transaction = get_object_or_404(
-            models.SubscriptionTransaction,
+        return models.SubscriptionTransaction.objects.filter(
             id=self.request.GET.get('transaction_id', None)
         )
 
-        return transaction
-
 class SubscribeCancelView(PermissionRequiredMixin, generic.DetailView):
     """View to handle cancelling of subscription."""
-    model = models.SubscriptionTransaction
+    model = models.UserSubscription
     context_object_name = 'subscription'
     pk_url_kwarg = 'subscription_id'
     permission_required = 'subscriptions.subscriptions'
