@@ -38,14 +38,6 @@ def test_subscribe_view_get_object_404_without_plan(admin_client):
 
     assert response.status_code == 404
 
-def test_subscribe_view_get_context_data_override():
-    """Tests that get_context_data override works properly."""
-    view = views.SubscribeView()
-    context = view.get_context_data()
-
-    assert 'template_extends' in context
-    assert context['template_extends'] == 'subscriptions/base.html'
-
 def test_subscribe_view_get_template_names_override_confirmation_true():
     """Tests get_template_names override works when confirmation is true."""
     view = views.SubscribeView()
@@ -485,16 +477,6 @@ def test_thank_you_view_adds_context(admin_client):
     ))
     assert 'transaction' in response.context
     assert response.context['transaction'] == transaction
-    assert 'template_extends' in response.context
-    assert response.context['template_extends'] == 'subscriptions/base.html'
-
-def test_subscribe_cancel_view_get_context_data_override():
-    """Tests that get_context_data override works properly."""
-    view = views.SubscribeView()
-    context = view.get_context_data()
-
-    assert 'template_extends' in context
-    assert context['template_extends'] == 'subscriptions/base.html'
 
 def test_subscribe_cancel_view_get_success_url():
     """Tests that get_success_url works properly."""
