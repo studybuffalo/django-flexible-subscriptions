@@ -23,6 +23,20 @@ def create_cost(plan=None, period=1, unit=6, cost='1.00'):
         plan=plan, recurrence_period=period, recurrence_unit=unit, cost=cost
     )
 
+@pytest.mark.django_db
+def test_subscribe_view_get_object_404_without_plan(admin_client):
+    """Tests get_object returns 404 when plan is missing."""
+    post_data = {
+        'action': None,
+    }
+    response = admin_client.post(
+        reverse('subscriptions_subscribe'),
+        post_data,
+        follow=True,
+    )
+
+    assert response.status_code == 404
+
 def test_subscribe_view_get_context_data_override():
     """Tests that get_context_data override works properly."""
     view = views.SubscribeView()
@@ -55,20 +69,11 @@ def test_subscribe_view_get_success_url():
     assert success_url == '/'
 
 @pytest.mark.django_db
-def test_subscribe_view_post_404_with_missing_plan(admin_client):
-    """Tests post returns 404 response when plan is missing."""
-    post_data = {
-        'action': None,
-    }
+def test_subscribe_view_get_405_response(admin_client):
+    """Tests that GET returns 405 response."""
+    response = admin_client.get(reverse('subscriptions_subscribe'))
 
-    response = admin_client.post(
-        reverse('subscriptions_subscribe'),
-        post_data,
-        follow=True,
-    )
-
-    assert response.status_code == 404
-    assert response.content == b'No subscription plan selected.'
+    assert response.status_code == 405
 
 @pytest.mark.django_db
 def test_subscribe_view_post_preview_200_response(admin_client):
@@ -487,3 +492,11 @@ def test_thank_you_view_adds_context():
     context = view.get_context_data()
 
     assert 'template_extends' in context
+
+def test_subscribe_cancel_view_get_context_data_override():
+    """Tests that get_context_data override works properly."""
+    view = views.SubscribeView()
+    context = view.get_context_data()
+
+    assert 'template_extends' in context
+    assert context['template_extends'] == 'subscriptions/base.html'
