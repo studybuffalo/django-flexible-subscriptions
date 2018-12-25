@@ -25,7 +25,7 @@
       {% else %}
         <li><a href="{% url 'login' %}">Login</a></li>
       {% endif %}
-      <li><a href="{% url 'subscriptions_dashboard' %}">Django Flexible Subscriptions</a></li>
+      <li><a href="{% url 'dfs_dashboard' %}">Django Flexible Subscriptions</a></li>
     </ul>
 
     {% if plans %}
@@ -33,7 +33,7 @@
 
       <ul>
         {% for plan in plans %}
-          <form method="post" action="{% url 'subscriptions_subscribe' %}">
+          <form method="post" action="{% url 'dfs_subscribe' %}">
             {% csrf_token %}
             <h3>{{ plan.plan_name }}</h3>
             <p>{{ plan.plan_description }}</p>

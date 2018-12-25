@@ -18,7 +18,7 @@ def create_tag(tag_text='test'):
 @pytest.mark.django_db
 def test_tag_list_template(admin_client):
     """Tests for proper tag_list template."""
-    response = admin_client.get(reverse('subscriptions_tag_list'))
+    response = admin_client.get(reverse('dfs_tag_list'))
 
     assert (
         'subscriptions/tag_list.html' in [t.name for t in response.templates]
@@ -30,7 +30,7 @@ def test_tag_list_403_if_not_authorized(client, django_user_model):
     django_user_model.objects.create_user(username='user', password='password')
     client.login(username='user', password='password')
 
-    response = client.get(reverse('subscriptions_tag_list'))
+    response = client.get(reverse('dfs_tag_list'))
 
     assert response.status_code == 403
 
@@ -48,7 +48,7 @@ def test_tag_list_200_if_authorized(client, django_user_model):
     user.user_permissions.add(permission)
     client.login(username='user', password='password')
 
-    response = client.get(reverse('subscriptions_tag_list'))
+    response = client.get(reverse('dfs_tag_list'))
 
     assert response.status_code == 200
 
@@ -60,7 +60,7 @@ def test_tag_list_retrives_all_tags(admin_client):
     create_tag('1')
     create_tag('2')
 
-    response = admin_client.get(reverse('subscriptions_tag_list'))
+    response = admin_client.get(reverse('dfs_tag_list'))
 
     assert len(response.context['tags']) == 3
     assert response.context['tags'][0].tag == '1'
@@ -72,7 +72,7 @@ def test_tag_list_retrives_all_tags(admin_client):
 @pytest.mark.django_db
 def test_tag_create_template(admin_client):
     """Tests for proper tag_create template."""
-    response = admin_client.get(reverse('subscriptions_tag_create'))
+    response = admin_client.get(reverse('dfs_tag_create'))
 
     assert (
         'subscriptions/tag_create.html' in [t.name for t in response.templates]
@@ -84,7 +84,7 @@ def test_tag_create_403_if_not_authorized(client, django_user_model):
     django_user_model.objects.create_user(username='user', password='password')
     client.login(username='user', password='password')
 
-    response = client.get(reverse('subscriptions_tag_create'))
+    response = client.get(reverse('dfs_tag_create'))
 
     assert response.status_code == 403
 
@@ -102,7 +102,7 @@ def test_tag_create_200_if_authorized(client, django_user_model):
     user.user_permissions.add(permission)
     client.login(username='user', password='password')
 
-    response = client.get(reverse('subscriptions_tag_create'))
+    response = client.get(reverse('dfs_tag_create'))
 
     assert response.status_code == 200
 
@@ -112,7 +112,7 @@ def test_tag_create_create_and_success(admin_client):
     tag_count = models.PlanTag.objects.all().count()
 
     response = admin_client.post(
-        reverse('subscriptions_tag_create'),
+        reverse('dfs_tag_create'),
         {'tag': '1'},
         follow=True,
     )
@@ -131,7 +131,7 @@ def test_tag_update_template(admin_client):
     tag = create_tag()
 
     response = admin_client.get(reverse(
-        'subscriptions_tag_update', kwargs={'tag_id': tag.id}
+        'dfs_tag_update', kwargs={'tag_id': tag.id}
     ))
 
     assert (
@@ -147,7 +147,7 @@ def test_tag_update_403_if_not_authorized(client, django_user_model):
     client.login(username='user', password='password')
 
     response = client.get(reverse(
-        'subscriptions_tag_update', kwargs={'tag_id': tag.id}
+        'dfs_tag_update', kwargs={'tag_id': tag.id}
     ))
 
     assert response.status_code == 403
@@ -169,7 +169,7 @@ def test_tag_update_200_if_authorized(client, django_user_model):
     client.login(username='user', password='password')
 
     response = client.get(reverse(
-        'subscriptions_tag_update', kwargs={'tag_id': tag.id}
+        'dfs_tag_update', kwargs={'tag_id': tag.id}
     ))
 
     assert response.status_code == 200
@@ -182,7 +182,7 @@ def test_tag_update_update_and_success(admin_client):
     tag_count = models.PlanTag.objects.all().count()
 
     response = admin_client.post(
-        reverse('subscriptions_tag_update', kwargs={'tag_id': tag.id}),
+        reverse('dfs_tag_update', kwargs={'tag_id': tag.id}),
         {'tag': '2'},
         follow=True,
     )
@@ -202,7 +202,7 @@ def test_tag_delete_template(admin_client):
     tag = create_tag()
 
     response = admin_client.get(reverse(
-        'subscriptions_tag_delete', kwargs={'tag_id': tag.id},
+        'dfs_tag_delete', kwargs={'tag_id': tag.id},
     ))
 
     assert (
@@ -218,7 +218,7 @@ def test_tag_delete_403_if_not_authorized(client, django_user_model):
     client.login(username='user', password='password')
 
     response = client.get(reverse(
-        'subscriptions_tag_delete', kwargs={'tag_id': tag.id},
+        'dfs_tag_delete', kwargs={'tag_id': tag.id},
     ))
 
     assert response.status_code == 403
@@ -240,7 +240,7 @@ def test_tag_delete_200_if_authorized(client, django_user_model):
     client.login(username='user', password='password')
 
     response = client.get(reverse(
-        'subscriptions_tag_delete', kwargs={'tag_id': tag.id},
+        'dfs_tag_delete', kwargs={'tag_id': tag.id},
     ))
 
     assert response.status_code == 200
@@ -252,7 +252,7 @@ def test_tag_delete_delete_and_success_message(admin_client):
     tag_count = models.PlanTag.objects.all().count()
 
     response = admin_client.post(
-        reverse('subscriptions_tag_delete', kwargs={'tag_id': tag.id}),
+        reverse('dfs_tag_delete', kwargs={'tag_id': tag.id}),
         follow=True,
     )
 

@@ -11,11 +11,11 @@
 {% endif %}
 
 <div>
-  <a href="{% url 'subscriptions_dashboard' %}">Back to dashboard</a>
+  <a href="{% url 'dfs_dashboard' %}">Back to dashboard</a>
 </div>
 
 <div>
-  <a href="{% url 'subscriptions_tag_create' %}">Create new tag</a>
+  <a href="{% url 'dfs_tag_create' %}">Create new tag</a>
 </div>
 
 {% if tags %}
@@ -32,12 +32,12 @@
         <tr>
           <td>{{ tag.tag }}</td>
           <td>
-              <a href="{% url 'subscriptions_tag_update' tag.id %}">
+              <a href="{% url 'dfs_tag_update' tag.id %}">
                 {% trans "Edit" %}
               </a>
             </td>
           <td>
-            <a href="{% url 'subscriptions_tag_delete' tag.id %}">
+            <a href="{% url 'dfs_tag_delete' tag.id %}">
               {% trans "Delete" %}
             </a>
           </td>

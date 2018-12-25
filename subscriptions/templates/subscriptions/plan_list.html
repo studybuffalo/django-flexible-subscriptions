@@ -12,11 +12,11 @@
 {% endif %}
 
 <div>
-  <a href="{% url 'subscriptions_dashboard' %}">Back to dashboard</a>
+  <a href="{% url 'dfs_dashboard' %}">Back to dashboard</a>
 </div>
 
 <div>
-  <a href="{% url 'subscriptions_plan_create' %}">Create new plan</a>
+  <a href="{% url 'dfs_plan_create' %}">Create new plan</a>
 </div>
 
 {% if plans %}
@@ -48,12 +48,12 @@
             </ul>
           </td>
           <td>
-              <a href="{% url 'subscriptions_plan_update' plan.id %}">
+              <a href="{% url 'dfs_plan_update' plan.id %}">
                 {% trans "Edit" %}
               </a>
             </td>
           <td>
-            <a href="{% url 'subscriptions_plan_delete' plan.id %}">
+            <a href="{% url 'dfs_plan_delete' plan.id %}">
               {% trans "Delete" %}
             </a>
           </td>

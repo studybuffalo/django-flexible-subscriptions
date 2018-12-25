@@ -11,11 +11,11 @@
 {% endif %}
 
 <div>
-  <a href="{% url 'subscriptions_dashboard' %}">Back to dashboard</a>
+  <a href="{% url 'dfs_dashboard' %}">Back to dashboard</a>
 </div>
 
 <div>
-  <a href="{% url 'subscriptions_subscription_create' %}">Create new user subscription</a>
+  <a href="{% url 'dfs_subscription_create' %}">Create new user subscription</a>
 </div>
 
 {% if users %}
@@ -50,12 +50,12 @@
               <td>{{ subscription.active }}</td>
               <td>{{ subscription.cancelled }}</td>
               <td>
-                <a href="{% url 'subscriptions_subscription_update' subscription.id %}">
+                <a href="{% url 'dfs_subscription_update' subscription.id %}">
                   {% trans "Edit" %}
                 </a>
               </td>
               <td>
-                <a href="{% url 'subscriptions_subscription_delete' subscription.id %}">
+                <a href="{% url 'dfs_subscription_delete' subscription.id %}">
                   {% trans "Delete" %}
                 </a>
               </td>
@@ -70,12 +70,12 @@
               <td>{{ subscription.active }}</td>
               <td>{{ subscription.cancelled }}</td>
               <td>
-                <a href="{% url 'subscriptions_subscription_update' subscription.id %}">
+                <a href="{% url 'dfs_subscription_update' subscription.id %}">
                   {% trans "Edit" %}
                 </a>
               </td>
               <td>
-                <a href="{% url 'subscriptions_subscription_delete' subscription.id %}">
+                <a href="{% url 'dfs_subscription_delete' subscription.id %}">
                   {% trans "Delete" %}
                 </a>
               </td>

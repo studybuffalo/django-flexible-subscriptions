@@ -31,7 +31,7 @@ def test_subscribe_view_get_object_404_without_plan(admin_client):
         'action': None,
     }
     response = admin_client.post(
-        reverse('subscriptions_subscribe'),
+        reverse('dfs_subscribe'),
         post_data,
         follow=True,
     )
@@ -64,7 +64,7 @@ def test_subscribe_view_get_success_url():
 @pytest.mark.django_db
 def test_subscribe_view_get_405_response(admin_client):
     """Tests that GET returns 405 response."""
-    response = admin_client.get(reverse('subscriptions_subscribe'))
+    response = admin_client.get(reverse('dfs_subscribe'))
 
     assert response.status_code == 405
 
@@ -79,7 +79,7 @@ def test_subscribe_view_post_preview_200_response(admin_client):
     }
 
     response = admin_client.post(
-        reverse('subscriptions_subscribe'),
+        reverse('dfs_subscribe'),
         post_data,
         follow=True,
     )
@@ -97,7 +97,7 @@ def test_subscribe_view_post_preview_proper_page(admin_client):
     }
 
     response = admin_client.post(
-        reverse('subscriptions_subscribe'),
+        reverse('dfs_subscribe'),
         post_data,
         follow=True,
     )
@@ -119,7 +119,7 @@ def test_subscribe_view_post_preview_added_context(admin_client):
     }
 
     response = admin_client.post(
-        reverse('subscriptions_subscribe'),
+        reverse('dfs_subscribe'),
         post_data,
         follow=True,
     )
@@ -153,7 +153,7 @@ def test_subscribe_view_post_preview_progress_to_confirmation(admin_client):
     }
 
     response = admin_client.post(
-        reverse('subscriptions_subscribe'),
+        reverse('dfs_subscribe'),
         post_data,
         follow=True,
     )
@@ -186,7 +186,7 @@ def test_subscribe_view_post_preview_to_confirm_invalid(admin_client):
     }
 
     response = admin_client.post(
-        reverse('subscriptions_subscribe'),
+        reverse('dfs_subscribe'),
         post_data,
         follow=True,
     )
@@ -216,7 +216,7 @@ def test_subscribe_view_post_preview_to_confirm_invalid_values(admin_client):
     }
 
     response = admin_client.post(
-        reverse('subscriptions_subscribe'),
+        reverse('dfs_subscribe'),
         post_data,
         follow=True,
     )
@@ -238,7 +238,7 @@ def test_subscribe_view_post_confirmation_200_response(admin_client):
     }
 
     response = admin_client.post(
-        reverse('subscriptions_subscribe'),
+        reverse('dfs_subscribe'),
         post_data,
         follow=True,
     )
@@ -267,7 +267,7 @@ def test_subscribe_view_post_confirm_to_process_valid(admin_client):
     }
 
     response = admin_client.post(
-        reverse('subscriptions_subscribe'),
+        reverse('dfs_subscribe'),
         post_data,
         follow=True,
     )
@@ -297,7 +297,7 @@ def test_subscribe_view_post_confirm_to_process_invalid(admin_client):
     }
 
     response = admin_client.post(
-        reverse('subscriptions_subscribe'),
+        reverse('dfs_subscribe'),
         post_data,
         follow=True,
     )
@@ -330,7 +330,7 @@ def test_subscribe_view_post_confirm_to_process_invalid_values(admin_client):
     }
 
     response = admin_client.post(
-        reverse('subscriptions_subscribe'),
+        reverse('dfs_subscribe'),
         post_data,
         follow=True,
     )
@@ -364,7 +364,7 @@ def test_subscribe_view_post_confirm_payment_error(admin_client):
     }
 
     response = admin_client.post(
-        reverse('subscriptions_subscribe'),
+        reverse('dfs_subscribe'),
         post_data,
         follow=True,
     )
@@ -388,7 +388,7 @@ def test_subscribe_view_post_process_200_response(admin_client):
     }
 
     response = admin_client.post(
-        reverse('subscriptions_subscribe'),
+        reverse('dfs_subscribe'),
         post_data,
         follow=True,
     )
@@ -463,7 +463,7 @@ def test_thank_you_view_returns_object(admin_client):
     transaction = models.SubscriptionTransaction.objects.create(amount='1.00')
 
     response = admin_client.get('{}?transaction_id={}'.format(
-        reverse('subscriptions_thank_you'), transaction.id
+        reverse('dfs_subscribe_thank_you'), transaction.id
     ))
 
     assert response.status_code == 200
@@ -473,7 +473,7 @@ def test_thank_you_view_adds_context(admin_client):
     transaction = models.SubscriptionTransaction.objects.create(amount='1.00')
 
     response = admin_client.get('{}?transaction_id={}'.format(
-        reverse('subscriptions_thank_you'), transaction.id
+        reverse('dfs_subscribe_thank_you'), transaction.id
     ))
     assert 'transaction' in response.context
     assert response.context['transaction'] == transaction
@@ -495,7 +495,7 @@ def test_subscribe_cancel_post_updates_instance(admin_client):
     subscription_id = subscription.id
     response = admin_client.post(
         reverse(
-            'subscriptions_cancel', kwargs={'subscription_id': subscription_id}
+            'dfs_subscribe_cancel', kwargs={'subscription_id': subscription_id}
         ),
         follow=True
     )

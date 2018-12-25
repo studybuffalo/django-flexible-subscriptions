@@ -35,7 +35,7 @@ class TagCreateView(
     context_object_name = 'tag'
     fields = ['tag']
     success_message = 'Tag successfully added'
-    success_url = reverse_lazy('subscriptions_tag_list')
+    success_url = reverse_lazy('dfs_tag_list')
     template_name = 'subscriptions/tag_create.html'
 
 class TagUpdateView(
@@ -48,7 +48,7 @@ class TagUpdateView(
     context_object_name = 'tag'
     fields = ['tag']
     success_message = 'Tag successfully updated'
-    success_url = reverse_lazy('subscriptions_tag_list')
+    success_url = reverse_lazy('dfs_tag_list')
     pk_url_kwarg = 'tag_id'
     template_name = 'subscriptions/tag_update.html'
 
@@ -60,7 +60,7 @@ class TagDeleteView(PermissionRequiredMixin, abstract.DeleteView):
     context_object_name = 'tag'
     pk_url_kwarg = 'tag_id'
     success_message = 'Tag successfully deleted'
-    success_url = reverse_lazy('subscriptions_tag_list')
+    success_url = reverse_lazy('dfs_tag_list')
     template_name = 'subscriptions/tag_delete.html'
 
     def delete(self, request, *args, **kwargs):
@@ -88,7 +88,7 @@ class PlanCreateView(PermissionRequiredMixin, abstract.CreateView):
     context_object_name = 'plan'
     form_class = forms.SubscriptionPlanForm
     success_message = 'Subscription plan successfully added'
-    success_url = reverse_lazy('subscriptions_plan_list')
+    success_url = reverse_lazy('dfs_plan_list')
     template_name = 'subscriptions/plan_create.html'
 
     def get(self, request, *args, **kwargs):
@@ -164,7 +164,7 @@ class PlanUpdateView(PermissionRequiredMixin, abstract.UpdateView):
     form_class = forms.SubscriptionPlanForm
     pk_url_kwarg = 'plan_id'
     success_message = 'Subscription plan successfully updated'
-    success_url = reverse_lazy('subscriptions_plan_list')
+    success_url = reverse_lazy('dfs_plan_list')
     template_name = 'subscriptions/plan_update.html'
 
     def get(self, request, *args, **kwargs):
@@ -238,7 +238,7 @@ class PlanDeleteView(PermissionRequiredMixin, abstract.DeleteView):
     context_object_name = 'plan'
     pk_url_kwarg = 'plan_id'
     success_message = 'Subscription plan successfully deleted'
-    success_url = reverse_lazy('subscriptions_plan_list')
+    success_url = reverse_lazy('dfs_plan_list')
     template_name = 'subscriptions/plan_delete.html'
 
     def delete(self, request, *args, **kwargs):
@@ -269,7 +269,7 @@ class SubscriptionCreateView(
     context_object_name = 'subscription'
     fields = ['user', 'subscription', 'date_billing_start', 'date_billing_end']
     success_message = 'User subscription successfully added'
-    success_url = reverse_lazy('subscriptions_subscription_list')
+    success_url = reverse_lazy('dfs_subscription_list')
     template_name = 'subscriptions/subscription_create.html'
 
 class SubscriptionUpdateView(
@@ -286,7 +286,7 @@ class SubscriptionUpdateView(
     ]
     pk_url_kwarg = 'subscription_id'
     success_message = 'User subscription successfully updated'
-    success_url = reverse_lazy('subscriptions_subscription_list')
+    success_url = reverse_lazy('dfs_subscription_list')
     template_name = 'subscriptions/subscription_update.html'
 
 class SubscriptionDeleteView(PermissionRequiredMixin, abstract.DeleteView):
@@ -297,7 +297,7 @@ class SubscriptionDeleteView(PermissionRequiredMixin, abstract.DeleteView):
     context_object_name = 'subscription'
     pk_url_kwarg = 'subscription_id'
     success_message = 'User subscription successfully deleted'
-    success_url = reverse_lazy('subscriptions_subscription_list')
+    success_url = reverse_lazy('dfs_subscription_list')
     template_name = 'subscriptions/subscription_delete.html'
 
     def delete(self, request, *args, **kwargs):
@@ -336,7 +336,7 @@ class SubscribeView(abstract.TemplateView):
     confirmation = False
     payment_form = forms.PaymentForm
     subscription_plan = None
-    success_url = 'subscriptions_dashboard'
+    success_url = 'dfs_dashboard'
     template_preview = 'subscriptions/subscribe_preview.html'
     template_confirmation = 'subscriptions/subscribe_confirmation.html'
 
@@ -539,7 +539,7 @@ class SubscribeCancelView(PermissionRequiredMixin, abstract.DetailView):
     permission_required = 'subscriptions.subscriptions'
     raise_exception = True
     success_message = 'Subscription successfully cancelled'
-    success_url = 'subscriptions_subscription_list'
+    success_url = 'dfs_subscription_list'
     template_name = 'subscriptions/subscribe_cancel.html'
 
     def get_success_url(self):

@@ -8,7 +8,7 @@ from subscriptions import models
 @pytest.mark.django_db
 def test_tag_list_exists_at_desired_location(admin_client):
     """Tests that tag list URL name works."""
-    response = admin_client.get(reverse('subscriptions_tag_list'))
+    response = admin_client.get(reverse('dfs_tag_list'))
 
     assert response.status_code == 200
 
@@ -22,7 +22,7 @@ def test_tag_list_exists_at_desired_url(admin_client):
 @pytest.mark.django_db
 def test_tag_create_exists_at_desired_location(admin_client):
     """Tests that tag create URL name works."""
-    response = admin_client.get(reverse('subscriptions_tag_create'))
+    response = admin_client.get(reverse('dfs_tag_create'))
 
     assert response.status_code == 200
 
@@ -38,7 +38,7 @@ def test_tag_update_exists_at_desired_location(admin_client):
     """Tests that tag update URL name works."""
     tag = models.PlanTag.objects.create(tag='test')
     response = admin_client.get(reverse(
-        'subscriptions_tag_update',
+        'dfs_tag_update',
         kwargs={'tag_id': tag.id}
     ))
 
@@ -57,7 +57,7 @@ def test_tag_delete_exists_at_desired_location(admin_client):
     """Tests that tag delete URL name works."""
     tag = models.PlanTag.objects.create(tag='test')
     response = admin_client.get(reverse(
-        'subscriptions_tag_delete',
+        'dfs_tag_delete',
         kwargs={'tag_id': tag.id}
     ))
 
@@ -74,7 +74,7 @@ def test_tag_delete_exists_at_desired_url(admin_client):
 @pytest.mark.django_db
 def test_plan_list_exists_at_desired_location(admin_client):
     """Tests that plan list URL name works."""
-    response = admin_client.get(reverse('subscriptions_plan_list'))
+    response = admin_client.get(reverse('dfs_plan_list'))
 
     assert response.status_code == 200
 
@@ -88,7 +88,7 @@ def test_plan_list_exists_at_desired_url(admin_client):
 @pytest.mark.django_db
 def test_plan_create_exists_at_desired_location(admin_client):
     """Tests that plan create URL name works."""
-    response = admin_client.get(reverse('subscriptions_plan_create'))
+    response = admin_client.get(reverse('dfs_plan_create'))
 
     assert response.status_code == 200
 
@@ -106,7 +106,7 @@ def test_plan_update_exists_at_desired_location(admin_client):
         plan_name='a', plan_description='b'
     )
     response = admin_client.get(
-        reverse('subscriptions_plan_update', kwargs={'plan_id': plan.id})
+        reverse('dfs_plan_update', kwargs={'plan_id': plan.id})
     )
 
     assert response.status_code == 200
@@ -128,7 +128,7 @@ def test_plan_delete_exists_at_desired_location(admin_client):
         plan_name='a', plan_description='b'
     )
     response = admin_client.get(
-        reverse('subscriptions_plan_delete', kwargs={'plan_id': plan.id})
+        reverse('dfs_plan_delete', kwargs={'plan_id': plan.id})
     )
 
     assert response.status_code == 200
@@ -150,7 +150,7 @@ def test_subscriptions_subscribe_exists_at_desired_location(admin_client):
         plan_name='a', plan_description='b'
     )
     response = admin_client.post(
-        reverse('subscriptions_subscribe'), {'plan_id': plan.id}
+        reverse('dfs_subscribe'), {'plan_id': plan.id}
     )
 
     assert response.status_code == 200
@@ -168,7 +168,7 @@ def test_subscription_subscribe_exists_at_desired_url(admin_client):
 @pytest.mark.django_db
 def test_subscription_list_exists_at_desired_location(admin_client):
     """Tests that subscription list URL name works."""
-    response = admin_client.get(reverse('subscriptions_subscription_list'))
+    response = admin_client.get(reverse('dfs_subscription_list'))
 
     assert response.status_code == 200
 
@@ -182,7 +182,7 @@ def test_subscription_list_exists_at_desired_url(admin_client):
 @pytest.mark.django_db
 def test_subscription_create_exists_at_desired_location(admin_client):
     """Tests that subscription create URL name works."""
-    response = admin_client.get(reverse('subscriptions_subscription_create'))
+    response = admin_client.get(reverse('dfs_subscription_create'))
 
     assert response.status_code == 200
 
@@ -198,7 +198,7 @@ def test_subscription_update_exists_at_desired_location(admin_client):
     """Tests that subscription update URL name works."""
     subscription = models.UserSubscription.objects.create()
     response = admin_client.get(reverse(
-        'subscriptions_subscription_update',
+        'dfs_subscription_update',
         kwargs={'subscription_id': subscription.id}
     ))
 
@@ -219,7 +219,7 @@ def test_subscription_delete_exists_at_desired_location(admin_client):
     subscription = models.UserSubscription.objects.create()
 
     response = admin_client.get(reverse(
-        'subscriptions_subscription_delete',
+        'dfs_subscription_delete',
         kwargs={'subscription_id': subscription.id}
     ))
 
@@ -239,7 +239,7 @@ def test_subscription_delete_exists_at_desired_url(admin_client):
 @pytest.mark.django_db
 def test_transaction_list_exists_at_desired_location(admin_client):
     """Tests that transaction list URL name works."""
-    response = admin_client.get(reverse('subscriptions_transaction_list'))
+    response = admin_client.get(reverse('dfs_transaction_list'))
 
     assert response.status_code == 200
 
@@ -256,7 +256,7 @@ def test_transaction_detail_exists_at_desired_location(admin_client):
     transaction = models.SubscriptionTransaction.objects.create()
 
     response = admin_client.get(reverse(
-        'subscriptions_transaction_detail',
+        'dfs_transaction_detail',
         kwargs={'transaction_id': transaction.id}
     ))
 
@@ -276,7 +276,7 @@ def test_transaction_detail_exists_at_desired_url(admin_client):
 @pytest.mark.django_db
 def test_thank_you_exists_at_desired_location(admin_client):
     """Tests that thank you page URL name works."""
-    response = admin_client.get(reverse('subscriptions_thank_you'))
+    response = admin_client.get(reverse('dfs_subscribe_thank_you'))
 
     assert response.status_code == 200
 
@@ -292,7 +292,7 @@ def test_susbscription_cancel_exists_at_desired_location(admin_client):
     """Tests that subscription cancel URL name works."""
     subscription = models.UserSubscription.objects.create()
     response = admin_client.get(reverse(
-        'subscriptions_cancel', kwargs={'subscription_id': subscription.id}
+        'dfs_subscribe_cancel', kwargs={'subscription_id': subscription.id}
     ))
 
     assert response.status_code == 200
@@ -308,7 +308,7 @@ def test_subscription_cancel_exists_at_desired_url(admin_client):
 @pytest.mark.django_db
 def test_dashboard_exists_at_desired_location(admin_client):
     """Tests that dashboard URL name works."""
-    response = admin_client.get(reverse('subscriptions_dashboard'))
+    response = admin_client.get(reverse('dfs_dashboard'))
 
     assert response.status_code == 200
 

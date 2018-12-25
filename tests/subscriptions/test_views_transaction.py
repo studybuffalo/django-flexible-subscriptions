@@ -32,7 +32,7 @@ def create_transaction(user, cost, amount='1.00'):
 @pytest.mark.django_db
 def test_transaction_list_template(admin_client):
     """Tests for proper transaction_list template."""
-    response = admin_client.get(reverse('subscriptions_transaction_list'))
+    response = admin_client.get(reverse('dfs_transaction_list'))
 
     assert 'subscriptions/transaction_list.html' in [
         t.name for t in response.templates
@@ -44,7 +44,7 @@ def test_transaction_list_403_if_not_authorized(client, django_user_model):
     django_user_model.objects.create_user(username='user', password='password')
     client.login(username='user', password='password')
 
-    response = client.get(reverse('subscriptions_tag_list'))
+    response = client.get(reverse('dfs_tag_list'))
 
     assert response.status_code == 403
 
@@ -62,7 +62,7 @@ def test_transaction_list_200_if_authorized(client, django_user_model):
     user.user_permissions.add(permission)
     client.login(username='user', password='password')
 
-    response = client.get(reverse('subscriptions_tag_list'))
+    response = client.get(reverse('dfs_tag_list'))
 
     assert response.status_code == 200
 
@@ -76,7 +76,7 @@ def test_transaction_list_retrives_all(admin_client, django_user_model):
     create_transaction(user, cost, '2.00')
     create_transaction(user, cost, '3.00')
 
-    response = admin_client.get(reverse('subscriptions_transaction_list'))
+    response = admin_client.get(reverse('dfs_transaction_list'))
 
     assert len(response.context['transactions']) == 3
     assert response.context['transactions'][0].amount == Decimal('1.0000')
@@ -94,7 +94,7 @@ def test_transaction_detail_template(admin_client, django_user_model):
 
     response = admin_client.get(
         reverse(
-            'subscriptions_transaction_detail',
+            'dfs_transaction_detail',
             kwargs={'transaction_id': transaction.id}
         )
     )
@@ -115,7 +115,7 @@ def test_transaction_detail_403_if_not_authorized(client, django_user_model):
 
     response = client.get(
         reverse(
-            'subscriptions_transaction_detail',
+            'dfs_transaction_detail',
             kwargs={'transaction_id': transaction.id}
         )
     )
@@ -142,7 +142,7 @@ def test_transaction_detail_200_if_authorized(client, django_user_model):
 
     response = client.get(
         reverse(
-            'subscriptions_transaction_detail',
+            'dfs_transaction_detail',
             kwargs={'transaction_id': transaction.id}
         )
     )

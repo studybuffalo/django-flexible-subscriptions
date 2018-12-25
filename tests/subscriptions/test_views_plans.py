@@ -33,7 +33,7 @@ def create_plan_cost(plan, rec_period=1, rec_unit=6, cost='1.00'):
 @pytest.mark.django_db
 def test_plan_list_template(admin_client):
     """Tests for proper plan_list template."""
-    response = admin_client.get(reverse('subscriptions_plan_list'))
+    response = admin_client.get(reverse('dfs_plan_list'))
 
     assert (
         'subscriptions/plan_list.html' in [t.name for t in response.templates]
@@ -45,7 +45,7 @@ def test_plan_list_403_if_not_authorized(client, django_user_model):
     django_user_model.objects.create_user(username='user', password='password')
     client.login(username='user', password='password')
 
-    response = client.get(reverse('subscriptions_plan_list'))
+    response = client.get(reverse('dfs_plan_list'))
 
     assert response.status_code == 403
 
@@ -63,7 +63,7 @@ def test_plan_list_200_if_authorized(client, django_user_model):
     user.user_permissions.add(permission)
     client.login(username='user', password='password')
 
-    response = client.get(reverse('subscriptions_plan_list'))
+    response = client.get(reverse('dfs_plan_list'))
 
     assert response.status_code == 200
 
@@ -75,7 +75,7 @@ def test_plan_list_retrives_all_plans(admin_client):
     create_plan(plan_name='1', plan_description='a')
     create_plan(plan_name='2', plan_description='b')
 
-    response = admin_client.get(reverse('subscriptions_plan_list'))
+    response = admin_client.get(reverse('dfs_plan_list'))
 
     assert len(response.context['plans']) == 3
     assert response.context['plans'][0].plan_name == '1'
@@ -87,7 +87,7 @@ def test_plan_list_retrives_all_plans(admin_client):
 @pytest.mark.django_db
 def test_plan_create_template(admin_client):
     """Tests for proper plan_create template."""
-    response = admin_client.get(reverse('subscriptions_plan_create'))
+    response = admin_client.get(reverse('dfs_plan_create'))
 
     assert (
         'subscriptions/plan_create.html' in [t.name for t in response.templates]
@@ -99,7 +99,7 @@ def test_plan_create_403_if_not_authorized(client, django_user_model):
     django_user_model.objects.create_user(username='user', password='password')
     client.login(username='user', password='password')
 
-    response = client.get(reverse('subscriptions_plan_create'))
+    response = client.get(reverse('dfs_plan_create'))
 
     assert response.status_code == 403
 
@@ -117,7 +117,7 @@ def test_plan_create_200_if_authorized(client, django_user_model):
     user.user_permissions.add(permission)
     client.login(username='user', password='password')
 
-    response = client.get(reverse('subscriptions_plan_create'))
+    response = client.get(reverse('dfs_plan_create'))
 
     assert response.status_code == 200
 
@@ -137,7 +137,7 @@ def test_plan_create_create_and_success(admin_client):
     }
 
     response = admin_client.post(
-        reverse('subscriptions_plan_create'),
+        reverse('dfs_plan_create'),
         post_data,
         follow=True,
     )
@@ -171,7 +171,7 @@ def test_plan_create_with_costs(admin_client):
     }
 
     admin_client.post(
-        reverse('subscriptions_plan_create'),
+        reverse('dfs_plan_create'),
         post_data,
         follow=True,
     )
@@ -200,7 +200,7 @@ def test_plan_create_with_tags(admin_client):
     }
 
     admin_client.post(
-        reverse('subscriptions_plan_create'),
+        reverse('dfs_plan_create'),
         post_data,
         follow=True,
     )
@@ -226,7 +226,7 @@ def test_plan_create_with_groups(admin_client):
     }
 
     admin_client.post(
-        reverse('subscriptions_plan_create'),
+        reverse('dfs_plan_create'),
         post_data,
         follow=True,
     )
@@ -250,7 +250,7 @@ def test_plan_create_invalid_form(admin_client):
     }
 
     response = admin_client.post(
-        reverse('subscriptions_plan_create'),
+        reverse('dfs_plan_create'),
         post_data,
         follow=True,
     )
@@ -281,7 +281,7 @@ def test_plan_create_invalid_cost_forms(admin_client):
     }
 
     response = admin_client.post(
-        reverse('subscriptions_plan_create'),
+        reverse('dfs_plan_create'),
         post_data,
         follow=True,
     )
@@ -299,7 +299,7 @@ def test_plan_update_template(admin_client):
     plan = create_plan()
 
     response = admin_client.get(
-        reverse('subscriptions_plan_update', kwargs={'plan_id': plan.id})
+        reverse('dfs_plan_update', kwargs={'plan_id': plan.id})
     )
 
     assert (
@@ -315,7 +315,7 @@ def test_plan_update_403_if_not_authorized(client, django_user_model):
     client.login(username='user', password='password')
 
     response = client.get(
-        reverse('subscriptions_plan_update', kwargs={'plan_id': plan.id})
+        reverse('dfs_plan_update', kwargs={'plan_id': plan.id})
     )
 
     assert response.status_code == 403
@@ -337,7 +337,7 @@ def test_plan_update_200_if_authorized(client, django_user_model):
     client.login(username='user', password='password')
 
     response = client.get(
-        reverse('subscriptions_plan_update', kwargs={'plan_id': plan.id})
+        reverse('dfs_plan_update', kwargs={'plan_id': plan.id})
     )
 
     assert response.status_code == 200
@@ -360,7 +360,7 @@ def test_plan_update_update_and_success(admin_client):
     }
 
     response = admin_client.post(
-        reverse('subscriptions_plan_update', kwargs={'plan_id': plan.id}),
+        reverse('dfs_plan_update', kwargs={'plan_id': plan.id}),
         post_data,
         follow=True,
     )
@@ -399,7 +399,7 @@ def test_plan_upate_with_same_costs(admin_client):
 
 
     response = admin_client.post(
-        reverse('subscriptions_plan_update', kwargs={'plan_id': plan.id}),
+        reverse('dfs_plan_update', kwargs={'plan_id': plan.id}),
         post_data,
         follow=True,
     )
@@ -443,7 +443,7 @@ def test_plan_upate_with_additional_costs(admin_client):
     }
 
     response = admin_client.post(
-        reverse('subscriptions_plan_update', kwargs={'plan_id': plan.id}),
+        reverse('dfs_plan_update', kwargs={'plan_id': plan.id}),
         post_data,
         follow=True,
     )
@@ -482,7 +482,7 @@ def test_plan_upate_with_delete_costs(admin_client):
 
 
     response = admin_client.post(
-        reverse('subscriptions_plan_update', kwargs={'plan_id': plan.id}),
+        reverse('dfs_plan_update', kwargs={'plan_id': plan.id}),
         post_data,
         follow=True,
     )
@@ -516,7 +516,7 @@ def test_plan_update_with_tags(admin_client):
     }
 
     admin_client.post(
-        reverse('subscriptions_plan_update', kwargs={'plan_id': plan.id}),
+        reverse('dfs_plan_update', kwargs={'plan_id': plan.id}),
         post_data,
         follow=True,
     )
@@ -548,7 +548,7 @@ def test_plan_update_with_groups(admin_client):
     }
 
     admin_client.post(
-        reverse('subscriptions_plan_update', kwargs={'plan_id': plan.id}),
+        reverse('dfs_plan_update', kwargs={'plan_id': plan.id}),
         post_data,
         follow=True,
     )
@@ -574,7 +574,7 @@ def test_plan_update_invalid_form(admin_client):
     }
 
     response = admin_client.post(
-        reverse('subscriptions_plan_update', kwargs={'plan_id': plan.id}),
+        reverse('dfs_plan_update', kwargs={'plan_id': plan.id}),
         post_data,
         follow=True,
     )
@@ -609,7 +609,7 @@ def test_plan_update_invalid_cost_forms(admin_client):
     }
 
     response = admin_client.post(
-        reverse('subscriptions_plan_update', kwargs={'plan_id': plan.id}),
+        reverse('dfs_plan_update', kwargs={'plan_id': plan.id}),
         post_data,
         follow=True,
     )
@@ -627,7 +627,7 @@ def test_plan_delete_template(admin_client):
     plan = create_plan()
 
     response = admin_client.get(
-        reverse('subscriptions_plan_delete', kwargs={'plan_id': plan.id})
+        reverse('dfs_plan_delete', kwargs={'plan_id': plan.id})
     )
 
     assert (
@@ -643,7 +643,7 @@ def test_plan_delete_403_if_not_authorized(client, django_user_model):
     client.login(username='user', password='password')
 
     response = client.get(
-        reverse('subscriptions_plan_delete', kwargs={'plan_id': plan.id})
+        reverse('dfs_plan_delete', kwargs={'plan_id': plan.id})
     )
 
     assert response.status_code == 403
@@ -665,7 +665,7 @@ def test_plan_delete_200_if_authorized(client, django_user_model):
     client.login(username='user', password='password')
 
     response = client.get(
-        reverse('subscriptions_plan_delete', kwargs={'plan_id': plan.id})
+        reverse('dfs_plan_delete', kwargs={'plan_id': plan.id})
     )
 
     assert response.status_code == 200
@@ -677,7 +677,7 @@ def test_plan_delete_delete_and_success_message(admin_client):
     plan_count = models.SubscriptionPlan.objects.all().count()
 
     response = admin_client.post(
-        reverse('subscriptions_plan_delete', kwargs={'plan_id': plan.id}),
+        reverse('dfs_plan_delete', kwargs={'plan_id': plan.id}),
         follow=True,
     )
 

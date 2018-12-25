@@ -12,7 +12,7 @@
 {% endif %}
 
 <div>
-  <a href="{% url 'subscriptions_dashboard' %}">Back to dashboard</a>
+  <a href="{% url 'dfs_dashboard' %}">Back to dashboard</a>
 </div>
 
 {% if transactions %}
@@ -34,7 +34,7 @@
           <td>{{ transaction.date_transaction }}</td>
           <td>{{ transaction.amount|currency }}</td>
           <td>
-            <a href="{% url 'subscriptions_transaction_detail' transaction.id %}">
+            <a href="{% url 'dfs_transaction_detail' transaction.id %}">
               {% trans "View" %}
             </a>
           </td>

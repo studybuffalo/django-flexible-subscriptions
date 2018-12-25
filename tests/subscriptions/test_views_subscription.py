@@ -30,7 +30,7 @@ def create_subscription(user, cost):
 @pytest.mark.django_db
 def test_subscription_list_template(admin_client):
     """Tests for proper subscription_list template."""
-    response = admin_client.get(reverse('subscriptions_subscription_list'))
+    response = admin_client.get(reverse('dfs_subscription_list'))
 
     assert (
         'subscriptions/subscription_list.html' in [
@@ -44,7 +44,7 @@ def test_subscription_list_403_if_not_authorized(client, django_user_model):
     django_user_model.objects.create_user(username='user', password='password')
     client.login(username='user', password='password')
 
-    response = client.get(reverse('subscriptions_subscription_list'))
+    response = client.get(reverse('dfs_subscription_list'))
 
     assert response.status_code == 403
 
@@ -62,7 +62,7 @@ def test_subscription_list_200_if_authorized(client, django_user_model):
     user.user_permissions.add(permission)
     client.login(username='user', password='password')
 
-    response = client.get(reverse('subscriptions_subscription_list'))
+    response = client.get(reverse('dfs_subscription_list'))
 
     assert response.status_code == 200
 
@@ -84,7 +84,7 @@ def test_subscription_list_retrives_all_users(admin_client, django_user_model):
     create_subscription(user_1, cost)
     create_subscription(user_2, cost)
 
-    response = admin_client.get(reverse('subscriptions_subscription_list'))
+    response = admin_client.get(reverse('dfs_subscription_list'))
 
     assert len(response.context['users']) == 3
     assert response.context['users'][0].username == 'user_1'
@@ -96,7 +96,7 @@ def test_subscription_list_retrives_all_users(admin_client, django_user_model):
 @pytest.mark.django_db
 def test_subscription_create_template(admin_client):
     """Tests for proper subscription_create template."""
-    response = admin_client.get(reverse('subscriptions_subscription_create'))
+    response = admin_client.get(reverse('dfs_subscription_create'))
 
     assert (
         'subscriptions/subscription_create.html' in [
@@ -110,7 +110,7 @@ def test_subscription_create_403_if_not_authorized(client, django_user_model):
     django_user_model.objects.create_user(username='user', password='password')
     client.login(username='user', password='password')
 
-    response = client.get(reverse('subscriptions_subscription_create'))
+    response = client.get(reverse('dfs_subscription_create'))
 
     assert response.status_code == 403
 
@@ -128,7 +128,7 @@ def test_subscription_create_200_if_authorized(client, django_user_model):
     user.user_permissions.add(permission)
     client.login(username='user', password='password')
 
-    response = client.get(reverse('subscriptions_subscription_create'))
+    response = client.get(reverse('dfs_subscription_create'))
 
     assert response.status_code == 200
 
@@ -144,7 +144,7 @@ def test_subscription_create_and_success(admin_client, django_user_model):
     }
 
     response = admin_client.post(
-        reverse('subscriptions_subscription_create'),
+        reverse('dfs_subscription_create'),
         post_data,
         follow=True,
     )
@@ -168,7 +168,7 @@ def test_subscription_update_template(admin_client, django_user_model):
 
     response = admin_client.get(
         reverse(
-            'subscriptions_subscription_update',
+            'dfs_subscription_update',
             kwargs={'subscription_id': subscription.id}
         )
     )
@@ -191,7 +191,7 @@ def test_subscription_update_403_if_not_authorized(client, django_user_model):
 
     response = client.get(
         reverse(
-            'subscriptions_subscription_update',
+            'dfs_subscription_update',
             kwargs={'subscription_id': subscription.id}
         )
     )
@@ -218,7 +218,7 @@ def test_subscription_update_200_if_authorized(client, django_user_model):
 
     response = client.get(
         reverse(
-            'subscriptions_subscription_update',
+            'dfs_subscription_update',
             kwargs={'subscription_id': subscription.id}
         )
     )
@@ -240,7 +240,7 @@ def test_subscription_update_and_success(admin_client, django_user_model):
 
     response = admin_client.post(
         reverse(
-            'subscriptions_subscription_update',
+            'dfs_subscription_update',
             kwargs={'subscription_id': subscription.id}
         ),
         post_data,
@@ -264,7 +264,7 @@ def test_subscription_delete_template(admin_client, django_user_model):
 
     response = admin_client.get(
         reverse(
-            'subscriptions_subscription_delete',
+            'dfs_subscription_delete',
             kwargs={'subscription_id': subscription.id}
         )
     )
@@ -287,7 +287,7 @@ def test_subscription_delete_403_if_not_authorized(client, django_user_model):
 
     response = client.get(
         reverse(
-            'subscriptions_subscription_delete',
+            'dfs_subscription_delete',
             kwargs={'subscription_id': subscription.id}
         )
     )
@@ -314,7 +314,7 @@ def test_subscription_delete_200_if_authorized(client, django_user_model):
 
     response = client.get(
         reverse(
-            'subscriptions_subscription_delete',
+            'dfs_subscription_delete',
             kwargs={'subscription_id': subscription.id}
         )
     )
@@ -331,7 +331,7 @@ def test_subscription_delete_and_success(admin_client, django_user_model):
 
     response = admin_client.post(
         reverse(
-            'subscriptions_subscription_delete',
+            'dfs_subscription_delete',
             kwargs={'subscription_id': subscription.id}
         ),
         follow=True,

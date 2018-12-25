@@ -5,7 +5,7 @@
 {% block content %}
   <h1>Subscribe</h1>
 
-  <form method="post" action="{% url 'subscriptions_subscribe' %}">
+  <form method="post" action="{% url 'dfs_subscribe' %}">
     {% csrf_token %}
     <input type="hidden" name="action" value="confirm">
     <input type="hidden" name="plan_id" value="{{ plan.id }}">
