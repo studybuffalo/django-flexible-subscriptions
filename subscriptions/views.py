@@ -344,13 +344,9 @@ class SubscribeView(generic.TemplateView):
 
     def get_object(self, request):
         """Gets the subscription plan object."""
-        try:
-            return get_object_or_404(
-                models.SubscriptionPlan, id=request.POST['plan_id']
-            )
-        except KeyError:
-            return HttpResponseNotFound('No subscription plan selected.')
-
+        return get_object_or_404(
+            models.SubscriptionPlan, id=request.POST.get('plan_id', None)
+        )
     def get_context_data(self, **kwargs):
         """Overriding get_context_data to add additional context."""
         context = super(SubscribeView, self).get_context_data(**kwargs)
