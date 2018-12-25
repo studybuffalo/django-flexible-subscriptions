@@ -518,7 +518,8 @@ class SubscribeThankYouView(LoginRequiredMixin, abstract.TemplateView):
         """Returns the provided transaction instance."""
         try:
             return models.SubscriptionTransaction.objects.get(
-                id=self.request.GET.get('transaction_id', None)
+                id=self.request.GET.get('transaction_id', None),
+                user=self.request.user,
             )
         except models.SubscriptionTransaction.DoesNotExist:
             return None
