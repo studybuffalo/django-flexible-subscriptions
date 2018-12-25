@@ -14,7 +14,7 @@ urlpatterns = [
     ),
     url(
         r'thank-you/$',
-        views.ThankYouView.as_view(),
+        views.SubscribeThankYouView.as_view(),
         name='dfs_subscribe_thank_you',
     ),
     url(
