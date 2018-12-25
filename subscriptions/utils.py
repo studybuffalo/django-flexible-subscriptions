@@ -65,21 +65,24 @@ class Manager():
 
     def process_new(self, subscription):
         """Handles processing of a new subscription."""
-        payment_success = self.process_payment(
-            subscription.user, subscription.subscription
-        )
+        user = subscription.user
+        cost = subscription.subscription
+        plan = cost.plan
+
+        payment_success = self.process_payment(subscription.user, cost)
 
         if payment_success:
             # Add user to the proper group
             try:
-                subscription.subscription.plan.group.add(subscription.user)
+                print('test')
+                plan.group.user_set.add(user)
             except AttributeError:
                 # No group available to add user to
                 pass
 
             # Update subscription details
             current = timezone.now()
-            next_billing = subscription.subscription.date_billing_next(current)
+            next_billing = cost.next_billing_datetime(current)
             subscription.date_billing_start = current
             subscription.date_billing_last = current
             subscription.date_billing_next = next_billing
