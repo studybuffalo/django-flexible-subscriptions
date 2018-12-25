@@ -24,6 +24,28 @@ def create_cost(plan=None, period=1, unit=6, cost='1.00'):
         plan=plan, recurrence_period=period, recurrence_unit=unit, cost=cost
     )
 
+
+# SubscribeView Tests
+# -----------------------------------------------------------------------------
+def test_subscribe_view_redirect_anonymous(client):
+    """Tests that anonymous users are redirected to login page."""
+    response = client.post(reverse('dfs_subscribe'), follow=True)
+    redirect_url, redirect_code = response.redirect_chain[-1]
+
+    assert redirect_code == 302
+    assert redirect_url == '/accounts/login/?next=/subscribe/'
+
+def test_subscribe_view_no_redirect_on_login(client, django_user_model):
+    """Tests that logged in users are not redirected."""
+    plan = create_plan()
+    post_data = {'action': None, 'plan_id': plan.id}
+
+    django_user_model.objects.create_user(username='a', password='b')
+    client.login(username='a', password='b')
+    response = client.post(reverse('dfs_subscribe'), post_data, follow=True)
+
+    assert response.status_code == 200
+
 @pytest.mark.django_db
 def test_subscribe_view_get_object_404_without_plan(admin_client):
     """Tests get_object returns 404 when plan is missing."""
@@ -457,6 +479,25 @@ def test_subscribe_view_setup_subscription_no_group(django_user_model):
     assert user not in group.user_set.all()
     assert group.user_set.all().count() == user_count
 
+
+# SubscribeThankYouView Tests
+# ----------------------------------------------------------------------------
+def test_thank_you_view_redirect_anonymous(client):
+    """Tests that anonymous users are redirected to login page."""
+    response = client.get(reverse('dfs_subscribe_thank_you'), follow=True)
+    redirect_url, redirect_code = response.redirect_chain[-1]
+
+    assert redirect_code == 302
+    assert redirect_url == '/accounts/login/?next=/thank-you/'
+
+def test_thank_you_view_no_redirect_on_login(client, django_user_model):
+    """Tests that logged in users are not redirected."""
+    django_user_model.objects.create_user(username='a', password='b')
+    client.login(username='a', password='b')
+    response = client.get(reverse('dfs_subscribe_thank_you'), follow=True)
+
+    assert response.status_code == 200
+
 @pytest.mark.django_db
 def test_thank_you_view_returns_object(admin_client):
     """Tests Thank You view properly returns transaction instance."""
@@ -478,13 +519,40 @@ def test_thank_you_view_adds_context(admin_client):
     assert 'transaction' in response.context
     assert response.context['transaction'] == transaction
 
-def test_subscribe_cancel_view_get_success_url():
+
+# SubscribeCancelView Tests
+# -----------------------------------------------------------------------------
+@pytest.mark.django_db
+def test_cancel_view_redirect_anonymous(client):
+    """Tests that anonymous users are redirected to login page."""
+    sub_id = models.UserSubscription.objects.create().id
+    response = client.get(
+        reverse('dfs_subscribe_cancel', kwargs={'subscription_id': sub_id}),
+        follow=True)
+    redirect_url, redirect_code = response.redirect_chain[-1]
+
+    assert redirect_code == 302
+    assert redirect_url == '/accounts/login/?next=/cancel/{}/'.format(sub_id)
+
+@pytest.mark.django_db
+def test_cancel_view_no_redirect_on_login(client, django_user_model):
+    """Tests that logged in users are not redirected."""
+    sub_id = models.UserSubscription.objects.create().id
+    django_user_model.objects.create_user(username='a', password='b')
+    client.login(username='a', password='b')
+    response = client.get(
+        reverse('dfs_subscribe_cancel', kwargs={'subscription_id': sub_id}),
+        follow=True)
+
+    assert response.status_code == 200
+
+def test_cancel_view_get_success_url():
     """Tests that get_success_url works properly."""
     view = views.SubscribeView()
     assert view.get_success_url() == '/'
 
 @pytest.mark.django_db
-def test_subscribe_cancel_post_updates_instance(admin_client):
+def test_cancel_post_updates_instance(admin_client):
     """Tests that POST request properly updates subscription instance."""
     subscription = models.UserSubscription.objects.create(
         date_billing_start=datetime(2018, 1, 1),

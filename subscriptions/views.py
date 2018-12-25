@@ -1,7 +1,8 @@
 """Views for the Flexible Subscriptions app."""
 from django.contrib import messages
 from django.contrib.auth import get_user_model
-from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.mixins import (
+    LoginRequiredMixin, PermissionRequiredMixin)
 from django.contrib.messages.views import SuccessMessageMixin
 from django.forms import HiddenInput
 from django.forms.models import inlineformset_factory
@@ -331,7 +332,7 @@ class TransactionDetailView(PermissionRequiredMixin, abstract.DetailView):
 
 # Subscribe Views
 # -----------------------------------------------------------------------------
-class SubscribeView(abstract.TemplateView):
+class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
     """View to handle all aspects of the subscribing process."""
     confirmation = False
     payment_form = forms.PaymentForm
@@ -508,7 +509,7 @@ class SubscribeView(abstract.TemplateView):
             # No group available to add user to
             pass
 
-class ThankYouView(abstract.TemplateView):
+class SubscribeThankYouView(LoginRequiredMixin, abstract.TemplateView):
     """A thank you page and summary for a new subscription."""
     template_name = 'subscriptions/subscribe_thank_you.html'
     context_object_name = 'transaction'
@@ -524,20 +525,18 @@ class ThankYouView(abstract.TemplateView):
 
     def get_context_data(self, **kwargs):
         """Overriding get_context_data to add additional context."""
-        context = super(ThankYouView, self).get_context_data(**kwargs)
+        context = super(SubscribeThankYouView, self).get_context_data(**kwargs)
 
         # Adds the context object
         context[self.context_object_name] = self.get_object()
 
         return context
 
-class SubscribeCancelView(PermissionRequiredMixin, abstract.DetailView):
+class SubscribeCancelView(LoginRequiredMixin, abstract.DetailView):
     """View to handle cancelling of subscription."""
     model = models.UserSubscription
     context_object_name = 'subscription'
     pk_url_kwarg = 'subscription_id'
-    permission_required = 'subscriptions.subscriptions'
-    raise_exception = True
     success_message = 'Subscription successfully cancelled'
     success_url = 'dfs_subscription_list'
     template_name = 'subscriptions/subscribe_cancel.html'
