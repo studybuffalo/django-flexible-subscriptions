@@ -342,6 +342,15 @@ class SubscribeView(generic.TemplateView):
     template_preview = 'subscriptions/subscribe_preview.html'
     template_confirmation = 'subscriptions/subscribe_confirmation.html'
 
+    def get_object(self, request):
+        """Gets the subscription plan object."""
+        try:
+            return get_object_or_404(
+                models.SubscriptionPlan, id=request.POST['plan_id']
+            )
+        except KeyError:
+            return HttpResponseNotFound('No subscription plan selected.')
+
     def get_context_data(self, **kwargs):
         """Overriding get_context_data to add additional context."""
         context = super(SubscribeView, self).get_context_data(**kwargs)
@@ -374,12 +383,7 @@ class SubscribeView(generic.TemplateView):
             context to render.
         """
         # Get the subscription plan for this POST
-        try:
-            self.subscription_plan = get_object_or_404(
-                models.SubscriptionPlan, id=request.POST['plan_id']
-            )
-        except KeyError:
-            return HttpResponseNotFound('No subscription plan selected.')
+        self.subscription_plan = self.get_object(request)
 
         # Determine POST action and direct to proper function
         post_action = request.POST.get('action', None)
@@ -532,3 +536,39 @@ class ThankYouView(generic.DetailView):
         )
 
         return transaction
+
+class SubscribeCancelView(PermissionRequiredMixin, generic.DetailView):
+    """View to handle cancelling of subscription."""
+    model = models.SubscriptionTransaction
+    context_object_name = 'subscription'
+    pk_url_kwarg = 'subscription_id'
+    permission_required = 'subscriptions.subscriptions'
+    raise_exception = True
+    success_message = 'Subscription successfully cancelled'
+    success_url = reverse_lazy('subscriptions_subscription_list')
+    template_extends = 'subscriptions/base.html'
+    template_name = 'subscriptions/subscribe_cancel.html'
+
+    def get_context_data(self, **kwargs):
+        """Overriding get_context_data to add additional context."""
+        context = super(SubscribeCancelView, self).get_context_data(**kwargs)
+
+        # Provides the base template to extend from
+        context['template_extends'] = self.template_extends
+
+        return context
+
+    def get_success_url(self):
+        """Returns the success URL."""
+        return reverse_lazy(self.success_url)
+
+    def post(self, request, *args, **kwargs):
+        """Updates a subscription's details to cancel it."""
+        subscription = self.object
+        subscription.date_billing_end = subscription.date_billing_next
+        subscription.date_billing_next = None
+        subscription.save()
+
+        messages.success(self.request, self.success_message)
+
+        return HttpResponseRedirect(self.get_success_url())
