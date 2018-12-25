@@ -509,6 +509,15 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
             # No group available to add user to
             pass
 
+class SubscribeList(LoginRequiredMixin, abstract.ListView):
+    """List of all a user's subscriptions."""
+    model = models.UserSubscription
+    context_object_name = 'subscriptions'
+    template_name = 'subscriptions/subscribe_list.html'
+
+    def get_queryset(self):
+        return self.model.objects.filter(user=self.request.user)
+
 class SubscribeThankYouView(LoginRequiredMixin, abstract.TemplateView):
     """A thank you page and summary for a new subscription."""
     template_name = 'subscriptions/subscribe_thank_you.html'

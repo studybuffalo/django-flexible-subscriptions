@@ -29,11 +29,11 @@ def create_cost(plan=None, period=1, unit=6, cost='1.00'):
 # -----------------------------------------------------------------------------
 def test_subscribe_view_redirect_anonymous(client):
     """Tests that anonymous users are redirected to login page."""
-    response = client.post(reverse('dfs_subscribe'), follow=True)
+    response = client.post(reverse('dfs_subscribe_add'), follow=True)
     redirect_url, redirect_code = response.redirect_chain[-1]
 
     assert redirect_code == 302
-    assert redirect_url == '/accounts/login/?next=/subscribe/'
+    assert redirect_url == '/accounts/login/?next=/subscribe/add/'
 
 def test_subscribe_view_no_redirect_on_login(client, django_user_model):
     """Tests that logged in users are not redirected."""
@@ -42,7 +42,7 @@ def test_subscribe_view_no_redirect_on_login(client, django_user_model):
 
     django_user_model.objects.create_user(username='a', password='b')
     client.login(username='a', password='b')
-    response = client.post(reverse('dfs_subscribe'), post_data, follow=True)
+    response = client.post(reverse('dfs_subscribe_add'), post_data, follow=True)
 
     assert response.status_code == 200
 
@@ -53,7 +53,7 @@ def test_subscribe_view_get_object_404_without_plan(admin_client):
         'action': None,
     }
     response = admin_client.post(
-        reverse('dfs_subscribe'),
+        reverse('dfs_subscribe_add'),
         post_data,
         follow=True,
     )
@@ -81,12 +81,12 @@ def test_subscribe_view_get_success_url():
     view = views.SubscribeView()
     success_url = view.get_success_url()
 
-    assert success_url == '/'
+    assert success_url == '/dfs/'
 
 @pytest.mark.django_db
 def test_subscribe_view_get_405_response(admin_client):
     """Tests that GET returns 405 response."""
-    response = admin_client.get(reverse('dfs_subscribe'))
+    response = admin_client.get(reverse('dfs_subscribe_add'))
 
     assert response.status_code == 405
 
@@ -101,7 +101,7 @@ def test_subscribe_view_post_preview_200_response(admin_client):
     }
 
     response = admin_client.post(
-        reverse('dfs_subscribe'),
+        reverse('dfs_subscribe_add'),
         post_data,
         follow=True,
     )
@@ -119,7 +119,7 @@ def test_subscribe_view_post_preview_proper_page(admin_client):
     }
 
     response = admin_client.post(
-        reverse('dfs_subscribe'),
+        reverse('dfs_subscribe_add'),
         post_data,
         follow=True,
     )
@@ -141,7 +141,7 @@ def test_subscribe_view_post_preview_added_context(admin_client):
     }
 
     response = admin_client.post(
-        reverse('dfs_subscribe'),
+        reverse('dfs_subscribe_add'),
         post_data,
         follow=True,
     )
@@ -175,7 +175,7 @@ def test_subscribe_view_post_preview_progress_to_confirmation(admin_client):
     }
 
     response = admin_client.post(
-        reverse('dfs_subscribe'),
+        reverse('dfs_subscribe_add'),
         post_data,
         follow=True,
     )
@@ -208,7 +208,7 @@ def test_subscribe_view_post_preview_to_confirm_invalid(admin_client):
     }
 
     response = admin_client.post(
-        reverse('dfs_subscribe'),
+        reverse('dfs_subscribe_add'),
         post_data,
         follow=True,
     )
@@ -238,7 +238,7 @@ def test_subscribe_view_post_preview_to_confirm_invalid_values(admin_client):
     }
 
     response = admin_client.post(
-        reverse('dfs_subscribe'),
+        reverse('dfs_subscribe_add'),
         post_data,
         follow=True,
     )
@@ -260,7 +260,7 @@ def test_subscribe_view_post_confirmation_200_response(admin_client):
     }
 
     response = admin_client.post(
-        reverse('dfs_subscribe'),
+        reverse('dfs_subscribe_add'),
         post_data,
         follow=True,
     )
@@ -289,14 +289,14 @@ def test_subscribe_view_post_confirm_to_process_valid(admin_client):
     }
 
     response = admin_client.post(
-        reverse('dfs_subscribe'),
+        reverse('dfs_subscribe_add'),
         post_data,
         follow=True,
     )
 
     url, _ = response.redirect_chain[-1]
 
-    assert url == '/'
+    assert url == '/dfs/'
 
 @pytest.mark.django_db
 def test_subscribe_view_post_confirm_to_process_invalid(admin_client):
@@ -319,7 +319,7 @@ def test_subscribe_view_post_confirm_to_process_invalid(admin_client):
     }
 
     response = admin_client.post(
-        reverse('dfs_subscribe'),
+        reverse('dfs_subscribe_add'),
         post_data,
         follow=True,
     )
@@ -352,7 +352,7 @@ def test_subscribe_view_post_confirm_to_process_invalid_values(admin_client):
     }
 
     response = admin_client.post(
-        reverse('dfs_subscribe'),
+        reverse('dfs_subscribe_add'),
         post_data,
         follow=True,
     )
@@ -386,7 +386,7 @@ def test_subscribe_view_post_confirm_payment_error(admin_client):
     }
 
     response = admin_client.post(
-        reverse('dfs_subscribe'),
+        reverse('dfs_subscribe_add'),
         post_data,
         follow=True,
     )
@@ -410,7 +410,7 @@ def test_subscribe_view_post_process_200_response(admin_client):
     }
 
     response = admin_client.post(
-        reverse('dfs_subscribe'),
+        reverse('dfs_subscribe_add'),
         post_data,
         follow=True,
     )
@@ -488,7 +488,7 @@ def test_thank_you_view_redirect_anonymous(client):
     redirect_url, redirect_code = response.redirect_chain[-1]
 
     assert redirect_code == 302
-    assert redirect_url == '/accounts/login/?next=/thank-you/'
+    assert redirect_url == '/accounts/login/?next=/subscribe/thank-you/'
 
 def test_thank_you_view_no_redirect_on_login(client, django_user_model):
     """Tests that logged in users are not redirected."""
@@ -535,7 +535,8 @@ def test_cancel_view_redirect_anonymous(client):
     redirect_url, redirect_code = response.redirect_chain[-1]
 
     assert redirect_code == 302
-    assert redirect_url == '/accounts/login/?next=/cancel/{}/'.format(sub_id)
+    assert redirect_url == (
+        '/accounts/login/?next=/subscribe/cancel/{}/'.format(sub_id))
 
 @pytest.mark.django_db
 def test_cancel_view_no_redirect_on_login(client, django_user_model):
@@ -552,7 +553,7 @@ def test_cancel_view_no_redirect_on_login(client, django_user_model):
 def test_cancel_view_get_success_url():
     """Tests that get_success_url works properly."""
     view = views.SubscribeView()
-    assert view.get_success_url() == '/'
+    assert view.get_success_url() == '/dfs/'
 
 @pytest.mark.django_db
 def test_cancel_post_updates_instance(client, django_user_model):

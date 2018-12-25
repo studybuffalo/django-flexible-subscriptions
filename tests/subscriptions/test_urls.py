@@ -15,7 +15,7 @@ def test_tag_list_exists_at_desired_location(admin_client):
 @pytest.mark.django_db
 def test_tag_list_exists_at_desired_url(admin_client):
     """Tests that tag list URL works."""
-    response = admin_client.get('/tags/')
+    response = admin_client.get('/dfs/tags/')
 
     assert response.status_code == 200
 
@@ -29,7 +29,7 @@ def test_tag_create_exists_at_desired_location(admin_client):
 @pytest.mark.django_db
 def test_tag_create_exists_at_desired_url(admin_client):
     """Tests that tag create URL works."""
-    response = admin_client.get('/tags/create/')
+    response = admin_client.get('/dfs/tags/create/')
 
     assert response.status_code == 200
 
@@ -48,7 +48,7 @@ def test_tag_update_exists_at_desired_location(admin_client):
 def test_tag_update_exists_at_desired_url(admin_client):
     """Tests that tag update URL works."""
     tag = models.PlanTag.objects.create(tag='test')
-    response = admin_client.get('/tags/{}/'.format(tag.id))
+    response = admin_client.get('/dfs/tags/{}/'.format(tag.id))
 
     assert response.status_code == 200
 
@@ -67,7 +67,7 @@ def test_tag_delete_exists_at_desired_location(admin_client):
 def test_tag_delete_exists_at_desired_url(admin_client):
     """Tests that tag delete URL works."""
     tag = models.PlanTag.objects.create(tag='test')
-    response = admin_client.get('/tags/{}/delete/'.format(tag.id))
+    response = admin_client.get('/dfs/tags/{}/delete/'.format(tag.id))
 
     assert response.status_code == 200
 
@@ -81,7 +81,7 @@ def test_plan_list_exists_at_desired_location(admin_client):
 @pytest.mark.django_db
 def test_plan_list_exists_at_desired_url(admin_client):
     """Tests that plan list URL works."""
-    response = admin_client.get('/plans/')
+    response = admin_client.get('/dfs/plans/')
 
     assert response.status_code == 200
 
@@ -95,7 +95,7 @@ def test_plan_create_exists_at_desired_location(admin_client):
 @pytest.mark.django_db
 def test_plan_create_exists_at_desired_url(admin_client):
     """Tests that plan create URL works."""
-    response = admin_client.get('/plans/create/')
+    response = admin_client.get('/dfs/plans/create/')
 
     assert response.status_code == 200
 
@@ -117,7 +117,7 @@ def test_plan_updated_exists_at_desired_url(admin_client):
     plan = models.SubscriptionPlan.objects.create(
         plan_name='a', plan_description='b'
     )
-    response = admin_client.get('/plans/{}/'.format(plan.id))
+    response = admin_client.get('/dfs/plans/{}/'.format(plan.id))
 
     assert response.status_code == 200
 
@@ -139,7 +139,7 @@ def test_plan_delete_exists_at_desired_url(admin_client):
     plan = models.SubscriptionPlan.objects.create(
         plan_name='a', plan_description='b'
     )
-    response = admin_client.get('/plans/{}/delete/'.format(plan.id))
+    response = admin_client.get('/dfs/plans/{}/delete/'.format(plan.id))
 
     assert response.status_code == 200
 
@@ -150,7 +150,7 @@ def test_subscriptions_subscribe_exists_at_desired_location(admin_client):
         plan_name='a', plan_description='b'
     )
     response = admin_client.post(
-        reverse('dfs_subscribe'), {'plan_id': plan.id}
+        reverse('dfs_subscribe_add'), {'plan_id': plan.id}
     )
 
     assert response.status_code == 200
@@ -161,7 +161,7 @@ def test_subscription_subscribe_exists_at_desired_url(admin_client):
     plan = models.SubscriptionPlan.objects.create(
         plan_name='a', plan_description='b'
     )
-    response = admin_client.post('/subscribe/', {'plan_id': plan.id})
+    response = admin_client.post('/subscribe/add/', {'plan_id': plan.id})
 
     assert response.status_code == 200
 
@@ -175,7 +175,7 @@ def test_subscription_list_exists_at_desired_location(admin_client):
 @pytest.mark.django_db
 def test_subscription_list_exists_at_desired_url(admin_client):
     """Tests that subscription list URL works."""
-    response = admin_client.get('/subscriptions/')
+    response = admin_client.get('/dfs/subscriptions/')
 
     assert response.status_code == 200
 
@@ -189,7 +189,7 @@ def test_subscription_create_exists_at_desired_location(admin_client):
 @pytest.mark.django_db
 def test_subscription_create_exists_at_desired_url(admin_client):
     """Tests that subscription create URL works."""
-    response = admin_client.get('/subscriptions/create/')
+    response = admin_client.get('/dfs/subscriptions/create/')
 
     assert response.status_code == 200
 
@@ -209,7 +209,8 @@ def test_subscription_updated_exists_at_desired_url(admin_client):
     """Tests that subscription update URL works."""
     subscription = models.UserSubscription.objects.create()
 
-    response = admin_client.get('/subscriptions/{}/'.format(subscription.id))
+    response = admin_client.get(
+        '/dfs/subscriptions/{}/'.format(subscription.id))
 
     assert response.status_code == 200
 
@@ -231,7 +232,7 @@ def test_subscription_delete_exists_at_desired_url(admin_client):
     subscription = models.UserSubscription.objects.create()
 
     response = admin_client.get(
-        '/subscriptions/{}/delete/'.format(subscription.id)
+        '/dfs/subscriptions/{}/delete/'.format(subscription.id)
     )
 
     assert response.status_code == 200
@@ -246,7 +247,7 @@ def test_transaction_list_exists_at_desired_location(admin_client):
 @pytest.mark.django_db
 def test_transaction_list_exists_at_desired_url(admin_client):
     """Tests that transaction list URL works."""
-    response = admin_client.get('/transactions/')
+    response = admin_client.get('/dfs/transactions/')
 
     assert response.status_code == 200
 
@@ -268,7 +269,7 @@ def test_transaction_detail_exists_at_desired_url(admin_client):
     transaction = models.SubscriptionTransaction.objects.create()
 
     response = admin_client.get(
-        '/transactions/{}/'.format(transaction.id)
+        '/dfs/transactions/{}/'.format(transaction.id)
     )
 
     assert response.status_code == 200
@@ -283,7 +284,7 @@ def test_thank_you_exists_at_desired_location(admin_client):
 @pytest.mark.django_db
 def test_thank_you_exists_at_desired_url(admin_client):
     """Tests that thank you page URL works."""
-    response = admin_client.get('/thank-you/')
+    response = admin_client.get('/subscribe/thank-you/')
 
     assert response.status_code == 200
 
@@ -304,7 +305,7 @@ def test_cancel_exists_at_desired_url(client, django_user_model):
     user = django_user_model.objects.create_user(username='a', password='b')
     subscription = models.UserSubscription.objects.create(user=user)
     client.login(username='a', password='b')
-    response = client.get('/cancel/{}/'.format(subscription.id))
+    response = client.get('/subscribe/cancel/{}/'.format(subscription.id))
 
     assert response.status_code == 200
 
@@ -318,6 +319,6 @@ def test_dashboard_exists_at_desired_location(admin_client):
 @pytest.mark.django_db
 def test_dashboard_exists_at_desired_url(admin_client):
     """Tests that dashboard URL works."""
-    response = admin_client.get('/')
+    response = admin_client.get('/dfs/')
 
     assert response.status_code == 200
