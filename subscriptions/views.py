@@ -548,7 +548,7 @@ class SubscribeCancelView(PermissionRequiredMixin, generic.DetailView):
     permission_required = 'subscriptions.subscriptions'
     raise_exception = True
     success_message = 'Subscription successfully cancelled'
-    success_url = reverse_lazy('subscriptions_subscription_list')
+    success_url = 'subscriptions_subscription_list'
     template_extends = 'subscriptions/base.html'
     template_name = 'subscriptions/subscribe_cancel.html'
 
@@ -567,7 +567,7 @@ class SubscribeCancelView(PermissionRequiredMixin, generic.DetailView):
 
     def post(self, request, *args, **kwargs):
         """Updates a subscription's details to cancel it."""
-        subscription = self.object
+        subscription = self.get_object()
         subscription.date_billing_end = subscription.date_billing_next
         subscription.date_billing_next = None
         subscription.save()
