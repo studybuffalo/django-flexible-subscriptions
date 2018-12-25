@@ -475,23 +475,17 @@ def test_thank_you_view_returns_object(admin_client):
 
     assert response.status_code == 200
 
-@pytest.mark.django_db
-def test_thank_you_view_returns_404(admin_client):
-    """Tests Thank You view returns 404 when no instance found."""
-    response = admin_client.get(
-        '{}?transaction_id=8974d3c3-f960-44fb-8729-bf71c870cd06'.format(
-            reverse('subscriptions_thank_you')
-        )
-    )
-
-    assert response.status_code == 404
-
-def test_thank_you_view_adds_context():
+def test_thank_you_view_adds_context(admin_client):
     """Tests that context is properly extended."""
-    view = views.ThankYouView()
-    context = view.get_context_data()
+    transaction = models.SubscriptionTransaction.objects.create(amount='1.00')
 
-    assert 'template_extends' in context
+    response = admin_client.get('{}?transaction_id={}'.format(
+        reverse('subscriptions_thank_you'), transaction.id
+    ))
+    assert 'transaction' in response.context
+    assert response.context['transaction'] == transaction
+    assert 'template_extends' in response.context
+    assert response.context['template_extends'] == 'subscriptions/base.html'
 
 def test_subscribe_cancel_view_get_context_data_override():
     """Tests that get_context_data override works properly."""

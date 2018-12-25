@@ -519,6 +519,15 @@ class ThankYouView(generic.TemplateView):
     template_extends = 'subscriptions/base.html'
     context_object_name = 'transaction'
 
+    def get_object(self):
+        """Returns the provided transaction instance."""
+        try:
+            return models.SubscriptionTransaction.objects.get(
+                id=self.request.GET.get('transaction_id', None)
+            )
+        except models.SubscriptionTransaction.DoesNotExist:
+            return None
+
     def get_context_data(self, **kwargs):
         """Overriding get_context_data to add additional context."""
         context = super(ThankYouView, self).get_context_data(**kwargs)
@@ -530,12 +539,6 @@ class ThankYouView(generic.TemplateView):
         context['template_extends'] = self.template_extends
 
         return context
-
-    def get_object(self):
-        """Returns the provided transaction instance."""
-        return models.SubscriptionTransaction.objects.filter(
-            id=self.request.GET.get('transaction_id', None)
-        )
 
 class SubscribeCancelView(PermissionRequiredMixin, generic.DetailView):
     """View to handle cancelling of subscription."""
