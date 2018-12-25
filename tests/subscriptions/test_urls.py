@@ -288,20 +288,23 @@ def test_thank_you_exists_at_desired_url(admin_client):
     assert response.status_code == 200
 
 @pytest.mark.django_db
-def test_susbscription_cancel_exists_at_desired_location(admin_client):
+def test_cancel_exists_at_desired_location(client, django_user_model):
     """Tests that subscription cancel URL name works."""
-    subscription = models.UserSubscription.objects.create()
-    response = admin_client.get(reverse(
-        'dfs_subscribe_cancel', kwargs={'subscription_id': subscription.id}
-    ))
+    user = django_user_model.objects.create_user(username='a', password='b')
+    subscription = models.UserSubscription.objects.create(user=user)
+    client.login(username='a', password='b')
+    response = client.get(reverse(
+        'dfs_subscribe_cancel', kwargs={'subscription_id': subscription.id}))
 
     assert response.status_code == 200
 
 @pytest.mark.django_db
-def test_subscription_cancel_exists_at_desired_url(admin_client):
+def test_cancel_exists_at_desired_url(client, django_user_model):
     """Tests that subscription cancel URL works."""
-    subscription = models.UserSubscription.objects.create()
-    response = admin_client.get('/cancel/{}/'.format(subscription.id))
+    user = django_user_model.objects.create_user(username='a', password='b')
+    subscription = models.UserSubscription.objects.create(user=user)
+    client.login(username='a', password='b')
+    response = client.get('/cancel/{}/'.format(subscription.id))
 
     assert response.status_code == 200
 

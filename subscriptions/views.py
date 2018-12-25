@@ -541,6 +541,12 @@ class SubscribeCancelView(LoginRequiredMixin, abstract.DetailView):
     success_url = 'dfs_subscription_list'
     template_name = 'subscriptions/subscribe_cancel.html'
 
+    def get_object(self, queryset=None):
+        return get_object_or_404(
+            self.model,
+            user=self.request.user,
+            id=self.kwargs['subscription_id'])
+
     def get_success_url(self):
         """Returns the success URL."""
         return reverse_lazy(self.success_url)

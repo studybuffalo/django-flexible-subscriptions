@@ -537,8 +537,8 @@ def test_cancel_view_redirect_anonymous(client):
 @pytest.mark.django_db
 def test_cancel_view_no_redirect_on_login(client, django_user_model):
     """Tests that logged in users are not redirected."""
-    sub_id = models.UserSubscription.objects.create().id
-    django_user_model.objects.create_user(username='a', password='b')
+    user = django_user_model.objects.create_user(username='a', password='b')
+    sub_id = models.UserSubscription.objects.create(user=user).id
     client.login(username='a', password='b')
     response = client.get(
         reverse('dfs_subscribe_cancel', kwargs={'subscription_id': sub_id}),
@@ -552,16 +552,19 @@ def test_cancel_view_get_success_url():
     assert view.get_success_url() == '/'
 
 @pytest.mark.django_db
-def test_cancel_post_updates_instance(admin_client):
+def test_cancel_post_updates_instance(client, django_user_model):
     """Tests that POST request properly updates subscription instance."""
+    user = django_user_model.objects.create_user(username='a', password='b')
     subscription = models.UserSubscription.objects.create(
+        user=user,
         date_billing_start=datetime(2018, 1, 1),
         date_billing_end=None,
         date_billing_last=datetime(2018, 11, 1),
         date_billing_next=datetime(2018, 12, 1),
     )
     subscription_id = subscription.id
-    response = admin_client.post(
+    client.login(username='a', password='b')
+    response = client.post(
         reverse(
             'dfs_subscribe_cancel', kwargs={'subscription_id': subscription_id}
         ),
@@ -575,3 +578,16 @@ def test_cancel_post_updates_instance(admin_client):
     assert subscription.date_billing_next is None
     assert messages[0].tags == 'success'
     assert messages[0].message == 'Subscription successfully cancelled'
+
+@pytest.mark.django_db
+def test_cancel_requires_user_owner(client, django_user_model):
+    """Tests that logged in user has ownership of subscription plan."""
+    django_user_model.objects.create_user(username='a', password='b')
+    user_2 = django_user_model.objects.create_user(username='c', password='d')
+    sub_id = models.UserSubscription.objects.create(user=user_2).id
+    client.login(username='a', password='b')
+    response = client.get(
+        reverse('dfs_subscribe_cancel', kwargs={'subscription_id': sub_id}),
+        follow=True)
+
+    assert response.status_code == 404
