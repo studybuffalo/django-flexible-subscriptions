@@ -1,4 +1,5 @@
 """Tests for the django-flexible-subscriptions UserSubscription views."""
+from datetime import datetime
 from unittest.mock import patch
 
 import pytest
@@ -494,3 +495,33 @@ def test_subscribe_cancel_view_get_context_data_override():
 
     assert 'template_extends' in context
     assert context['template_extends'] == 'subscriptions/base.html'
+
+def test_subscribe_cancel_view_get_success_url():
+    """Tests that get_success_url works properly."""
+    view = views.SubscribeView()
+    assert view.get_success_url() == '/'
+
+@pytest.mark.django_db
+def test_subscribe_cancel_post_updates_instance(admin_client):
+    """Tests that POST request properly updates subscription instance."""
+    subscription = models.UserSubscription.objects.create(
+        date_billing_start=datetime(2018, 1, 1),
+        date_billing_end=None,
+        date_billing_last=datetime(2018, 11, 1),
+        date_billing_next=datetime(2018, 12, 1),
+    )
+    subscription_id = subscription.id
+    response = admin_client.post(
+        reverse(
+            'subscriptions_cancel', kwargs={'subscription_id': subscription_id}
+        ),
+        follow=True
+    )
+
+    subscription = models.UserSubscription.objects.get(id=subscription_id)
+    messages = [message for message in get_messages(response.wsgi_request)]
+
+    assert subscription.date_billing_end == datetime(2018, 12, 1)
+    assert subscription.date_billing_next is None
+    assert messages[0].tags == 'success'
+    assert messages[0].message == 'Subscription successfully cancelled'
