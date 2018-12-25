@@ -5,6 +5,78 @@ from django.urls import reverse
 
 from subscriptions import models
 
+
+@pytest.mark.django_db
+def test_subscribe_add_exists_at_desired_location(admin_client):
+    """Tests that subscribe add URL name works."""
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='a', plan_description='b'
+    )
+    response = admin_client.post(
+        reverse('dfs_subscribe_add'), {'plan_id': plan.id}
+    )
+
+    assert response.status_code == 200
+
+@pytest.mark.django_db
+def test_subscribe_add_exists_at_desired_url(admin_client):
+    """Tests that subscribe add URL works."""
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='a', plan_description='b'
+    )
+    response = admin_client.post('/subscribe/add/', {'plan_id': plan.id})
+
+    assert response.status_code == 200
+
+@pytest.mark.django_db
+def test_thank_you_exists_at_desired_location(admin_client):
+    """Tests that thank you page URL name works."""
+    response = admin_client.get(reverse('dfs_subscribe_thank_you'))
+
+    assert response.status_code == 200
+
+@pytest.mark.django_db
+def test_thank_you_exists_at_desired_url(admin_client):
+    """Tests that thank you page URL works."""
+    response = admin_client.get('/subscribe/thank-you/')
+
+    assert response.status_code == 200
+
+@pytest.mark.django_db
+def test_cancel_exists_at_desired_location(client, django_user_model):
+    """Tests that subscription cancel URL name works."""
+    user = django_user_model.objects.create_user(username='a', password='b')
+    subscription = models.UserSubscription.objects.create(user=user)
+    client.login(username='a', password='b')
+    response = client.get(reverse(
+        'dfs_subscribe_cancel', kwargs={'subscription_id': subscription.id}))
+
+    assert response.status_code == 200
+
+@pytest.mark.django_db
+def test_cancel_exists_at_desired_url(client, django_user_model):
+    """Tests that subscription cancel URL works."""
+    user = django_user_model.objects.create_user(username='a', password='b')
+    subscription = models.UserSubscription.objects.create(user=user)
+    client.login(username='a', password='b')
+    response = client.get('/subscribe/cancel/{}/'.format(subscription.id))
+
+    assert response.status_code == 200
+
+@pytest.mark.django_db
+def test_subscribe_list_exists_at_desired_location(admin_client):
+    """Tests that subscribe list URL name works."""
+    response = admin_client.get(reverse('dfs_subscribe_list'))
+
+    assert response.status_code == 200
+
+@pytest.mark.django_db
+def test_subscribe_list_exists_at_desired_url(admin_client):
+    """Tests that subscription cancel URL works."""
+    response = admin_client.get('/subscribe/')
+
+    assert response.status_code == 200
+
 @pytest.mark.django_db
 def test_tag_list_exists_at_desired_location(admin_client):
     """Tests that tag list URL name works."""
@@ -144,28 +216,6 @@ def test_plan_delete_exists_at_desired_url(admin_client):
     assert response.status_code == 200
 
 @pytest.mark.django_db
-def test_subscriptions_subscribe_exists_at_desired_location(admin_client):
-    """Tests that subscription subscribe URL name works."""
-    plan = models.SubscriptionPlan.objects.create(
-        plan_name='a', plan_description='b'
-    )
-    response = admin_client.post(
-        reverse('dfs_subscribe_add'), {'plan_id': plan.id}
-    )
-
-    assert response.status_code == 200
-
-@pytest.mark.django_db
-def test_subscription_subscribe_exists_at_desired_url(admin_client):
-    """Tests that subscription subscribe URL works."""
-    plan = models.SubscriptionPlan.objects.create(
-        plan_name='a', plan_description='b'
-    )
-    response = admin_client.post('/subscribe/add/', {'plan_id': plan.id})
-
-    assert response.status_code == 200
-
-@pytest.mark.django_db
 def test_subscription_list_exists_at_desired_location(admin_client):
     """Tests that subscription list URL name works."""
     response = admin_client.get(reverse('dfs_subscription_list'))
@@ -271,41 +321,6 @@ def test_transaction_detail_exists_at_desired_url(admin_client):
     response = admin_client.get(
         '/dfs/transactions/{}/'.format(transaction.id)
     )
-
-    assert response.status_code == 200
-
-@pytest.mark.django_db
-def test_thank_you_exists_at_desired_location(admin_client):
-    """Tests that thank you page URL name works."""
-    response = admin_client.get(reverse('dfs_subscribe_thank_you'))
-
-    assert response.status_code == 200
-
-@pytest.mark.django_db
-def test_thank_you_exists_at_desired_url(admin_client):
-    """Tests that thank you page URL works."""
-    response = admin_client.get('/subscribe/thank-you/')
-
-    assert response.status_code == 200
-
-@pytest.mark.django_db
-def test_cancel_exists_at_desired_location(client, django_user_model):
-    """Tests that subscription cancel URL name works."""
-    user = django_user_model.objects.create_user(username='a', password='b')
-    subscription = models.UserSubscription.objects.create(user=user)
-    client.login(username='a', password='b')
-    response = client.get(reverse(
-        'dfs_subscribe_cancel', kwargs={'subscription_id': subscription.id}))
-
-    assert response.status_code == 200
-
-@pytest.mark.django_db
-def test_cancel_exists_at_desired_url(client, django_user_model):
-    """Tests that subscription cancel URL works."""
-    user = django_user_model.objects.create_user(username='a', password='b')
-    subscription = models.UserSubscription.objects.create(user=user)
-    client.login(username='a', password='b')
-    response = client.get('/subscribe/cancel/{}/'.format(subscription.id))
 
     assert response.status_code == 200
 

@@ -595,3 +595,38 @@ def test_cancel_requires_user_owner(client, django_user_model):
         follow=True)
 
     assert response.status_code == 404
+
+
+# SubscribeListView Tests
+# -----------------------------------------------------------------------------
+@pytest.mark.django_db
+def test_subscribe_list_redirect_anonymous(client):
+    """Tests that anonymous users are redirected to login page."""
+    response = client.get(reverse('dfs_subscribe_list'), follow=True)
+    redirect_url, redirect_code = response.redirect_chain[-1]
+
+    assert redirect_code == 302
+    assert redirect_url == ('/accounts/login/?next=/subscribe/')
+
+@pytest.mark.django_db
+def test_subscribe_list_no_redirect_on_login(client, django_user_model):
+    """Tests that logged in users are not redirected."""
+    django_user_model.objects.create_user(username='a', password='b')
+    client.login(username='a', password='b')
+    response = client.get(reverse('dfs_subscribe_list'), follow=True)
+
+    assert response.status_code == 200
+
+@pytest.mark.django_db
+def test_subscribe_list_requires_user_owner(client, django_user_model):
+    """Tests that logged in user has ownership of subscription plans."""
+    user_1 = django_user_model.objects.create_user(username='a', password='b')
+    user_2 = django_user_model.objects.create_user(username='c', password='d')
+    subscription_1 = models.UserSubscription.objects.create(user=user_1)
+    models.UserSubscription.objects.create(user=user_2)
+    client.login(username='a', password='b')
+    response = client.get(reverse('dfs_subscribe_list'), follow=True)
+
+    assert response.context['subscriptions'][0] == subscription_1
+    assert models.UserSubscription.objects.all().count() == 2
+    assert len(response.context['subscriptions']) == 1
