@@ -83,13 +83,18 @@ urlpatterns = [
         name='subscriptions_transaction_detail',
     ),
     url(
-        r'^$',
-        TemplateView.as_view(template_name='subscriptions/dashboard.html'),
-        name='subscriptions_dashboard',
-    ),
-    url(
         r'thank-you/$',
         views.ThankYouView.as_view(),
         name='subscriptions_thank_you',
+    ),
+    url(
+        r'cancel/(?P<subscription_id>[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12})/$',
+        views.SubscribeCancelView.as_view(),
+        name='subscriptions_cancel',
+    ),
+    url(
+        r'^$',
+        TemplateView.as_view(template_name='subscriptions/dashboard.html'),
+        name='subscriptions_dashboard',
     ),
 ]
