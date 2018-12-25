@@ -30,7 +30,7 @@ class Manager():
         for subscription in new_subscriptions:
             self.process_new(subscription)
 
-        # Handle new subscriptions
+        # Handle subscriptions with billing due
         due_subscriptions = models.UserSubscription.objects.filter(
             Q(active=True) & Q(cancelled=False)
             & Q(date_billing_next__lte=current)
@@ -74,7 +74,6 @@ class Manager():
         if payment_success:
             # Add user to the proper group
             try:
-                print('test')
                 plan.group.user_set.add(user)
             except AttributeError:
                 # No group available to add user to
