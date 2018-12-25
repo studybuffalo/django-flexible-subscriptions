@@ -166,4 +166,6 @@ LOGGING = {
 
 # django-flexible-subscriptions settings
 # -----------------------------------------------------------------------------
-SUBSCRIPTIONS_CURRENCY_LOCALE = 'en_ca'
+DSF_CURRENCY_LOCALE = 'en_ca'
+DSF_ENABLE_ADMIN = True
+DFS_BASE_TEMPLATE = 'subscriptions/base.html'

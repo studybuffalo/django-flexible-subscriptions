@@ -1,8 +1,9 @@
 """Abstract templates for the Djanog Flexible Subscriptions app."""
 from django.views import generic
 
+from subscriptions.conf import SETTINGS
 
-BASE_TEMPLATE = 'subscriptions/base.html'
+BASE_TEMPLATE = SETTINGS['base_template']
 
 class TemplateView(generic.TemplateView):
     """Extends TemplateView to specify of extensible HTML template.

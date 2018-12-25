@@ -173,18 +173,23 @@ def compile_settings():
     """
     # ADMIN SETTINGS
     # -------------------------------------------------------------------------
-    enable_admin = getattr(
-        settings, 'SUBSCRIPTIONS_ENABLE_ADMIN', False
-    )
+    enable_admin = getattr(settings, 'DFS_ENABLE_ADMIN', False)
     # CURRENCY SETTINGS
     # -------------------------------------------------------------------------
-    currency_locale = str(getattr(
-        settings, 'SUBSCRIPTIONS_CURRENCY_LOCALE', 'en_us'
-    )).lower()
+    currency_locale = str(
+        getattr(settings, 'DFS_CURRENCY_LOCALE', 'en_us')
+    ).lower()
+
+    # TEMPLATE SETTINGS
+    # -------------------------------------------------------------------------
+    base_template = getattr(
+        settings, 'DFS_BASE_TEMPLATE', 'subscriptions/base.html'
+    )
 
     return {
         'enable_admin': enable_admin,
         'currency_locale': currency_locale,
+        'base_template': base_template,
     }
 
 
