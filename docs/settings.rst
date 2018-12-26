@@ -51,7 +51,7 @@ Template Settings
 These settings control aspects of the HTML templates.
 
 ``DFS_BASE_TEMPLATE``
-====================
+=====================
 
 **Required:** ``False``
 
