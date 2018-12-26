@@ -199,6 +199,7 @@ django_settings = {
         'django.contrib.contenttypes',
         'django.contrib.sessions',
         'django.contrib.sites',
+        'subscriptions',
     },
     'MIDDLEWARE': [
         'django.contrib.sessions.middleware.SessionMiddleware',
