@@ -18,8 +18,12 @@ setup(
     author_email='studybuffalo@gmail.com',
     keywords='Django, subscriptions, recurrent billing',
     platforms=['linux', 'windows'],
-    packages=find_packages(exclude=['tests*']),
-    package_data={},
+    packages=find_packages(exclude=['sandbox*', 'tests*']),
+    package_data={
+        'subscriptions': [
+            'templates/subscriptions/*.html',
+        ]
+    },
     project_urls={
         'Documentation': 'https://django-flexible-subscriptions.readthedocs.io/en/latest/',
         'Source code': 'https://github.com/studybuffalo/django-flexible-subscriptions',
