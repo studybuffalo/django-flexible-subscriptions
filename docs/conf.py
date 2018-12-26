@@ -10,7 +10,7 @@ import os
 import sys
 import django
 from django.conf import settings
-from subscriptions import __version__
+
 
 # -- Path setup --------------------------------------------------------------
 # Path to any external modules (i.e. outside of the docs directory)
@@ -18,6 +18,8 @@ sys.path.insert(0, os.path.abspath('../')) # Parent directory
 
 
 # -- Project information -----------------------------------------------------
+from subscriptions import __version__ # pylint: disable=wrong-import-position
+
 project = 'django-flexible-subscriptions'
 copyright = '2018, Joshua Robert Torrance'
 author = 'Joshua Robert Torrance'
