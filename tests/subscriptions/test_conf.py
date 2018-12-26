@@ -8,29 +8,33 @@ from subscriptions.conf import compile_settings, Currency, CURRENCY
 
 
 @override_settings(
-    SUBSCRIPTIONS_ENABLE_ADMIN=1,
-    SUBSCRIPTIONS_CURRENCY_LOCALE=2,
+    DFS_ENABLE_ADMIN=1,
+    DFS_CURRENCY_LOCALE=2,
+    DFS_BASE_TEMPLATE='3'
 )
 def test_all_settings_populate_from_settings_properly():
     """Tests that Django settings all proper populate SETTINGS."""
     subscription_settings = compile_settings()
 
-    assert len(subscription_settings) == 2
+    assert len(subscription_settings) == 3
     assert subscription_settings['enable_admin'] == 1
     assert subscription_settings['currency_locale'] == '2'
+    assert subscription_settings['base_template'] == '3'
 
 @override_settings()
 def test_settings_defaults():
     """Tests that SETTINGS adds all defaults properly."""
     # Clear any settings already provided
-    del settings.SUBSCRIPTIONS_ENABLE_ADMIN
-    del settings.SUBSCRIPTIONS_CURRENCY_LOCALE
+    del settings.DFS_ENABLE_ADMIN
+    del settings.DFS_CURRENCY_LOCALE
+    del settings.DFS_BASE_TEMPLATE
 
     subscription_settings = compile_settings()
 
-    assert len(subscription_settings) == 2
+    assert len(subscription_settings) == 3
     assert subscription_settings['enable_admin'] is False
     assert subscription_settings['currency_locale'] == 'en_us'
+    assert subscription_settings['base_template'] == 'subscriptions/base.html'
 
 def test_format_currency_en_us():
     """Tests that format currency works properly with the default."""

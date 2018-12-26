@@ -1,7 +1,6 @@
 """URLs for the Flexible Subscriptions app."""
 # pylint: disable=line-too-long
 from django.conf.urls import url
-from django.views.generic import TemplateView
 
 from subscriptions import views
 
@@ -99,7 +98,7 @@ urlpatterns = [
     ),
     url(
         r'^dfs/$',
-        TemplateView.as_view(template_name='subscriptions/dashboard.html'),
+        views.DashboardView.as_view(),
         name='dfs_dashboard',
     ),
 ]

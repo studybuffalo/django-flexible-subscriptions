@@ -9,12 +9,19 @@ from django.forms.models import inlineformset_factory
 from django.http import HttpResponseRedirect
 from django.http.response import HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404
-from django.views import generic
 from django.urls import reverse_lazy
 from django.utils import timezone
 
 from subscriptions import models, forms, abstract
 
+
+# Dashboard View
+# -----------------------------------------------------------------------------
+class DashboardView(PermissionRequiredMixin, abstract.TemplateView):
+    """Dashboard view to manage subscription details."""
+    permission_required = 'subscriptions.subscriptions'
+    raise_exception = True
+    template_name = 'subscriptions/dashboard.html'
 
 # Tag Views
 # -----------------------------------------------------------------------------
@@ -324,7 +331,7 @@ class SubscriptionListView(PermissionRequiredMixin, abstract.ListView):
     template_name = 'subscriptions/subscription_list.html'
 
 class SubscriptionCreateView(
-        PermissionRequiredMixin, SuccessMessageMixin, generic.CreateView
+        PermissionRequiredMixin, SuccessMessageMixin, abstract.CreateView
 ):
     """View to create a new user subscription."""
     model = models.UserSubscription

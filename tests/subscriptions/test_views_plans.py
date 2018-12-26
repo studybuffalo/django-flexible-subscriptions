@@ -30,7 +30,6 @@ def create_plan_cost(plan, rec_period=1, rec_unit=6, cost='1.00'):
 
 # PlanListView
 # -----------------------------------------------------------------------------
-@pytest.mark.django_db
 def test_plan_list_template(admin_client):
     """Tests for proper plan_list template."""
     response = admin_client.get(reverse('dfs_plan_list'))
