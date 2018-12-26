@@ -34,7 +34,7 @@ django-flexible-subscriptions
 
 Django Flexible Subscriptions provides subscription and recurrent
 billing for `Django`_ applications. Any payment provider can be quickly
-added by overriding the placeholder functions.
+added by overriding the placeholder methods.
 
 .. _Django: https://www.djangoproject.com/
 
@@ -96,7 +96,11 @@ This project is licensed under the GPLv3. Please see the LICENSE_ file for detai
 Acknowledgements
 ----------------
 
-TBD
+`Django Oscar`_ and `Django Subscription`_ for inspiring many of the
+initial design decisions.
+
+.. _Django Oscar: https://github.com/django-oscar/django-oscar
+.. _Django Subscription: https://github.com/zhaque/django-subscription
 
 ---------
 Changelog
