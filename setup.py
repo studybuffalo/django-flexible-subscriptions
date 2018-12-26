@@ -29,7 +29,7 @@ setup(
         'Source code': 'https://github.com/studybuffalo/django-flexible-subscriptions',
         'Issues': 'https://github.com/studybuffalo/django-flexible-subscriptions/issues',
     },
-    python_required='>=3',
+    python_requires='>=3',
     install_requires=[
         'django>=1.11',
     ],
