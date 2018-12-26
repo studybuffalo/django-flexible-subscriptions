@@ -1,0 +1,40 @@
+{% extends template_extends %}
+
+{% load i18n %}
+
+{% block content %}
+  <h1>Subscription Payment Transaction Detail</h1>
+
+  {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <div>
+    <a href="{% url 'dfs_transaction_list' %}">
+      {% trans "Back to subscription payment transactions" %}
+    </a>
+  </div>
+
+  <ul>
+    <li>
+      <strong>{% trans "User" %}: </strong>
+      {{ transaction.user }}
+    </li>
+    <li>
+      <strong>{% trans "Plan" %}: </strong>
+      {{ transaction.plan }}
+    </li>
+    <li>
+      <strong>{% trans "Transaction date" %}: </strong>
+      {{ transaction.date_transaction }}
+    </li>
+    <li>
+      <strong></strong>{% trans "Amount" %}: </strong>
+      ${{ transaction.amount }}
+    </li>
+  </ul>
+{% endblock %}

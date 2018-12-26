@@ -19,13 +19,14 @@ def pytest_configure():
             'django.contrib.contenttypes',
             'django.contrib.sessions',
             'django.contrib.sites',
+            'subscriptions',
         },
         'MIDDLEWARE': [
             'django.contrib.sessions.middleware.SessionMiddleware',
             'django.contrib.auth.middleware.AuthenticationMiddleware',
             'django.contrib.messages.middleware.MessageMiddleware',
         ],
-        #'ROOT_URLCONF': 'flexbile_subscriptions.urls',
+        'ROOT_URLCONF': 'subscriptions.urls',
         'TEMPLATES': [
             {
                 'BACKEND': 'django.template.backends.django.DjangoTemplates',

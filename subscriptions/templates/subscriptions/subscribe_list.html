@@ -1,0 +1,16 @@
+{% extends template_extends %}
+
+{% load i18n %}
+
+{% block content %}
+  <h1>Manage subscriptions</h1>
+
+  {% for subscription in subscriptions %}
+    <ul>
+      <li>
+        {{ subscription.subscription.plan }} -
+        <a href="{% url 'dfs_subscribe_cancel' subscription.id %}">Cancel</a>
+      </li>
+    </ul>
+  {% endfor %}
+{% endblock %}

@@ -1,5 +1,5 @@
 # pylint: disable=missing-docstring, invalid-name
-__version__ = '0.3.1'
+__version__ = '0.1.0'
 
 # Provide DepreciationWarning for older Django versions
 import warnings
@@ -17,4 +17,4 @@ if '1.11' in django.__version__:
     )
 
 # Django configuration details
-default_app_config = 'flexible_subscriptions.apps.FlexibleSubscriptionsConfig'
+default_app_config = 'subscriptions.apps.FlexibleSubscriptionsConfig'

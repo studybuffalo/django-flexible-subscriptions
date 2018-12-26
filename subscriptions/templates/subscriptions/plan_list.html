@@ -1,0 +1,70 @@
+{% extends template_extends %}
+
+{% load i18n %}
+{% load currency_filters %}
+
+{% block content %}
+  <h1>Subscription Plans</h1>
+
+  {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <div>
+    <a href="{% url 'dfs_dashboard' %}">Back to dashboard</a>
+  </div>
+
+  <div>
+    <a href="{% url 'dfs_plan_create' %}">Create new plan</a>
+  </div>
+
+  {% if plans %}
+    <table>
+      <thead>
+        <tr>
+          <th>{% trans "Plan name" %}</th>
+          <th>{% trans "Plan description" %}</th>
+          <th>{% trans "Plan tags" %}</th>
+          <th>{% trans "Plan costs" %}</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for plan in plans %}
+          <tr>
+            <td>{{ plan.plan_name }}</td>
+            <td>{{ plan.plan_description }}</td>
+            <td>{{ plan.display_tags }}</td>
+            <td>
+              <ul>
+                {% for cost in plan.costs.all %}
+                  <li>
+                    {{ cost.cost|currency }}
+                    {{ cost.display_billing_frequency_text }}
+                  </li>
+                {% endfor %}
+              </ul>
+            </td>
+            <td>
+                <a href="{% url 'dfs_plan_update' plan.id %}">
+                  {% trans "Edit" %}
+                </a>
+              </td>
+            <td>
+              <a href="{% url 'dfs_plan_delete' plan.id %}">
+                {% trans "Delete" %}
+              </a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>{% trans "No subscription plans have been added yet." %}</p>
+  {% endif %}
+{% endblock %}

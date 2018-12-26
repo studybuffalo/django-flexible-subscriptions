@@ -1,0 +1,47 @@
+{% load i18n %}
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>Django Flexible Subscriptions Sandbox Site</title>
+  </head>
+  <body>
+    <h1>Django Flexible Subscriptions Sandbox Site</h1>
+
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <li {% if message.tags %}class="{{ message.tags }}"{% endif %}>
+            {{ message }}
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    <ul>
+      {% if user.is_authenticated %}
+        <li><a href="{% url 'logout' %}">Logout</a></li>
+      {% else %}
+        <li><a href="{% url 'login' %}">Login</a></li>
+      {% endif %}
+      <li><a href="{% url 'dfs_dashboard' %}">Django Flexible Subscriptions</a></li>
+    </ul>
+
+    {% if plans %}
+      <h2>Test subscriptions</h2>
+
+      <ul>
+        {% for plan in plans %}
+          <form method="post" action="{% url 'dfs_subscribe' %}">
+            {% csrf_token %}
+            <h3>{{ plan.plan_name }}</h3>
+            <p>{{ plan.plan_description }}</p>
+            <input type="hidden" name="plan_id" value="{{ plan.id }}">
+            <button type="submit">Subscribe!</button>
+          </form>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </body>
+</html>

@@ -1,0 +1,12 @@
+{% extends template_extends %}
+
+{% load i18n %}
+
+{% block content %}
+  <h1>Cancel subscription?</h1>
+
+  <form method="post" action="{% url 'dfs_subscribe_cancel' subscription.id %}">
+    {% csrf_token %}
+    <button type="submit">Cancel</button>
+  </form>
+{% endblock %}

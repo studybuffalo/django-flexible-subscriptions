@@ -21,3 +21,7 @@ _templates/
 *.egg-info
 dist/
 build/
+
+# Sandbox files
+sandbox/*.env
+sandbox/*.sqlite3

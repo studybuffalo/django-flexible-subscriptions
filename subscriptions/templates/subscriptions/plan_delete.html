@@ -1,0 +1,53 @@
+{% extends template_extends %}
+
+{% load i18n %}
+
+{% block content %}
+  <h1>Subscription Plan Deletion</h1>
+
+  {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <p>
+    <strong>Are you sure you want to delete this subscription plan?</strong>
+  </p>
+
+  <ul>
+    <li><strong>Plan name: </strong>{{ plan.plan_name }}</li>
+    <li><strong>Plan description: </strong>{{ plan.plan_description }}</li>
+    <li>
+      <strong>Plan tags: </strong>
+      <ul>
+        {% for tag in plan.tags.all %}
+          <li>{{ tag.tag }}</li>
+        {% endfor %}
+      </ul>
+    </li>
+    <li>
+      <strong>Plan costs: </strong>
+      <ul>
+        {% for cost in plan.costs.all %}
+          <li>
+            ${{ cost.cost }}
+            {{ cost.display_billing_frequency_text }}
+          </li>
+        {% endfor %}
+      </ul>
+    </li>
+  </ul>
+
+
+  <form method="POST">
+    {% csrf_token %}
+    <input type="submit" value="Delete">
+  </form>
+
+  <div>
+    <a href="{% url 'dfs_plan_list' %}">Cancel</a>
+  </div>
+{% endblock %}

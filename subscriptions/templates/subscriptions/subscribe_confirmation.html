@@ -1,0 +1,16 @@
+{% extends template_extends %}
+
+{% load i18n %}
+
+{% block content %}
+  <h1>Confirmation</h1>
+
+  <form method="post" action="{% url 'dfs_subscribe_add' %}">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="process">
+    <input type="hidden" name="plan_id" value="{{ plan.id }}">
+    {{ plan_cost_form.as_p }}
+    {{ payment_form.as_p }}
+    <button type="submit">Subscribe</button>
+  </form>
+{% endblock %}

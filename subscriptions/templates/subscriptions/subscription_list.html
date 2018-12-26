@@ -1,0 +1,114 @@
+{% extends template_extends %}
+
+{% load i18n %}
+
+{% block content %}
+  <h1>User Subscriptions</h1>
+
+  {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <div>
+    <a href="{% url 'dfs_dashboard' %}">Back to dashboard</a>
+  </div>
+
+  <div>
+    <a href="{% url 'dfs_subscription_create' %}">Create new user subscription</a>
+  </div>
+
+  {% if users %}
+    <table>
+      <thead>
+        <tr>
+          <th>{% trans "User" %}</th>
+          <th>{% trans "Plan" %}</th>
+          <th>{% trans "Billing start date" %}</th>
+          <th>{% trans "Billing end date" %}</th>
+          <th>{% trans "Last billing date" %}</th>
+          <th>{% trans "Next billing date" %}</th>
+          <th>{% trans "Active?" %}</th>
+          <th>{% trans "Cancelled?" %}</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+          {% for subscription in user.subscriptions.all %}
+            {% if forloop.first %}
+              <tr>
+                <td colspan="{{ user.subscriptions.all.count }}">
+                  {{ user }}
+                </td>
+                <td>{{ subscription.plan }}</td>
+                <td>{{ subscription.date_billing_start }}</td>
+                <td>{{ subscription.date_billing_end }}</td>
+                <td>{{ subscription.date_billing_last }}</td>
+                <td>{{ subscription.date_billing_next }}</td>
+                <td>{{ subscription.active }}</td>
+                <td>{{ subscription.cancelled }}</td>
+                <td>
+                  <a href="{% url 'dfs_subscription_update' subscription.id %}">
+                    {% trans "Edit" %}
+                  </a>
+                </td>
+                <td>
+                  <a href="{% url 'dfs_subscription_delete' subscription.id %}">
+                    {% trans "Delete" %}
+                  </a>
+                </td>
+              </tr>
+            {% else %}
+              <tr>
+                <td>{{ subscription.plan }}</td>
+                <td>{{ subscription.date_billing_start }}</td>
+                <td>{{ subscription.date_billing_end }}</td>
+                <td>{{ subscription.date_billing_last }}</td>
+                <td>{{ subscription.date_billing_next }}</td>
+                <td>{{ subscription.active }}</td>
+                <td>{{ subscription.cancelled }}</td>
+                <td>
+                  <a href="{% url 'dfs_subscription_update' subscription.id %}">
+                    {% trans "Edit" %}
+                  </a>
+                </td>
+                <td>
+                  <a href="{% url 'dfs_subscription_delete' subscription.id %}">
+                    {% trans "Delete" %}
+                  </a>
+                </td>
+              </tr>
+            {% endif %}
+          {% endfor %}
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>{% trans "No user subscriptions have been added yet." %}</p>
+  {% endif %}
+
+  {% if is_paginated %}
+    <div class="pagination">
+      <span class="step-links">
+        {% if page_obj.has_previous %}
+          <a href="?page=1">&laquo; first</a>
+          <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+          Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}">next</a>
+          <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+      </span>
+    </div>
+  {% endif %}
+{% endblock %}

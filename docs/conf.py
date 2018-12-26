@@ -71,7 +71,7 @@ language = None
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path .
 exclude_patterns = [
-    '_build', 'Thumbs.db', '.DS_Store', 'flexible_subscriptions/migrations',
+    '_build', 'Thumbs.db', '.DS_Store', 'subscriptions/migrations',
 ]
 
 # The name of the Pygments (syntax highlighting) style to use.
@@ -152,8 +152,13 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'django-flexible-subscriptions', 'django-flexible-subscriptions Documentation',
-     [author], 1)
+    (
+        master_doc,
+        'django-flexible-subscriptions',
+        'django-flexible-subscriptions Documentation',
+        [author],
+        1
+    ),
 ]
 
 
@@ -181,38 +186,38 @@ autodoc_mock_imports = []
 
 # Loads some default Django settings to allow autodoc to create Django
 # documentation
-# django_settings = {
-#     'DATABASES': {
-#         'default': {
-#             'ENGINE': 'django.db.backends.sqlite3',
-#             'NAME': ':memory:',
-#         }
-#     },
-#     'INSTALLED_APPS': {
-#         'django.contrib.admin',
-#         'django.contrib.auth',
-#         'django.contrib.contenttypes',
-#         'django.contrib.sessions',
-#         'django.contrib.sites',
-#     },
-#     'MIDDLEWARE': [
-#         'django.contrib.sessions.middleware.SessionMiddleware',
-#         'django.contrib.auth.middleware.AuthenticationMiddleware',
-#         'django.contrib.messages.middleware.MessageMiddleware',
-#     ],
-#     'ROOT_URLCONF': 'flexible_subscriptions.urls',
-#     'TEMPLATES': [
-#         {
-#             'BACKEND': 'django.template.backends.django.DjangoTemplates',
-#             'APP_DIRS': True,
-#         },
-#     ],
-# }
-#
-# settings.configure(**django_settings)
+django_settings = {
+    'DATABASES': {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': ':memory:',
+        }
+    },
+    'INSTALLED_APPS': {
+        'django.contrib.admin',
+        'django.contrib.auth',
+        'django.contrib.contenttypes',
+        'django.contrib.sessions',
+        'django.contrib.sites',
+    },
+    'MIDDLEWARE': [
+        'django.contrib.sessions.middleware.SessionMiddleware',
+        'django.contrib.auth.middleware.AuthenticationMiddleware',
+        'django.contrib.messages.middleware.MessageMiddleware',
+    ],
+    'ROOT_URLCONF': 'subscriptions.urls',
+    'TEMPLATES': [
+        {
+            'BACKEND': 'django.template.backends.django.DjangoTemplates',
+            'APP_DIRS': True,
+        },
+    ],
+}
+
+settings.configure(**django_settings)
 
 # Initiate Django
-# django.setup()
+django.setup()
 
 
 # -- Options for napoleon ----------------------------------------------------

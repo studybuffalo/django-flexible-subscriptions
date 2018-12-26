@@ -1,7 +1,7 @@
 flexible\_subscriptions package
 ===============================
 
-.. automodule:: flexible_subscriptions
+.. automodule:: subscriptions
     :members:
     :undoc-members:
     :show-inheritance:

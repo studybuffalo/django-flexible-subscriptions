@@ -1,0 +1,16 @@
+{% extends template_extends %}
+
+{% load i18n %}
+
+{% block content %}
+  <h1>User Subscription Update</h1>
+
+  <form method="post">{% csrf_token %}
+    {{ form.as_ul }}
+    <input type="submit" value="Save">
+  </form>
+
+  <div>
+    <a href="{% url 'dfs_subscription_list' %}">Cancel</a>
+  </div>
+{% endblock %}

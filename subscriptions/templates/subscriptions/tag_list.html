@@ -1,0 +1,54 @@
+{% extends template_extends %}
+
+{% load i18n %}
+
+{% block content %}
+  <h1>Subscription Plan Tags</h1>
+
+  {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <div>
+    <a href="{% url 'dfs_dashboard' %}">Back to dashboard</a>
+  </div>
+
+  <div>
+    <a href="{% url 'dfs_tag_create' %}">Create new tag</a>
+  </div>
+
+  {% if tags %}
+    <table>
+      <thead>
+        <tr>
+          <th>{% trans "Tag name" %}</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for tag in tags %}
+          <tr>
+            <td>{{ tag.tag }}</td>
+            <td>
+                <a href="{% url 'dfs_tag_update' tag.id %}">
+                  {% trans "Edit" %}
+                </a>
+              </td>
+            <td>
+              <a href="{% url 'dfs_tag_delete' tag.id %}">
+                {% trans "Delete" %}
+              </a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>{% trans "No tags have been added yet." %}</p>
+  {% endif %}
+{% endblock %}

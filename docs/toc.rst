@@ -4,5 +4,5 @@
    installation
    settings
    contributing
-   Package reference <flexible_subscriptions>
+   Package reference <subscriptions>
    changelog

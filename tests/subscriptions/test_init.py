@@ -1,13 +1,13 @@
-"""Test sfor the __init__.py module."""
+"""Tests for the __init__.py module."""
 from importlib import reload
 from unittest.mock import patch
 
-import flexible_subscriptions
+import subscriptions
 
-@patch('flexible_subscriptions.django.__version__', '1.11.0')
+@patch('subscriptions.django.__version__', '1.11.0')
 def test_django_111_depreciation_warning(recwarn):
     """Tests that the depreciation warning fires for Django 1.11."""
-    reload(flexible_subscriptions)
+    reload(subscriptions)
 
     assert len(recwarn) == 1
 
@@ -22,9 +22,9 @@ def test_django_111_depreciation_warning(recwarn):
 
     assert str(django_111_warning.message) == warning_text
 
-@patch('flexible_subscriptions.django.__version__', '2.0.0')
+@patch('subscriptions.django.__version__', '2.0.0')
 def test_other_django_versions_depreciation_warning(recwarn):
     """Tests that warning doesn't fire for other Django versions."""
-    reload(flexible_subscriptions)
+    reload(subscriptions)
 
     assert len(recwarn) is 0

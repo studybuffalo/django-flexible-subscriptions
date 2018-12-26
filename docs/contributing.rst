@@ -75,7 +75,7 @@ You can run all tests with the standard ``pytest`` command::
 
 To check test coverage, you can use the following::
 
-    $ pipenv run py.test --cov=flexible_subscriptions --cov-report=html
+    $ pipenv run py.test --cov=subscriptions --cov-report=html
 
 You may specify the output of the coverage report by changing the
 ``--cov-report`` option to ``html`` or ``xml``.
@@ -132,11 +132,11 @@ Building package reference documentation
 
 The content for the Package reference is built using the
 ``sphinx-apidoc`` tool. If any files are added or removed from the
-``flexible_subscriptions`` module you will need to rebuild the
-``flexible_subscriptions.rst`` file for the changes to populate on Read
+``subscriptions`` module you will need to rebuild the
+``subscriptions.rst`` file for the changes to populate on Read
 the Docs. You can do this with the following command::
 
-    $ pipenv run sphinx-apidoc -fTM -o docs flexible_subscriptions flexible_subscriptions/migrations flexible_subscriptions/urls.py flexible_subscriptions/apps.py flexible_subscriptions/admin.py
+    $ pipenv run sphinx-apidoc -fTM -o docs subscriptions subscriptions/migrations subscriptions/urls.py subscriptions/apps.py subscriptions/admin.py
 
 Linting documentation
 =====================

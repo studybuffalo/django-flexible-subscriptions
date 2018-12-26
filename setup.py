@@ -1,7 +1,8 @@
 """PyPI setup script for the django-flexible-subscriptions package."""
+# pylint: disable=line-too-long
 from setuptools import find_packages, setup
 
-from flexible_subscriptions import __version__
+from subscriptions import __version__
 
 with open('README.rst', 'r') as readme_file:
     LONG_DESCRIPTION = readme_file.read()

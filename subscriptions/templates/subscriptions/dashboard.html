@@ -1,0 +1,14 @@
+{% extends template_extends %}
+
+{% load i18n %}
+
+{% block content %}
+  <h1>Subscriptions</h1>
+
+  <ul>
+      <li><a href="{% url 'dfs_tag_list' %}">{% trans 'Tags' %}</a></li>
+      <li><a href="{% url 'dfs_plan_list' %}">{% trans 'Subscription plans' %}</a></li>
+      <li><a href="{% url 'dfs_subscription_list' %}">{% trans 'User subscriptions' %}</a></li>
+      <li><a href="{% url 'dfs_transaction_list' %}">{% trans 'Subscription payment transactions' %}</a></li>
+  </ul>
+{% endblock %}
