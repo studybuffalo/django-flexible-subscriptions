@@ -6,6 +6,15 @@ Changelog
 Version 0 (Beta)
 ----------------
 
+0.1.1 (2018-Dec-28)
+===================
+
+Bug Fixes
+---------
+
+* Adding the ``snippets`` folder to the PyPI package - was not included
+  in previous build.
+
 0.1.0 (2018-Dec-26)
 ===================
 

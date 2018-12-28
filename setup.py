@@ -22,6 +22,7 @@ setup(
     package_data={
         'subscriptions': [
             'templates/subscriptions/*.html',
+            'templates/subscriptions/snippets/*.html',
         ]
     },
     project_urls={
