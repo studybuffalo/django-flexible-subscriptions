@@ -200,6 +200,32 @@ def test_manager_process_new_without_group(django_user_model):
     assert subscription.active is True
     assert subscription.cancelled is False
 
+@pytest.mark.django_db
+def test_manager_process_new_next_date(django_user_model):
+    """Tests that next billing date uses billing start date."""
+    user = django_user_model.objects.create_user(username='a', password='b')
+    group = Group.objects.create(name='test')
+    cost = create_cost(group)
+    subscription = models.UserSubscription.objects.create(
+        user=user,
+        subscription=cost,
+        date_billing_start=datetime(2018, 1, 1, 1, 1, 1),
+        date_billing_end=None,
+        date_billing_last=None,
+        date_billing_next=datetime(2018, 1, 1, 1, 1, 1),
+        active=False,
+        cancelled=False,
+    )
+    subscription_id = subscription.id
+
+    manager = utils.Manager()
+    manager.process_new(subscription)
+
+    subscription = models.UserSubscription.objects.get(id=subscription_id)
+    next_date = datetime(2018, 1, 31, 11, 30, 0, 520000)
+
+    assert subscription.date_billing_next == next_date
+
 @patch('subscriptions.utils.Manager.process_payment', lambda x, y, z: False)
 @pytest.mark.django_db
 def test_manager_process_new_payment_error(django_user_model):
@@ -226,6 +252,65 @@ def test_manager_process_new_payment_error(django_user_model):
     assert subscription.date_billing_next is None
     assert subscription.active is False
     assert subscription.cancelled is False
+
+@patch(
+    'subscriptions.utils.timezone.now', lambda: datetime(2018, 2, 1, 2, 2, 2)
+)
+@pytest.mark.django_db
+def test_manager_process_due_billing_dates(django_user_model):
+    """Tests that last and next billing dates are updated properly.
+
+        Patching the timezone module to ensure consistent test results.
+    """
+    user = django_user_model.objects.create_user(username='a', password='b')
+    group = Group.objects.create(name='test')
+    cost = create_cost(group)
+    subscription = models.UserSubscription.objects.create(
+        user=user,
+        subscription=cost,
+        date_billing_start=datetime(2018, 1, 1, 1, 1, 1),
+        date_billing_end=None,
+        date_billing_last=datetime(2018, 1, 1, 1, 1, 1),
+        date_billing_next=datetime(2018, 2, 1, 1, 1, 1),
+        active=True,
+        cancelled=False,
+    )
+    subscription_id = subscription.id
+
+    manager = utils.Manager()
+    manager.process_due(subscription)
+
+    subscription = models.UserSubscription.objects.get(id=subscription_id)
+    next_date = datetime(2018, 3, 3, 11, 30, 0, 520000)
+
+    assert subscription.date_billing_next == next_date
+    assert subscription.date_billing_last == datetime(2018, 2, 1, 2, 2, 2)
+
+@patch('subscriptions.utils.Manager.process_payment', lambda x, y, z: False)
+@pytest.mark.django_db
+def test_manager_process_due_payment_error(django_user_model):
+    """Tests handling of due subscription payment error."""
+    user = django_user_model.objects.create_user(username='a', password='b')
+    cost = create_cost(None)
+    subscription = models.UserSubscription.objects.create(
+        user=user,
+        subscription=cost,
+        date_billing_start=datetime(2018, 1, 1, 1, 1, 1),
+        date_billing_end=None,
+        date_billing_last=datetime(2018, 1, 1, 1, 1, 1),
+        date_billing_next=datetime(2018, 2, 1, 1, 1, 1),
+        active=True,
+        cancelled=False,
+    )
+    subscription_id = subscription.id
+
+    manager = utils.Manager()
+    manager.process_due(subscription)
+
+    subscription = models.UserSubscription.objects.get(id=subscription_id)
+
+    assert subscription.date_billing_last == datetime(2018, 1, 1, 1, 1, 1)
+    assert subscription.date_billing_next == datetime(2018, 2, 1, 1, 1, 1)
 
 @patch('subscriptions.utils.timezone.now', lambda: datetime(2019, 1, 1))
 @pytest.mark.django_db

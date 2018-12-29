@@ -37,7 +37,7 @@ class Manager():
         )
 
         for subscription in due_subscriptions:
-            self.process_payment(subscription.user, subscription.subscription)
+            self.process_due(subscription)
 
     def process_expired(self, subscription):
         """Handles processing of expired/cancelled subscriptions.
@@ -77,7 +77,7 @@ class Manager():
         cost = subscription.subscription
         plan = cost.plan
 
-        payment_success = self.process_payment(subscription.user, cost)
+        payment_success = self.process_payment(user, cost)
 
         if payment_success:
             # Add user to the proper group
@@ -89,14 +89,36 @@ class Manager():
 
             # Update subscription details
             current = timezone.now()
-            next_billing = cost.next_billing_datetime(current)
-            subscription.date_billing_start = current
+            next_billing = cost.next_billing_datetime(
+                subscription.date_billing_start
+            )
             subscription.date_billing_last = current
             subscription.date_billing_next = next_billing
             subscription.active = True
             subscription.save()
 
             self.notify_new(subscription)
+
+    def process_due(self, subscription):
+        """Handles processing of a due subscription.
+
+            Parameters:
+                subscription (obj): A UserSubscription instance.
+        """
+        user = subscription.user
+        cost = subscription.subscription
+
+        payment_success = self.process_payment(user, cost)
+
+        if payment_success:
+            # Update subscription details
+            current = timezone.now()
+            next_billing = cost.next_billing_datetime(
+                subscription.date_billing_next
+            )
+            subscription.date_billing_last = current
+            subscription.date_billing_next = next_billing
+            subscription.save()
 
     def process_payment(self, user=None, cost=None): # pylint: disable=unused-argument
         """Processes payment and confirms if payment is accepted.
