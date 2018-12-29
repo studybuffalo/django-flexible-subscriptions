@@ -77,9 +77,9 @@ class Manager():
         cost = subscription.subscription
         plan = cost.plan
 
-        payment_success = self.process_payment(user, cost)
+        payment_transaction = self.process_payment(user=user, cost=cost)
 
-        if payment_success:
+        if payment_transaction:
             # Add user to the proper group
             try:
                 plan.group.user_set.add(user)
@@ -97,6 +97,13 @@ class Manager():
             subscription.active = True
             subscription.save()
 
+            # Record the transaction details
+            self.record_transaction(
+                subscription,
+                self.retrieve_transaction_date(payment_transaction)
+            )
+
+            # Send notifications
             self.notify_new(subscription)
 
     def process_due(self, subscription):
@@ -108,9 +115,9 @@ class Manager():
         user = subscription.user
         cost = subscription.subscription
 
-        payment_success = self.process_payment(user, cost)
+        payment_transaction = self.process_payment(user=user, cost=cost)
 
-        if payment_success:
+        if payment_transaction:
             # Update subscription details
             current = timezone.now()
             next_billing = cost.next_billing_datetime(
@@ -120,20 +127,38 @@ class Manager():
             subscription.date_billing_next = next_billing
             subscription.save()
 
-    def process_payment(self, user=None, cost=None): # pylint: disable=unused-argument
+            # Record the transaction details
+            self.record_transaction(
+                subscription,
+                self.retrieve_transaction_date(payment_transaction)
+            )
+
+    def process_payment(self, *args, **kwargs): # pylint: disable=unused-argument
         """Processes payment and confirms if payment is accepted.
 
             This method needs to be overriden in a project to handle
             payment processing with the appropriate payment provider.
 
-            Parameters:
-                user (obj): User instance.
-                cost (str): The amount to process for payment.
+            This method needs to be overriden in a project to handle
+            payment processing with the appropriate payment provider.
 
-            Returns:
-                bool: True if payment successful, otherwise false.
+            Can return value that evalutes to ``True`` to indicate
+            payment success and any value that evalutes to ``False`` to
+            indicate payment error.
         """
         return True
+
+    def retrieve_transaction_date(self, payment): # pylint: disable=unused-argument
+        """Returns the transaction date from provided payment details.
+
+            Method should be overriden to accomodate the implemented
+            payment processing if a more accurate datetime is required.
+
+
+            Returns
+                obj: The current datetime.
+        """
+        return timezone.now()
 
     def record_transaction(self, subscription, transaction_date=None):
         """Records transaction details in SubscriptionTransaction.
