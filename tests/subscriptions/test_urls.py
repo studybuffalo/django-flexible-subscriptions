@@ -2,6 +2,7 @@
 import pytest
 
 from django.urls import reverse
+from django.utils import timezone
 
 from subscriptions import models
 
@@ -304,7 +305,9 @@ def test_transaction_list_exists_at_desired_url(admin_client):
 @pytest.mark.django_db
 def test_transaction_detail_exists_at_desired_location(admin_client):
     """Tests that transaction detail URL name works."""
-    transaction = models.SubscriptionTransaction.objects.create()
+    transaction = models.SubscriptionTransaction.objects.create(
+        date_transaction=timezone.now()
+    )
 
     response = admin_client.get(reverse(
         'dfs_transaction_detail',
@@ -316,7 +319,9 @@ def test_transaction_detail_exists_at_desired_location(admin_client):
 @pytest.mark.django_db
 def test_transaction_detail_exists_at_desired_url(admin_client):
     """Tests that transaction detail URL works."""
-    transaction = models.SubscriptionTransaction.objects.create()
+    transaction = models.SubscriptionTransaction.objects.create(
+        date_transaction=timezone.now()
+    )
 
     response = admin_client.get(
         '/dfs/transactions/{}/'.format(transaction.id)
