@@ -136,7 +136,7 @@ class Manager():
         return True
 
     def record_transaction(self, subscription, transaction_date=None):
-        """Records transaction details in SubscritionTransaction.
+        """Records transaction details in SubscriptionTransaction.
 
             Parameters:
                 subscription (obj): A UserSubscription object.
