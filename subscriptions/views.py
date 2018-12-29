@@ -438,7 +438,7 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
     confirmation = False
     payment_form = forms.PaymentForm
     subscription_plan = None
-    success_url = 'dfs_dashboard'
+    success_url = 'dfs_subscribe_list'
     template_preview = 'subscriptions/subscribe_preview.html'
     template_confirmation = 'subscriptions/subscribe_confirmation.html'
 
@@ -561,15 +561,21 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
 
         if payment_form.is_valid() and plan_cost_form.is_valid():
             # Attempt to process payment
-            payment_success = self.process_payment(
+            payment_transaction = self.process_payment(
                 payment_form=payment_form,
                 plan_cost_form=plan_cost_form,
             )
 
-            if payment_success:
+            if payment_transaction:
                 # Payment successful - can handle subscription processing
-                self.setup_subscription(
+                subscription = self.setup_subscription(
                     request.user, plan_cost_form.cleaned_data['plan_cost']
+                )
+
+                # Record the transaction details
+                self.record_transaction(
+                    subscription,
+                    self.retrieve_transaction_date(payment_transaction)
                 )
 
                 return HttpResponseRedirect(self.get_success_url())
@@ -605,9 +611,9 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
             This method needs to be overriden in a project to handle
             payment processing with the appropriate payment provider.
 
-            Returns:
-                bool: True if payment is successful, False if an error
-                    has occurred.
+            Can return value that evalutes to ``True`` to indicate
+            payment success and any value that evalutes to ``False`` to
+            indicate payment error.
         """
         return True
 
@@ -617,12 +623,15 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
             Parameters:
                 request_user (obj): A Django user instance.
                 plan_cost_id (str): A PlanCost ID.
+
+            Returns:
+                obj: The newly created UserSubscription instance.
         """
         plan_cost = models.PlanCost.objects.get(id=plan_cost_id)
         current_date = timezone.now()
 
         # Add subscription plan to user
-        models.UserSubscription.objects.create(
+        subscription = models.UserSubscription.objects.create(
             user=request_user,
             subscription=plan_cost,
             date_billing_start=current_date,
@@ -640,6 +649,42 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
         except AttributeError:
             # No group available to add user to
             pass
+
+        return subscription
+
+    def retrieve_transaction_date(self, payment): # pylint: disable=unused-argument
+        """Returns the transaction date from provided payment details.
+
+            Method should be overriden to accomodate the implemented
+            payment processing if a more accurate datetime is required.
+
+
+            Returns
+                obj: The current datetime.
+        """
+        return timezone.now()
+
+    def record_transaction(self, subscription, transaction_date=None):
+        """Records transaction details in SubscriptionTransaction.
+
+            Parameters:
+                subscription (obj): A UserSubscription object.
+                transaction_date (obj): A DateTime object of when
+                    payment occurred (defaults to current datetime if
+                    none provided).
+
+            Returns:
+                obj: The created SubscriptionTransaction instance.
+        """
+        if transaction_date is None:
+            transaction_date = timezone.now()
+
+        return models.SubscriptionTransaction.objects.create(
+            user=subscription.user,
+            subscription=subscription.subscription,
+            date_transaction=transaction_date,
+            amount=subscription.subscription.cost,
+        )
 
 class SubscribeList(LoginRequiredMixin, abstract.ListView):
     """List of all a user's subscriptions."""
@@ -688,7 +733,7 @@ class SubscribeCancelView(LoginRequiredMixin, abstract.DetailView):
     context_object_name = 'subscription'
     pk_url_kwarg = 'subscription_id'
     success_message = 'Subscription successfully cancelled'
-    success_url = 'dfs_subscription_list'
+    success_url = 'dfs_subscribe_list'
     template_name = 'subscriptions/subscribe_cancel.html'
 
     def get_object(self, queryset=None):

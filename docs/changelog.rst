@@ -6,6 +6,26 @@ Changelog
 Version 0 (Beta)
 ----------------
 
+0.2.1 (2018-Dec-29)
+===================
+
+Bug Fixes
+---------
+
+* Adding missing methods to ``SubscribeView`` and ``Manager`` to record
+  payment transactions. Added additional method
+  (``retrieve_transaction_date``) to help with transaction date
+  specification. Reworked method calls around payment processing to
+  streamline passing of arguments between functions to reduce need to
+  override methods.
+* Fixing issue in ``Manager`` class where the future billing date was
+  based off the current datetime, rather than the last billed datetime.
+* Adding method to update next billing datetimes for due subscriptions
+  in the ``Manager`` class.
+* Switching the default ``success_url`` for ``SubscribeView`` and
+  ``CancelView`` to the user-specific list of their subscriptions,
+  rather than the subscription CRUD dashboard.
+
 0.2.0 (2018-Dec-28)
 ===================
 

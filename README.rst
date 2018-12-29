@@ -96,8 +96,8 @@ This project is licensed under the GPLv3. Please see the LICENSE_ file for detai
 Acknowledgements
 ----------------
 
-`Django Oscar`_ and `Django Subscription`_ for inspiring many of the
-initial design decisions.
+* `Django Oscar`_ and `Django Subscription`_ for inspiring many of the
+  initial design decisions.
 
 .. _Django Oscar: https://github.com/django-oscar/django-oscar
 .. _Django Subscription: https://github.com/zhaque/django-subscription

@@ -21,6 +21,21 @@ def create_cost(group):
         plan=plan, recurrence_period=1, recurrence_unit=6, cost='1.00'
     )
 
+def create_due_subscription(user, group=None):
+    """Creates a standard UserSubscription object due for billing."""
+    cost = create_cost(group)
+
+    return models.UserSubscription.objects.create(
+        user=user,
+        subscription=cost,
+        date_billing_start=datetime(2018, 1, 1, 1, 1, 1),
+        date_billing_end=None,
+        date_billing_last=datetime(2018, 1, 1, 1, 1, 1),
+        date_billing_next=datetime(2018, 2, 1, 1, 1, 1),
+        active=True,
+        cancelled=False,
+    )
+
 @pytest.mark.django_db
 def test_manager_process_expired_single_group(django_user_model):
     """Tests handling expiry with user with single group."""
@@ -200,7 +215,36 @@ def test_manager_process_new_without_group(django_user_model):
     assert subscription.active is True
     assert subscription.cancelled is False
 
-@patch('subscriptions.utils.Manager.process_payment', lambda x, y, z: False)
+@pytest.mark.django_db
+def test_manager_process_new_next_date(django_user_model):
+    """Tests that next billing date uses billing start date."""
+    user = django_user_model.objects.create_user(username='a', password='b')
+    group = Group.objects.create(name='test')
+    cost = create_cost(group)
+    subscription = models.UserSubscription.objects.create(
+        user=user,
+        subscription=cost,
+        date_billing_start=datetime(2018, 1, 1, 1, 1, 1),
+        date_billing_end=None,
+        date_billing_last=None,
+        date_billing_next=datetime(2018, 1, 1, 1, 1, 1),
+        active=False,
+        cancelled=False,
+    )
+    subscription_id = subscription.id
+
+    manager = utils.Manager()
+    manager.process_new(subscription)
+
+    subscription = models.UserSubscription.objects.get(id=subscription_id)
+    next_date = datetime(2018, 1, 31, 11, 30, 0, 520000)
+
+    assert subscription.date_billing_next == next_date
+
+@patch(
+    'subscriptions.utils.Manager.process_payment',
+    lambda self, **kwargs: False
+)
 @pytest.mark.django_db
 def test_manager_process_new_payment_error(django_user_model):
     """Tests handlig of new subscription payment error."""
@@ -226,6 +270,47 @@ def test_manager_process_new_payment_error(django_user_model):
     assert subscription.date_billing_next is None
     assert subscription.active is False
     assert subscription.cancelled is False
+
+@patch(
+    'subscriptions.utils.timezone.now', lambda: datetime(2018, 2, 1, 2, 2, 2)
+)
+@pytest.mark.django_db
+def test_manager_process_due_billing_dates(django_user_model):
+    """Tests that last and next billing dates are updated properly.
+
+        Patching the timezone module to ensure consistent test results.
+    """
+    user = django_user_model.objects.create_user(username='a', password='b')
+    subscription = create_due_subscription(user)
+    subscription_id = subscription.id
+
+    manager = utils.Manager()
+    manager.process_due(subscription)
+
+    subscription = models.UserSubscription.objects.get(id=subscription_id)
+    next_date = datetime(2018, 3, 3, 11, 30, 0, 520000)
+
+    assert subscription.date_billing_next == next_date
+    assert subscription.date_billing_last == datetime(2018, 2, 1, 2, 2, 2)
+
+@patch(
+    'subscriptions.utils.Manager.process_payment',
+    lambda self, **kwargs: False
+)
+@pytest.mark.django_db
+def test_manager_process_due_payment_error(django_user_model):
+    """Tests handling of due subscription payment error."""
+    user = django_user_model.objects.create_user(username='a', password='b')
+    subscription = create_due_subscription(user)
+    subscription_id = subscription.id
+
+    manager = utils.Manager()
+    manager.process_due(subscription)
+
+    subscription = models.UserSubscription.objects.get(id=subscription_id)
+
+    assert subscription.date_billing_last == datetime(2018, 1, 1, 1, 1, 1)
+    assert subscription.date_billing_next == datetime(2018, 2, 1, 1, 1, 1)
 
 @patch('subscriptions.utils.timezone.now', lambda: datetime(2019, 1, 1))
 @pytest.mark.django_db
@@ -296,17 +381,7 @@ def test_manager_process_subscriptions_with_due(django_user_model):
     group = Group.objects.create(name='test')
     user_count = group.user_set.all().count()
 
-    cost = create_cost(group)
-    subscription = models.UserSubscription.objects.create(
-        user=user,
-        subscription=cost,
-        date_billing_start=datetime(2018, 1, 1, 1, 1, 1),
-        date_billing_end=datetime(2018, 12, 31, 1, 1, 1),
-        date_billing_last=datetime(2018, 11, 1, 1, 1, 1),
-        date_billing_next=datetime(2018, 12, 1, 1, 1, 1),
-        active=True,
-        cancelled=False,
-    )
+    subscription = create_due_subscription(user, group=group)
     subscription_id = subscription.id
 
     manager = utils.Manager()
@@ -317,3 +392,42 @@ def test_manager_process_subscriptions_with_due(django_user_model):
     assert group.user_set.all().count() == user_count
     assert subscription.active is True
     assert subscription.cancelled is False
+
+@patch(
+    'subscriptions.utils.timezone.now', lambda: datetime(2018, 1, 1, 1, 1, 1)
+)
+@pytest.mark.django_db
+def test_manager_record_transaction_without_date(django_user_model):
+    """Tests handling of record_transaction without providing a date.
+
+        Patching the timezone module to ensure consistent test results.
+    """
+    transaction_count = models.SubscriptionTransaction.objects.all().count()
+
+    user = django_user_model.objects.create_user(username='a', password='b')
+    subscription = create_due_subscription(user)
+
+    manager = utils.Manager()
+    transaction = manager.record_transaction(subscription)
+
+    assert models.SubscriptionTransaction.objects.all().count() == (
+        transaction_count + 1
+    )
+    assert transaction.date_transaction == datetime(2018, 1, 1, 1, 1, 1)
+
+@pytest.mark.django_db
+def test_manager_record_transaction_with_date(django_user_model):
+    """Tests handling of record_transaction with date provided."""
+    transaction_count = models.SubscriptionTransaction.objects.all().count()
+
+    user = django_user_model.objects.create_user(username='a', password='b')
+    subscription = create_due_subscription(user)
+    transaction_date = datetime(2018, 1, 2, 1, 1, 1)
+
+    manager = utils.Manager()
+    transaction = manager.record_transaction(subscription, transaction_date)
+
+    assert models.SubscriptionTransaction.objects.all().count() == (
+        transaction_count + 1
+    )
+    assert transaction.date_transaction == transaction_date

@@ -37,7 +37,7 @@ class Manager():
         )
 
         for subscription in due_subscriptions:
-            self.process_payment(subscription.user, subscription.subscription)
+            self.process_due(subscription)
 
     def process_expired(self, subscription):
         """Handles processing of expired/cancelled subscriptions.
@@ -77,9 +77,9 @@ class Manager():
         cost = subscription.subscription
         plan = cost.plan
 
-        payment_success = self.process_payment(subscription.user, cost)
+        payment_transaction = self.process_payment(user=user, cost=cost)
 
-        if payment_success:
+        if payment_transaction:
             # Add user to the proper group
             try:
                 plan.group.user_set.add(user)
@@ -89,29 +89,98 @@ class Manager():
 
             # Update subscription details
             current = timezone.now()
-            next_billing = cost.next_billing_datetime(current)
-            subscription.date_billing_start = current
+            next_billing = cost.next_billing_datetime(
+                subscription.date_billing_start
+            )
             subscription.date_billing_last = current
             subscription.date_billing_next = next_billing
             subscription.active = True
             subscription.save()
 
+            # Record the transaction details
+            self.record_transaction(
+                subscription,
+                self.retrieve_transaction_date(payment_transaction)
+            )
+
+            # Send notifications
             self.notify_new(subscription)
 
-    def process_payment(self, user=None, cost=None): # pylint: disable=unused-argument
+    def process_due(self, subscription):
+        """Handles processing of a due subscription.
+
+            Parameters:
+                subscription (obj): A UserSubscription instance.
+        """
+        user = subscription.user
+        cost = subscription.subscription
+
+        payment_transaction = self.process_payment(user=user, cost=cost)
+
+        if payment_transaction:
+            # Update subscription details
+            current = timezone.now()
+            next_billing = cost.next_billing_datetime(
+                subscription.date_billing_next
+            )
+            subscription.date_billing_last = current
+            subscription.date_billing_next = next_billing
+            subscription.save()
+
+            # Record the transaction details
+            self.record_transaction(
+                subscription,
+                self.retrieve_transaction_date(payment_transaction)
+            )
+
+    def process_payment(self, *args, **kwargs): # pylint: disable=unused-argument
         """Processes payment and confirms if payment is accepted.
 
             This method needs to be overriden in a project to handle
             payment processing with the appropriate payment provider.
 
-            Parameters:
-                user (obj): User instance.
-                cost (str): The amount to process for payment.
+            This method needs to be overriden in a project to handle
+            payment processing with the appropriate payment provider.
 
-            Returns:
-                bool: True if payment successful, otherwise false.
+            Can return value that evalutes to ``True`` to indicate
+            payment success and any value that evalutes to ``False`` to
+            indicate payment error.
         """
         return True
+
+    def retrieve_transaction_date(self, payment): # pylint: disable=unused-argument
+        """Returns the transaction date from provided payment details.
+
+            Method should be overriden to accomodate the implemented
+            payment processing if a more accurate datetime is required.
+
+
+            Returns
+                obj: The current datetime.
+        """
+        return timezone.now()
+
+    def record_transaction(self, subscription, transaction_date=None):
+        """Records transaction details in SubscriptionTransaction.
+
+            Parameters:
+                subscription (obj): A UserSubscription object.
+                transaction_date (obj): A DateTime object of when
+                    payment occurred (defaults to current datetime if
+                    none provided).
+
+            Returns:
+                obj: The created SubscriptionTransaction instance.
+        """
+        if transaction_date is None:
+            transaction_date = timezone.now()
+
+        return models.SubscriptionTransaction.objects.create(
+            user=subscription.user,
+            subscription=subscription.subscription,
+            date_transaction=transaction_date,
+            amount=subscription.subscription.cost,
+        )
 
     def notify_expired(self, subscription):
         """Sends notification of expired subscription.

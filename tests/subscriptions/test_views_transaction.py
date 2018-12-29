@@ -5,6 +5,7 @@ import pytest
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
+from django.utils import timezone
 
 from subscriptions import models
 
@@ -24,7 +25,10 @@ def create_cost(plan=None, period=1, unit=6, cost='1.00'):
 def create_transaction(user, cost, amount='1.00'):
     """Creates and returns a PlanTag instance."""
     return models.SubscriptionTransaction.objects.create(
-        user=user, subscription=cost, amount=amount
+        user=user,
+        subscription=cost,
+        date_transaction=timezone.now(),
+        amount=amount,
     )
 
 # TransactionListView

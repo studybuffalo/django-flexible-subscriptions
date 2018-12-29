@@ -272,7 +272,6 @@ class SubscriptionTransaction(models.Model):
         related_name='transactions'
     )
     date_transaction = models.DateTimeField(
-        auto_now_add=True,
         help_text=_('the datetime the transaction was billed'),
         verbose_name='transaction date',
     )
