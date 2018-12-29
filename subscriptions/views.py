@@ -438,7 +438,7 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
     confirmation = False
     payment_form = forms.PaymentForm
     subscription_plan = None
-    success_url = 'dfs_dashboard'
+    success_url = 'dfs_subscribe_list'
     template_preview = 'subscriptions/subscribe_preview.html'
     template_confirmation = 'subscriptions/subscribe_confirmation.html'
 
