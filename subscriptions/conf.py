@@ -181,7 +181,7 @@ def compile_settings():
         getattr(settings, 'DFS_CURRENCY_LOCALE', 'en_us')
     ).lower()
 
-    # CUSTOM SETTINGS & OVERRIDES
+    # TEMPLATE & VIEW SETTINGS
     # -------------------------------------------------------------------------
     base_template = getattr(
         settings, 'DFS_BASE_TEMPLATE', 'subscriptions/base.html'
