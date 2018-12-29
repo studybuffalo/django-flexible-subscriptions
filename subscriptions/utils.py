@@ -135,6 +135,28 @@ class Manager():
         """
         return True
 
+    def record_transaction(self, subscription, transaction_date=None):
+        """Records transaction details in SubscritionTransaction.
+
+            Parameters:
+                subscription (obj): A UserSubscription object.
+                transaction_date (obj): A DateTime object of when
+                    payment occurred (defaults to current datetime if
+                    none provided).
+
+            Returns:
+                obj: The created SubscriptionTransaction instance.
+        """
+        if transaction_date is None:
+            transaction_date = timezone.now()
+
+        return models.SubscriptionTransaction.objects.create(
+            user=subscription.user,
+            subscription=subscription.subscription,
+            date_transaction=transaction_date,
+            amount=subscription.subscription.cost,
+        )
+
     def notify_expired(self, subscription):
         """Sends notification of expired subscription.
 
