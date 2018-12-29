@@ -572,13 +572,11 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
                     request.user, plan_cost_form.cleaned_data['plan_cost']
                 )
 
-                # Get datetime from payment_transaction (if provided)
-                date_transaction = self.retrieve_transaction_date(
-                    payment_transaction
-                )
-
                 # Record the transaction details
-                self.record_transaction(subscription, date_transaction)
+                self.record_transaction(
+                    subscription,
+                    self.retrieve_transaction_date(payment_transaction)
+                )
 
                 return HttpResponseRedirect(self.get_success_url())
 
