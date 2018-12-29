@@ -363,7 +363,10 @@ def test_subscribe_view_post_confirm_to_process_invalid_values(admin_client):
     assert 'cardholder_name' not in payment_form.data
     assert payment_form.data['card_number'] == '1111222233334444'
 
-@patch('subscriptions.views.SubscribeView.process_payment', lambda x, y: False)
+@patch(
+    'subscriptions.views.SubscribeView.process_payment',
+    lambda self, **kwargs: False
+)
 @pytest.mark.django_db
 def test_subscribe_view_post_confirm_payment_error(admin_client):
     """Tests handling of payment error from confirmation POST."""

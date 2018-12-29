@@ -6,6 +6,22 @@ Changelog
 Version 0 (Beta)
 ----------------
 
+0.2.0 (2018-Dec-28)
+===================
+
+Feature Updates
+---------------
+* Switching arguments for the ``process_payment`` call to keyword
+  arguments (``kwargs``).
+* Allow the ``SubscriptionView`` class to be specified in the settings
+  file to make overriding easier.
+
+Bug Fixes
+---------
+
+* Passing the PlanCostForm form into the process_payment call to
+  allow access to the amount to bill.
+
 0.1.1 (2018-Dec-28)
 ===================
 

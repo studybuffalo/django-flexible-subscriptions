@@ -44,11 +44,11 @@ Additional currencies can be easily added by adding to the ``CURRENCY``
 dictionary in the ``conf`` module. Please make a pull request to add or
 update a currency if needed.
 
------------------
-Template Settings
------------------
+------------------------
+View & Template Settings
+------------------------
 
-These settings control aspects of the HTML templates.
+These control various aspects of HTML templates and Django views.
 
 ``DFS_BASE_TEMPLATE``
 =====================
@@ -61,3 +61,15 @@ Path to an HTML template that is the 'base' template for the site. This
 allows you to easily specify the main site design for the provided
 Django Flexible Subscription views. The template must include a
 ``content`` block, which is what all the templates override.
+
+``DSF_SUBSCRIBE_VIEW``
+======================
+
+**Required:** ``False``
+
+**Default (string):** ``subscriptions.views.SubscribeView``
+
+The path to the SubscribeView to use with
+``django-flexible-subscriptions``. This will generally be set to a
+class view the inherits from ``SubscribeView`` to allow customization
+of payment and subscription processing.

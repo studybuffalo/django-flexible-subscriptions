@@ -10,16 +10,19 @@ from subscriptions.conf import compile_settings, Currency, CURRENCY
 @override_settings(
     DFS_ENABLE_ADMIN=1,
     DFS_CURRENCY_LOCALE=2,
-    DFS_BASE_TEMPLATE='3'
+    DFS_BASE_TEMPLATE='3',
+    DFS_SUBSCRIBE_VIEW='a.b',
 )
 def test_all_settings_populate_from_settings_properly():
     """Tests that Django settings all proper populate SETTINGS."""
     subscription_settings = compile_settings()
 
-    assert len(subscription_settings) == 3
+    assert len(subscription_settings) == 5
     assert subscription_settings['enable_admin'] == 1
     assert subscription_settings['currency_locale'] == '2'
     assert subscription_settings['base_template'] == '3'
+    assert subscription_settings['subscribe_view_module'] == 'a'
+    assert subscription_settings['subscribe_view_class'] == 'b'
 
 @override_settings()
 def test_settings_defaults():
@@ -28,13 +31,16 @@ def test_settings_defaults():
     del settings.DFS_ENABLE_ADMIN
     del settings.DFS_CURRENCY_LOCALE
     del settings.DFS_BASE_TEMPLATE
+    del settings.DFS_SUBSCRIBE_VIEW
 
     subscription_settings = compile_settings()
 
-    assert len(subscription_settings) == 3
+    assert len(subscription_settings) == 5
     assert subscription_settings['enable_admin'] is False
     assert subscription_settings['currency_locale'] == 'en_us'
     assert subscription_settings['base_template'] == 'subscriptions/base.html'
+    assert subscription_settings['subscribe_view_module'] == 'subscriptions.views'
+    assert subscription_settings['subscribe_view_class'] == 'SubscribeView'
 
 def test_format_currency_en_us():
     """Tests that format currency works properly with the default."""
