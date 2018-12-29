@@ -81,7 +81,7 @@ def test_subscribe_view_get_success_url():
     view = views.SubscribeView()
     success_url = view.get_success_url()
 
-    assert success_url == '/dfs/'
+    assert success_url == '/subscribe/'
 
 @pytest.mark.django_db
 def test_subscribe_view_get_405_response(admin_client):
@@ -296,7 +296,7 @@ def test_subscribe_view_post_confirm_to_process_valid(admin_client):
 
     url, _ = response.redirect_chain[-1]
 
-    assert url == '/dfs/'
+    assert url == '/subscribe/'
 
 @pytest.mark.django_db
 def test_subscribe_view_post_confirm_to_process_invalid(admin_client):
@@ -556,7 +556,7 @@ def test_cancel_view_no_redirect_on_login(client, django_user_model):
 def test_cancel_view_get_success_url():
     """Tests that get_success_url works properly."""
     view = views.SubscribeView()
-    assert view.get_success_url() == '/dfs/'
+    assert view.get_success_url() == '/subscribe/'
 
 @pytest.mark.django_db
 def test_cancel_post_updates_instance(client, django_user_model):

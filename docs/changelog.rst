@@ -25,6 +25,9 @@ Bug Fixes
   based off the current datetime, rather than the last billed datetime.
 * Adding method to update next billing datetimes for due subscriptions
   in the ``Manager`` class.
+* Switching the default ``success_url`` for ``SubscribeView`` and
+  ``CancelView`` to the user-specific list of their subscriptions,
+  rather than the subscription CRUD dashboard.
 
 0.2.0 (2018-Dec-28)
 ===================

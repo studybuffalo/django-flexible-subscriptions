@@ -688,7 +688,7 @@ class SubscribeCancelView(LoginRequiredMixin, abstract.DetailView):
     context_object_name = 'subscription'
     pk_url_kwarg = 'subscription_id'
     success_message = 'Subscription successfully cancelled'
-    success_url = 'dfs_subscription_list'
+    success_url = 'dfs_subscribe_list'
     template_name = 'subscriptions/subscribe_cancel.html'
 
     def get_object(self, queryset=None):
