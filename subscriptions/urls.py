@@ -1,9 +1,17 @@
 """URLs for the Flexible Subscriptions app."""
 # pylint: disable=line-too-long
+import importlib
+
 from django.conf.urls import url
 
 from subscriptions import views
+from subscriptions.conf import SETTINGS
 
+# Retrieve the proper subscribe view
+SubscribeView = getattr( # pylint: disable=invalid-name
+    importlib.import_module(SETTINGS['subscribe_view_module']),
+    SETTINGS['subscribe_view_class']
+)
 
 urlpatterns = [
     url(
@@ -13,7 +21,7 @@ urlpatterns = [
     ),
     url(
         r'subscribe/add/$',
-        views.SubscribeView.as_view(),
+        SubscribeView.as_view(),
         name='dfs_subscribe_add',
     ),
     url(

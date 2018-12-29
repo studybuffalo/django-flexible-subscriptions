@@ -174,22 +174,33 @@ def compile_settings():
     # ADMIN SETTINGS
     # -------------------------------------------------------------------------
     enable_admin = getattr(settings, 'DFS_ENABLE_ADMIN', False)
+
     # CURRENCY SETTINGS
     # -------------------------------------------------------------------------
     currency_locale = str(
         getattr(settings, 'DFS_CURRENCY_LOCALE', 'en_us')
     ).lower()
 
-    # TEMPLATE SETTINGS
+    # CUSTOM SETTINGS & OVERRIDES
     # -------------------------------------------------------------------------
     base_template = getattr(
         settings, 'DFS_BASE_TEMPLATE', 'subscriptions/base.html'
     )
 
+    # Breaks view string into module & class components for dynamic importing
+    subscribe_view_path = getattr(
+        settings, 'DFS_SUBSCRIBE_VIEW', 'subscriptions.views.SubscribeView'
+    )
+    subscribe_view_components = subscribe_view_path.split('.')
+    subscribe_view_class = subscribe_view_components.pop()
+    subscribe_view_module = '.'.join(subscribe_view_components)
+
     return {
         'enable_admin': enable_admin,
         'currency_locale': currency_locale,
         'base_template': base_template,
+        'subscribe_view_module': subscribe_view_module,
+        'subscribe_view_class': subscribe_view_class
     }
 
 
