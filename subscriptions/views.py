@@ -561,7 +561,10 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
 
         if payment_form.is_valid() and plan_cost_form.is_valid():
             # Attempt to process payment
-            payment_success = self.process_payment(payment_form)
+            payment_success = self.process_payment(
+                payment_form=payment_form,
+                plan_cost_form=plan_cost_form,
+            )
 
             if payment_success:
                 # Payment successful - can handle subscription processing
