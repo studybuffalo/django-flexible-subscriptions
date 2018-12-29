@@ -6,6 +6,26 @@ Changelog
 Version 0 (Beta)
 ----------------
 
+0.2.1 (2018-Dec-29)
+===================
+
+Feature Updates
+---------------
+* Switching arguments for the ``process_payment`` call to keyword
+  arguments (``kwargs``).
+* Allow the ``SubscriptionView`` class to be specified in the settings
+  file to make overriding easier.
+
+Bug Fixes
+---------
+
+* Adding methods to ``SubscribeView`` and ``Manager`` to record payment
+  transactions.
+* Fixing issue in ``Manager`` class where the future billing date was
+  based off the current datetime, rather than the last billed datetime.
+* Adding method to update next billing datetimes for due subscriptions
+  in the ``Manager`` class.
+
 0.2.0 (2018-Dec-28)
 ===================
 
