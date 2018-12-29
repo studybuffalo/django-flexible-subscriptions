@@ -8,6 +8,7 @@ from django.contrib.auth.models import Group
 from django.contrib.messages import get_messages
 from django.forms import HiddenInput
 from django.urls import reverse
+from django.utils import timezone
 
 from subscriptions import models, views, forms
 
@@ -506,7 +507,8 @@ def test_thank_you_view_returns_object(client, django_user_model):
     """Tests Thank You view properly returns transaction instance."""
     user = django_user_model.objects.create_user(username='a', password='b')
     transaction = models.SubscriptionTransaction.objects.create(
-        user=user, amount='1.00')
+        user=user, amount='1.00', date_transaction=timezone.now()
+    )
     client.login(username='a', password='b')
     response = client.get('{}?transaction_id={}'.format(
         reverse('dfs_subscribe_thank_you'), transaction.id))
@@ -517,7 +519,8 @@ def test_thank_you_view_adds_context(client, django_user_model):
     """Tests that context is properly extended."""
     user = django_user_model.objects.create_user(username='a', password='b')
     transaction = models.SubscriptionTransaction.objects.create(
-        user=user, amount='1.00')
+        user=user, amount='1.00', date_transaction=timezone.now()
+    )
     client.login(username='a', password='b')
     response = client.get('{}?transaction_id={}'.format(
         reverse('dfs_subscribe_thank_you'), transaction.id))
