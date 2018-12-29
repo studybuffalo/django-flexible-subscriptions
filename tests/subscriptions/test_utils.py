@@ -241,7 +241,10 @@ def test_manager_process_new_next_date(django_user_model):
 
     assert subscription.date_billing_next == next_date
 
-@patch('subscriptions.utils.Manager.process_payment', lambda x, y, z: False)
+@patch(
+    'subscriptions.utils.Manager.process_payment',
+    lambda self, **kwargs: False
+)
 @pytest.mark.django_db
 def test_manager_process_new_payment_error(django_user_model):
     """Tests handlig of new subscription payment error."""
@@ -290,7 +293,10 @@ def test_manager_process_due_billing_dates(django_user_model):
     assert subscription.date_billing_next == next_date
     assert subscription.date_billing_last == datetime(2018, 2, 1, 2, 2, 2)
 
-@patch('subscriptions.utils.Manager.process_payment', lambda x, y, z: False)
+@patch(
+    'subscriptions.utils.Manager.process_payment',
+    lambda self, **kwargs: False
+)
 @pytest.mark.django_db
 def test_manager_process_due_payment_error(django_user_model):
     """Tests handling of due subscription payment error."""

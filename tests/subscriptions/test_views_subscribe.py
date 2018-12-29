@@ -25,6 +25,22 @@ def create_cost(plan=None, period=1, unit=6, cost='1.00'):
         plan=plan, recurrence_period=period, recurrence_unit=unit, cost=cost
     )
 
+def create_subscription(user):
+    """Creates a standard UserSubscription object due for billing."""
+    plan = create_plan()
+    cost = create_cost(plan=plan)
+
+    return models.UserSubscription.objects.create(
+        user=user,
+        subscription=cost,
+        date_billing_start=datetime(2018, 1, 1, 1, 1, 1),
+        date_billing_end=None,
+        date_billing_last=datetime(2018, 1, 1, 1, 1, 1),
+        date_billing_next=datetime(2018, 2, 1, 1, 1, 1),
+        active=True,
+        cancelled=False,
+    )
+
 
 # SubscribeView Tests
 # -----------------------------------------------------------------------------
@@ -429,6 +445,46 @@ def test_subscribe_view_hide_form():
 
     for _, field in hidden_form.fields.items():
         assert isinstance(field.widget, HiddenInput)
+
+@patch(
+    'subscriptions.utils.timezone.now', lambda: datetime(2018, 1, 1, 1, 1, 1)
+)
+@pytest.mark.django_db
+def test_subscribe_view_record_transaction_without_date(django_user_model):
+    """Tests handling of record_transaction without providing a date.
+
+        Patching the timezone module to ensure consistent test results.
+    """
+    transaction_count = models.SubscriptionTransaction.objects.all().count()
+
+    user = django_user_model.objects.create_user(username='a', password='b')
+    subscription = create_subscription(user)
+
+    view = views.SubscribeView()
+    transaction = view.record_transaction(subscription)
+
+    assert models.SubscriptionTransaction.objects.all().count() == (
+        transaction_count + 1
+    )
+    assert transaction.date_transaction == datetime(2018, 1, 1, 1, 1, 1)
+
+@pytest.mark.django_db
+def test_subscribe_view_record_transaction_with_date(django_user_model):
+    """Tests handling of record_transaction with date provided."""
+    transaction_count = models.SubscriptionTransaction.objects.all().count()
+
+    user = django_user_model.objects.create_user(username='a', password='b')
+    subscription = create_subscription(user)
+    transaction_date = datetime(2018, 1, 2, 1, 1, 1)
+
+    view = views.SubscribeView()
+    transaction = view.record_transaction(subscription, transaction_date)
+
+    assert models.SubscriptionTransaction.objects.all().count() == (
+        transaction_count + 1
+    )
+    assert transaction.date_transaction == transaction_date
+
 
 @pytest.mark.django_db
 def test_subscribe_view_setup_subscription_user_group(django_user_model):
