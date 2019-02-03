@@ -851,11 +851,9 @@ class PlanListDetailCreateView(
         return context
 
     def get_success_url(self):
-        print(reverse_lazy(
-            'dfs_plan_list_detail_list', self.kwargs['plan_list_id']
-        ))
         return reverse_lazy(
-            'dfs_plan_list_detail_list', self.kwargs['plan_list_id']
+            'dfs_plan_list_detail_list',
+            kwargs={'plan_list_id': self.kwargs['plan_list_id']},
         )
 
 class PlanListDetailUpdateView(
@@ -865,12 +863,25 @@ class PlanListDetailUpdateView(
     model = models.PlanListDetail
     permission_required = 'subscriptions.subscriptions'
     raise_exception = True
-    context_object_name = 'plan_list'
     fields = ['plan', 'plan_list', 'title', 'subtitle', 'header', 'footer']
     success_message = 'Plan list details successfully updated'
-    success_url = reverse_lazy('dfs_plan_list_detail_list')
     pk_url_kwarg = 'plan_list_detail_id'
     template_name = 'subscriptions/plan_list_detail_update.html'
+
+    def get_context_data(self, **kwargs):
+        """Extend context to include the parent PlanList object."""
+        context = super().get_context_data(**kwargs)
+
+        context['plan_list'] = get_object_or_404(
+            models.PlanList, id=self.kwargs.get('plan_list_id', None)
+        )
+
+        return context
+    def get_success_url(self):
+        return reverse_lazy(
+            'dfs_plan_list_detail_list',
+            kwargs={'plan_list_id': self.kwargs['plan_list_id']},
+        )
 
 class PlanListDetailDeleteView(PermissionRequiredMixin, abstract.DeleteView):
     """View to delete a plan list detail.
@@ -898,5 +909,6 @@ class PlanListDetailDeleteView(PermissionRequiredMixin, abstract.DeleteView):
 
     def get_success_url(self):
         return reverse_lazy(
-            'dfs_plan_list_detail_list', self.kwargs['plan_list_id']
+            'dfs_plan_list_detail_list',
+            kwargs={'plan_list_id': self.kwargs['plan_list_id']},
         )
