@@ -685,12 +685,12 @@ def test_plan_list_details_minimal_model_creation():
     plan_list = models.PlanList.objects.create(
         title='Test Title',
     )
-    models.PlanListDetails.objects.create(
+    models.PlanListDetail.objects.create(
         plan=plan,
         plan_list=plan_list,
     )
 
-    assert models.PlanListDetails.objects.all().count() == 1
+    assert models.PlanListDetail.objects.all().count() == 1
 
 @pytest.mark.django_db
 def test_plan_list_details_str():
@@ -702,7 +702,7 @@ def test_plan_list_details_str():
     plan_list = models.PlanList.objects.create(
         title='Test Title',
     )
-    plan_list_details = models.PlanListDetails.objects.create(
+    plan_list_details = models.PlanListDetail.objects.create(
         plan=plan,
         plan_list=plan_list,
         title='Test Plan as part of Test List',
