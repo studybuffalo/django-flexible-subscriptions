@@ -652,3 +652,60 @@ def test_plan_cost_next_billing_datetime_once():
     next_billing = cost.next_billing_datetime(current)
 
     assert next_billing is None
+
+# PlanList Model
+# -----------------------------------------------------------------------------
+@pytest.mark.django_db
+def test_plan_list_minimal_model_creation():
+    """Tests minimal requirements of PlanList model."""
+    models.PlanList.objects.create(
+        title='Test Title',
+    )
+
+    assert models.PlanList.objects.all().count() == 1
+
+@pytest.mark.django_db
+def test_plan_list_str():
+    """Tests __str__ for the PlanList model."""
+    plan_list = models.PlanList.objects.create(
+        title='Test Title',
+    )
+
+    assert str(plan_list) == 'Test Title'
+
+# PlanListDetails Model
+# -----------------------------------------------------------------------------
+@pytest.mark.django_db
+def test_plan_list_details_minimal_model_creation():
+    """Tests minimal requirements of PlanListDetails model."""
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='Test Plan',
+        plan_description='A test plan',
+    )
+    plan_list = models.PlanList.objects.create(
+        title='Test Title',
+    )
+    models.PlanListDetails.objects.create(
+        plan=plan,
+        plan_list=plan_list,
+    )
+
+    assert models.PlanListDetails.objects.all().count() == 1
+
+@pytest.mark.django_db
+def test_plan_list_details_str():
+    """Tests __str__ for the PlanListDetails model."""
+    plan = models.SubscriptionPlan.objects.create(
+        plan_name='Test Plan',
+        plan_description='A test plan',
+    )
+    plan_list = models.PlanList.objects.create(
+        title='Test Title',
+    )
+    plan_list_details = models.PlanListDetails.objects.create(
+        plan=plan,
+        plan_list=plan_list,
+        title='Test Plan as part of Test List',
+    )
+
+    assert str(plan_list_details) == 'Test Plan as part of Test List'
