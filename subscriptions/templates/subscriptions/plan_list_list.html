@@ -1,0 +1,62 @@
+{% extends template_extends %}
+
+{% load i18n %}
+{% load currency_filters %}
+
+{% block content %}
+  <h1>Plan Lists</h1>
+
+  {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <div>
+    <a href="{% url 'dfs_dashboard' %}">Back to dashboard</a>
+  </div>
+
+  <div>
+    <a href="{% url 'dfs_plan_list_create' %}">Create new plan list</a>
+  </div>
+
+  {% if plan_lists %}
+    <table>
+      <thead>
+        <tr>
+          <th>{% trans "Plan list title" %}</th>
+          <th>{% trans "Active?" %}</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for plan_list in plan_lists %}
+          <tr>
+            <td>{{ plan_list.title }}</td>
+            <td>{{ plan_list.active }}</td>
+            <td>
+              <a href="{% url 'dfs_plan_list_detail_list' plan_list.id %}">
+                {% trans "Manage plans" %}
+              </a>
+            </td>
+            <td>
+              <a href="{% url 'dfs_plan_list_update' plan_list.id %}">
+                {% trans "Edit" %}
+              </a>
+            </td>
+            <td>
+              <a href="{% url 'dfs_plan_list_delete' plan_list.id %}">
+                {% trans "Delete" %}
+              </a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>{% trans "No plan lists have been added yet." %}</p>
+  {% endif %}
+{% endblock %}

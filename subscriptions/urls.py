@@ -75,6 +75,46 @@ urlpatterns = [
         name='dfs_plan_delete',
     ),
     url(
+        r'dfs/plan-lists/$',
+        views.PlanListListView.as_view(),
+        name='dfs_plan_list_list',
+    ),
+    url(
+        r'dfs/plan-lists/create/$',
+        views.PlanListCreateView.as_view(),
+        name='dfs_plan_list_create',
+    ),
+    url(
+        r'dfs/plan-lists/(?P<plan_list_id>[0-9]+)/$',
+        views.PlanListUpdateView.as_view(),
+        name='dfs_plan_list_update',
+    ),
+    url(
+        r'dfs/plan-lists/(?P<plan_list_id>[0-9]+)/delete/$',
+        views.PlanListDeleteView.as_view(),
+        name='dfs_plan_list_delete',
+    ),
+    url(
+        r'dfs/plan-lists/(?P<plan_list_id>[0-9]+)/details/$',
+        views.PlanListDetailListView.as_view(),
+        name='dfs_plan_list_detail_list',
+    ),
+    url(
+        r'dfs/plan-lists/(?P<plan_list_id>[0-9]+)/details/create/$',
+        views.PlanListDetailCreateView.as_view(),
+        name='dfs_plan_list_detail_create',
+    ),
+    url(
+        r'dfs/plan-lists/(?P<plan_list_id>[0-9]+)/details/(?P<plan_list_detail_id>[0-9]+)/$',
+        views.PlanListDetailUpdateView.as_view(),
+        name='dfs_plan_list_detail_update',
+    ),
+    url(
+        r'dfs/plan-lists/(?P<plan_list_id>[0-9]+)/details/(?P<plan_list_detail_id>[0-9]+)/delete/$',
+        views.PlanListDetailDeleteView.as_view(),
+        name='dfs_plan_list_detail_delete',
+    ),
+    url(
         r'dfs/subscriptions/$',
         views.SubscriptionListView.as_view(),
         name='dfs_subscription_list',
