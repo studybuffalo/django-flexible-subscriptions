@@ -33,7 +33,7 @@
 
       <ul>
         {% for plan in plans %}
-          <form method="post" action="{% url 'dfs_subscribe' %}">
+          <form method="post" action="{% url 'dfs_subscribe_list' %}">
             {% csrf_token %}
             <h3>{{ plan.plan_name }}</h3>
             <p>{{ plan.plan_description }}</p>
