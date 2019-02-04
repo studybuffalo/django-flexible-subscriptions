@@ -659,7 +659,7 @@ def test_cancel_requires_user_owner(client, django_user_model):
     assert response.status_code == 404
 
 
-# SubscribeListView Tests
+# SubscribeUserListView Tests
 # -----------------------------------------------------------------------------
 @pytest.mark.django_db
 def test_subscribe_list_redirect_anonymous(client):

@@ -16,7 +16,7 @@ SubscribeView = getattr( # pylint: disable=invalid-name
 urlpatterns = [
     url(
         r'subscribe/$',
-        views.SubscribeList.as_view(),
+        views.SubscribeUserList.as_view(),
         name='dfs_subscribe_list',
     ),
     url(
