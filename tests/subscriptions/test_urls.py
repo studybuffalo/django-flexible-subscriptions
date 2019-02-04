@@ -74,7 +74,7 @@ def test_subscribe_user_list_exists_at_desired_location(admin_client):
 @pytest.mark.django_db
 def test_subscribe_user_list_exists_at_desired_url(admin_client):
     """Tests that subscription cancel URL works."""
-    response = admin_client.get('/subscribe/')
+    response = admin_client.get('/subscriptions/')
 
     assert response.status_code == 200
 

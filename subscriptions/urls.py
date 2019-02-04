@@ -35,6 +35,11 @@ urlpatterns = [
         name='dfs_subscribe_cancel',
     ),
     url(
+        r'subscriptions/$',
+        views.SubscribeUserList.as_view(),
+        name='dfs_subscribe_user_list',
+    ),
+    url(
         r'dfs/tags/$',
         views.TagListView.as_view(),
         name='dfs_tag_list',

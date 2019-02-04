@@ -98,7 +98,7 @@ def test_subscribe_view_get_success_url():
     view = views.SubscribeView()
     success_url = view.get_success_url()
 
-    assert success_url == '/subscribe/'
+    assert success_url == '/subscriptions/'
 
 @pytest.mark.django_db
 def test_subscribe_view_get_405_response(admin_client):
@@ -313,7 +313,7 @@ def test_subscribe_view_post_confirm_to_process_valid(admin_client):
 
     url, _ = response.redirect_chain[-1]
 
-    assert url == '/subscribe/'
+    assert url == '/subscriptions/'
 
 @pytest.mark.django_db
 def test_subscribe_view_post_confirm_to_process_invalid(admin_client):
@@ -615,7 +615,7 @@ def test_cancel_view_no_redirect_on_login(client, django_user_model):
 def test_cancel_view_get_success_url():
     """Tests that get_success_url works properly."""
     view = views.SubscribeView()
-    assert view.get_success_url() == '/subscribe/'
+    assert view.get_success_url() == '/subscriptions/'
 
 @pytest.mark.django_db
 def test_cancel_post_updates_instance(client, django_user_model):
@@ -668,7 +668,7 @@ def test_subscribe_user_list_redirect_anonymous(client):
     redirect_url, redirect_code = response.redirect_chain[-1]
 
     assert redirect_code == 302
-    assert redirect_url == ('/accounts/login/?next=/subscribe/')
+    assert redirect_url == ('/accounts/login/?next=/subscriptions/')
 
 @pytest.mark.django_db
 def test_subscribe_user_list_no_redirect_on_login(client, django_user_model):
