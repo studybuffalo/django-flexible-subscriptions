@@ -17,7 +17,7 @@ urlpatterns = [
     url(
         r'subscribe/$',
         views.SubscribeUserList.as_view(),
-        name='dfs_subscribe_list',
+        name='dfs_subscribe_user_list',
     ),
     url(
         r'subscribe/add/$',

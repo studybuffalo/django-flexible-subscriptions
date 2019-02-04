@@ -65,14 +65,14 @@ def test_cancel_exists_at_desired_url(client, django_user_model):
     assert response.status_code == 200
 
 @pytest.mark.django_db
-def test_subscribe_list_exists_at_desired_location(admin_client):
+def test_subscribe_user_list_exists_at_desired_location(admin_client):
     """Tests that subscribe list URL name works."""
-    response = admin_client.get(reverse('dfs_subscribe_list'))
+    response = admin_client.get(reverse('dfs_subscribe_user_list'))
 
     assert response.status_code == 200
 
 @pytest.mark.django_db
-def test_subscribe_list_exists_at_desired_url(admin_client):
+def test_subscribe_user_list_exists_at_desired_url(admin_client):
     """Tests that subscription cancel URL works."""
     response = admin_client.get('/subscribe/')
 
