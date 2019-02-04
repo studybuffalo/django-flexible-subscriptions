@@ -566,6 +566,21 @@ class PlanListDetailDeleteView(PermissionRequiredMixin, abstract.DeleteView):
 
 # Subscribe Views
 # -----------------------------------------------------------------------------
+class SubscribeList(LoginRequiredMixin, abstract.DetailView):
+    """Detail view of the first active PlanList instance.
+
+        View is designed to be the user-facing subscription list and
+        customizable through the PlanList and PlanListDetail models.
+    """
+    permission_required = 'subscriptions.subscriptions'
+    raise_exception = True
+    context_object_name = 'plan_list'
+    template_name = 'subscriptions/subscribe_list.html'
+
+    def get_queryset(self):
+        """Override view to get proper PlanList instance."""
+        return models.PlanList.objects.filter(active=True).first()
+
 class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
     """View to handle all aspects of the subscribing process.
 
@@ -595,7 +610,7 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
     confirmation = False
     payment_form = forms.PaymentForm
     subscription_plan = None
-    success_url = 'dfs_subscribe_list'
+    success_url = 'dfs_subscribe_user_list'
     template_preview = 'subscriptions/subscribe_preview.html'
     template_confirmation = 'subscriptions/subscribe_confirmation.html'
 
@@ -847,7 +862,7 @@ class SubscribeUserList(LoginRequiredMixin, abstract.ListView):
     """List of all a user's subscriptions."""
     model = models.UserSubscription
     context_object_name = 'subscriptions'
-    template_name = 'subscriptions/subscribe_list.html'
+    template_name = 'subscriptions/subscribe_user_list.html'
 
     def get_queryset(self):
         """Overrides get_queryset to restrict list to logged in user."""
@@ -890,7 +905,7 @@ class SubscribeCancelView(LoginRequiredMixin, abstract.DetailView):
     context_object_name = 'subscription'
     pk_url_kwarg = 'subscription_id'
     success_message = 'Subscription successfully cancelled'
-    success_url = 'dfs_subscribe_list'
+    success_url = 'dfs_subscribe_user_list'
     template_name = 'subscriptions/subscribe_cancel.html'
 
     def get_object(self, queryset=None):
