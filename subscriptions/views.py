@@ -589,7 +589,6 @@ class SubscribeList(abstract.TemplateView):
                 self.get_context_data(plan_list=plan_list)
             )
 
-
             return response
 
         return HttpResponseNotFound('No subscription plans are available')
