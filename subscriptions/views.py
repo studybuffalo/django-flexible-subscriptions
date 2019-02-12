@@ -515,7 +515,7 @@ class PlanListDetailUpdateView(
     model = models.PlanListDetail
     permission_required = 'subscriptions.subscriptions'
     raise_exception = True
-    fields = ['plan', 'plan_list', 'title', 'subtitle', 'header', 'footer']
+    fields = ['plan', 'plan_list', 'html_content', 'subscribe_button_text']
     success_message = 'Plan list details successfully updated'
     pk_url_kwarg = 'plan_list_detail_id'
     template_name = 'subscriptions/plan_list_detail_update.html'
