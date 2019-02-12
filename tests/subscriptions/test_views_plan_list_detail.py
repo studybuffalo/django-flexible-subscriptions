@@ -19,7 +19,7 @@ def create_plan(plan_name='1', plan_description='2'):
         plan_name=plan_name, plan_description=plan_description
     )
 
-def create_plan_list_detail(plan=None, plan_list=None, title='1'):
+def create_plan_list_detail(plan=None, plan_list=None):
     """Creates and returns PlanListDetail instance."""
     if not plan:
         plan = create_plan()
@@ -28,7 +28,7 @@ def create_plan_list_detail(plan=None, plan_list=None, title='1'):
         plan_list = create_plan_list()
 
     return models.PlanListDetail.objects.create(
-        plan=plan, plan_list=plan_list, title=title
+        plan=plan, plan_list=plan_list
     )
 
 
@@ -278,7 +278,7 @@ def test_detail_update_update_and_success(admin_client):
     plan = create_plan()
     plan_list = create_plan_list()
     detail = models.PlanListDetail.objects.create(
-        plan=plan, plan_list=plan_list, title='1'
+        plan=plan, plan_list=plan_list
     )
     detail_count = models.PlanListDetail.objects.all().count()
 
@@ -293,7 +293,7 @@ def test_detail_update_update_and_success(admin_client):
         {
             'plan': plan.id,
             'plan_list': plan_list.id,
-            'title': '2',
+            'html_content': '<b>Test</b>',
         },
         follow=True,
     )
@@ -301,7 +301,9 @@ def test_detail_update_update_and_success(admin_client):
     messages = [message for message in get_messages(response.wsgi_request)]
 
     assert models.PlanListDetail.objects.all().count() == detail_count
-    assert models.PlanListDetail.objects.get(id=plan_list.id).title == '2'
+    assert models.PlanListDetail.objects.get(id=plan_list.id).html_content == (
+        '<b>Test</b>'
+    )
     assert messages[0].tags == 'success'
     assert messages[0].message == 'Plan list details successfully updated'
 
