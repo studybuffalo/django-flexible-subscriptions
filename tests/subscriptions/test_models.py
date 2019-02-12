@@ -693,7 +693,7 @@ def test_plan_list_details_minimal_model_creation():
     assert models.PlanListDetail.objects.all().count() == 1
 
 @pytest.mark.django_db
-def test_plan_list_details_str():
+def test_plan_list_details_str_():
     """Tests __str__ for the PlanListDetails model."""
     plan = models.SubscriptionPlan.objects.create(
         plan_name='Test Plan',
@@ -705,7 +705,6 @@ def test_plan_list_details_str():
     plan_list_details = models.PlanListDetail.objects.create(
         plan=plan,
         plan_list=plan_list,
-        title='Test Plan as part of Test List',
     )
 
-    assert str(plan_list_details) == 'Test Plan as part of Test List'
+    assert str(plan_list_details) == 'Plan List Test Title - Test Plan'
