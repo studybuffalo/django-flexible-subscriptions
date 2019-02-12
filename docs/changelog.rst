@@ -12,11 +12,9 @@ Version 0 (Beta)
 Feature Updates
 ---------------
 
-* Extending the ``SubscriptionPlan`` model to include a short, plain-text
-  description and a longer HTML description.
-* Creating ``PlanList`` model to record group of ``SubscriptionPlan`` models
-  to display on a single page for user selection.
-* Creating a view and template to display the most recently created
+* Creating ``PlanList`` model to record group of ``SubscriptionPlan``
+  models to display on a single page for user selection.
+* Creating a view and template to display the the oldest active
   ``PlanList``.
 
 0.2.1 (2018-Dec-29)
