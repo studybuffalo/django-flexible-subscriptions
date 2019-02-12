@@ -298,27 +298,27 @@ class PlanList(models.Model):
     )
     title = models.TextField(
         blank=True,
-        help_text='Title to display on the subscription plan list page',
+        help_text='title to display on the subscription plan list page',
         null=True,
     )
     subtitle = models.TextField(
         blank=True,
-        help_text='Subtitle to display on the subscription plan list page',
+        help_text='subtitle to display on the subscription plan list page',
         null=True,
     )
     header = models.TextField(
         blank=True,
-        help_text='Header text to display on the subscription plan list page',
+        help_text='header text to display on the subscription plan list page',
         null=True,
     )
     footer = models.TextField(
         blank=True,
-        help_text='Header text to display on the subscription plan list page',
+        help_text='header text to display on the subscription plan list page',
         null=True,
     )
     active = models.BooleanField(
         default=True,
-        help_text='Whether this plan list is active or not.',
+        help_text='whether this plan list is active or not.',
     )
 
     def __str__(self):
@@ -334,29 +334,25 @@ class PlanListDetail(models.Model):
         PlanList,
         on_delete=models.CASCADE,
     )
-    title = models.TextField(
+    html_content = models.TextField(
         blank=True,
-        help_text='Title to display for this subscription plan',
+        help_text='HTML content to display for plan',
         null=True,
     )
-    subtitle = models.TextField(
+    subscribe_button_text = models.CharField(
         blank=True,
-        help_text='Subitle to display for this subscription plan',
-        null=True,
-    )
-    header = models.TextField(
-        blank=True,
-        help_text='Header text to display for this subscription plan',
-        null=True,
-    )
-    footer = models.TextField(
-        blank=True,
-        help_text='Footer text to display for this subscription plan',
+        default='Subscribe',
+        max_length=128,
         null=True,
     )
 
     def __str__(self):
-        return self.title
+        if self.plan_list.title:
+            return '{} - {}'.format(self.plan_list.title, self.plan.plan_name)
+
+        return 'Plan List {} - {}'.format(
+            self.plan_list.id, self.plan.plan_name
+        )
 
 # Convenience references for units for plan recurrence billing
 ONCE = 0
