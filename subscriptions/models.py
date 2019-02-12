@@ -36,8 +36,10 @@ class SubscriptionPlan(models.Model):
         max_length=128,
     )
     plan_description = models.CharField(
+        blank=True,
         help_text=_('a description of the subscription plan'),
         max_length=512,
+        null=True,
     )
     group = models.ForeignKey(
         Group,
@@ -285,6 +287,69 @@ class SubscriptionTransaction(models.Model):
 
     class Meta:
         ordering = ('date_transaction', 'user',)
+
+class PlanList(models.Model):
+    """Model to record details of a display list of SubscriptionPlans."""
+    plans = models.ManyToManyField(
+        SubscriptionPlan,
+        blank=True,
+        related_name='plan_lists',
+        through='PlanListDetail',
+    )
+    title = models.TextField(
+        blank=True,
+        help_text='title to display on the subscription plan list page',
+        null=True,
+    )
+    subtitle = models.TextField(
+        blank=True,
+        help_text='subtitle to display on the subscription plan list page',
+        null=True,
+    )
+    header = models.TextField(
+        blank=True,
+        help_text='header text to display on the subscription plan list page',
+        null=True,
+    )
+    footer = models.TextField(
+        blank=True,
+        help_text='header text to display on the subscription plan list page',
+        null=True,
+    )
+    active = models.BooleanField(
+        default=True,
+        help_text='whether this plan list is active or not.',
+    )
+
+    def __str__(self):
+        return self.title
+
+class PlanListDetail(models.Model):
+    """Model to add additional details to plans when part of PlanList."""
+    plan = models.ForeignKey(
+        SubscriptionPlan,
+        on_delete=models.CASCADE,
+    )
+    plan_list = models.ForeignKey(
+        PlanList,
+        on_delete=models.CASCADE,
+    )
+    html_content = models.TextField(
+        blank=True,
+        help_text='HTML content to display for plan',
+        null=True,
+    )
+    subscribe_button_text = models.CharField(
+        blank=True,
+        default='Subscribe',
+        max_length=128,
+        null=True,
+    )
+
+    def __str__(self):
+        return 'Plan List {} - {}'.format(
+            self.plan_list, self.plan.plan_name
+        )
 
 # Convenience references for units for plan recurrence billing
 ONCE = 0

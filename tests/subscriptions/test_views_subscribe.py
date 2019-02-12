@@ -41,6 +41,92 @@ def create_subscription(user):
         cancelled=False,
     )
 
+def create_plan_list(title='test'):
+    """Creates and returns a PlanList instance."""
+    return models.PlanList.objects.create(title=title)
+
+
+# SubscribeList Tests
+# -----------------------------------------------------------------------------
+@pytest.mark.django_db
+def test_subscribe_list_template(admin_client):
+    """Tests for proper subscribe_list template."""
+    # Create plan to allow viewing of page
+    create_plan_list('1')
+
+    response = admin_client.get(reverse('dfs_subscribe_list'))
+
+    assert (
+        'subscriptions/subscribe_list.html' in [
+            t.name for t in response.templates
+        ]
+    )
+
+@pytest.mark.django_db
+def test_subscribe_list_200_for_anonymous_user(client, django_user_model):
+    """Tests for 200 response for anonymous user"""
+    # Create plan to allow viewing of page
+    create_plan_list('1')
+
+    django_user_model.objects.create_user(
+        username='user', password='password'
+    )
+    client.login(username='user', password='password')
+
+    response = client.get(reverse('dfs_subscribe_list'))
+
+    assert response.status_code == 200
+
+@pytest.mark.django_db
+def test_subscribe_list_get_plan_list(admin_client):
+    """Tests list retrieves a single active list"""
+    plan_list = create_plan_list('1')
+
+    response = admin_client.get(reverse('dfs_subscribe_list'))
+
+    assert response.context['plan_list'] == plan_list
+
+@pytest.mark.django_db
+def test_subscribe_list_get_plan_list_from_multiple(admin_client):
+    """Tests list retrieves a single active list from multiple."""
+    plan_list = create_plan_list('1')
+    create_plan_list('2')
+    create_plan_list('3')
+
+    response = admin_client.get(reverse('dfs_subscribe_list'))
+
+    assert response.context['plan_list'] == plan_list
+
+@pytest.mark.django_db
+def test_subscribe_list_get_plan_list_with_inactive(admin_client):
+    """Tests list retrieves single active list from multiple + inactive."""
+    plan_list_1 = create_plan_list('1')
+    plan_list_1.active = False
+    plan_list_1.save()
+
+    plan_list_2 = create_plan_list('2')
+
+    response = admin_client.get(reverse('dfs_subscribe_list'))
+
+    assert response.context['plan_list'] == plan_list_2
+
+@pytest.mark.django_db
+def test_subscribe_list_get_404_on_no_plans(admin_client):
+    """Tests that list returns 404 if no plan lists are created."""
+    response = admin_client.get(reverse('dfs_subscribe_list'))
+
+    assert response.status_code == 404
+    assert response.content == b'No subscription plans are available'
+
+@pytest.mark.django_db
+def test_subscribe_list_get_context_data(admin_client):
+    """Tests get_context_data adds plan list to context."""
+    create_plan_list('1')
+
+    response = admin_client.get(reverse('dfs_subscribe_list'))
+
+    assert 'plan_list' in response.context
+
 
 # SubscribeView Tests
 # -----------------------------------------------------------------------------
@@ -98,7 +184,7 @@ def test_subscribe_view_get_success_url():
     view = views.SubscribeView()
     success_url = view.get_success_url()
 
-    assert success_url == '/subscribe/'
+    assert success_url == '/subscriptions/'
 
 @pytest.mark.django_db
 def test_subscribe_view_get_405_response(admin_client):
@@ -313,7 +399,7 @@ def test_subscribe_view_post_confirm_to_process_valid(admin_client):
 
     url, _ = response.redirect_chain[-1]
 
-    assert url == '/subscribe/'
+    assert url == '/subscriptions/'
 
 @pytest.mark.django_db
 def test_subscribe_view_post_confirm_to_process_invalid(admin_client):
@@ -540,6 +626,41 @@ def test_subscribe_view_setup_subscription_no_group(django_user_model):
     assert group.user_set.all().count() == user_count
 
 
+# SubscribeUserListView Tests
+# -----------------------------------------------------------------------------
+@pytest.mark.django_db
+def test_subscribe_user_list_redirect_anonymous(client):
+    """Tests that anonymous users are redirected to login page."""
+    response = client.get(reverse('dfs_subscribe_user_list'), follow=True)
+    redirect_url, redirect_code = response.redirect_chain[-1]
+
+    assert redirect_code == 302
+    assert redirect_url == ('/accounts/login/?next=/subscriptions/')
+
+@pytest.mark.django_db
+def test_subscribe_user_list_no_redirect_on_login(client, django_user_model):
+    """Tests that logged in users are not redirected."""
+    django_user_model.objects.create_user(username='a', password='b')
+    client.login(username='a', password='b')
+    response = client.get(reverse('dfs_subscribe_user_list'), follow=True)
+
+    assert response.status_code == 200
+
+@pytest.mark.django_db
+def test_subscribe_user_list_requires_user_owner(client, django_user_model):
+    """Tests that logged in user has ownership of subscription plans."""
+    user_1 = django_user_model.objects.create_user(username='a', password='b')
+    user_2 = django_user_model.objects.create_user(username='c', password='d')
+    subscription_1 = models.UserSubscription.objects.create(user=user_1)
+    models.UserSubscription.objects.create(user=user_2)
+    client.login(username='a', password='b')
+    response = client.get(reverse('dfs_subscribe_user_list'), follow=True)
+
+    assert response.context['subscriptions'][0] == subscription_1
+    assert models.UserSubscription.objects.all().count() == 2
+    assert len(response.context['subscriptions']) == 1
+
+
 # SubscribeThankYouView Tests
 # ----------------------------------------------------------------------------
 def test_thank_you_view_redirect_anonymous(client):
@@ -615,7 +736,7 @@ def test_cancel_view_no_redirect_on_login(client, django_user_model):
 def test_cancel_view_get_success_url():
     """Tests that get_success_url works properly."""
     view = views.SubscribeView()
-    assert view.get_success_url() == '/subscribe/'
+    assert view.get_success_url() == '/subscriptions/'
 
 @pytest.mark.django_db
 def test_cancel_post_updates_instance(client, django_user_model):
@@ -657,38 +778,3 @@ def test_cancel_requires_user_owner(client, django_user_model):
         follow=True)
 
     assert response.status_code == 404
-
-
-# SubscribeListView Tests
-# -----------------------------------------------------------------------------
-@pytest.mark.django_db
-def test_subscribe_list_redirect_anonymous(client):
-    """Tests that anonymous users are redirected to login page."""
-    response = client.get(reverse('dfs_subscribe_list'), follow=True)
-    redirect_url, redirect_code = response.redirect_chain[-1]
-
-    assert redirect_code == 302
-    assert redirect_url == ('/accounts/login/?next=/subscribe/')
-
-@pytest.mark.django_db
-def test_subscribe_list_no_redirect_on_login(client, django_user_model):
-    """Tests that logged in users are not redirected."""
-    django_user_model.objects.create_user(username='a', password='b')
-    client.login(username='a', password='b')
-    response = client.get(reverse('dfs_subscribe_list'), follow=True)
-
-    assert response.status_code == 200
-
-@pytest.mark.django_db
-def test_subscribe_list_requires_user_owner(client, django_user_model):
-    """Tests that logged in user has ownership of subscription plans."""
-    user_1 = django_user_model.objects.create_user(username='a', password='b')
-    user_2 = django_user_model.objects.create_user(username='c', password='d')
-    subscription_1 = models.UserSubscription.objects.create(user=user_1)
-    models.UserSubscription.objects.create(user=user_2)
-    client.login(username='a', password='b')
-    response = client.get(reverse('dfs_subscribe_list'), follow=True)
-
-    assert response.context['subscriptions'][0] == subscription_1
-    assert models.UserSubscription.objects.all().count() == 2
-    assert len(response.context['subscriptions']) == 1

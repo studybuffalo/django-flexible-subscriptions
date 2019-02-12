@@ -6,6 +6,17 @@ Changelog
 Version 0 (Beta)
 ----------------
 
+0.3.0 (2019-Jan-30)
+===================
+
+Feature Updates
+---------------
+
+* Creating ``PlanList`` model to record group of ``SubscriptionPlan``
+  models to display on a single page for user selection.
+* Creating a view and template to display the the oldest active
+  ``PlanList``.
+
 0.2.1 (2018-Dec-29)
 ===================
 

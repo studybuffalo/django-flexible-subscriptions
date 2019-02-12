@@ -3,14 +3,23 @@
 {% load i18n %}
 
 {% block content %}
-  <h1>Manage subscriptions</h1>
+  <h1>{{ plan_list.title|safe }}</h1>
+  <em>{{ plan_list.subtitle|safe }}</em>
 
-  {% for subscription in subscriptions %}
-    <ul>
+  <div>{{ plan_list.header|safe }}</div>
+
+  <ul>
+    {% for detail in plan_list.planlistdetail_set.all %}
       <li>
-        {{ subscription.subscription.plan }} -
-        <a href="{% url 'dfs_subscribe_cancel' subscription.id %}">Cancel</a>
+        <form method="post" action="{% url 'dfs_subscribe_add' %}">
+          <h2>{{ detail.html_content|safe }}</h2>
+          {% csrf_token %}
+          <input type="hidden" name="plan_id" value="{{ detail.plan.id }}">
+          <button type="submit">Subscribe!</button>
+        </form>
       </li>
-    </ul>
-  {% endfor %}
+    {% endfor %}
+  </ul>
+
+  <div>{{ plan_list.footer|safe }}</div>
 {% endblock %}

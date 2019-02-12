@@ -2,13 +2,15 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import (
-    LoginRequiredMixin, PermissionRequiredMixin)
+    LoginRequiredMixin, PermissionRequiredMixin
+)
 from django.contrib.messages.views import SuccessMessageMixin
 from django.forms import HiddenInput
 from django.forms.models import inlineformset_factory
 from django.http import HttpResponseRedirect
-from django.http.response import HttpResponseNotAllowed
+from django.http.response import HttpResponseNotAllowed, HttpResponseNotFound
 from django.shortcuts import get_object_or_404
+from django.template.response import TemplateResponse
 from django.urls import reverse_lazy
 from django.utils import timezone
 
@@ -407,8 +409,198 @@ class TransactionDetailView(PermissionRequiredMixin, abstract.DetailView):
     template_name = 'subscriptions/transaction_detail.html'
 
 
+# PlanList Views
+# -----------------------------------------------------------------------------
+class PlanListListView(PermissionRequiredMixin, abstract.ListView):
+    """List of plan lists."""
+    model = models.PlanList
+    permission_required = 'subscriptions.subscriptions'
+    raise_exception = True
+    context_object_name = 'plan_lists'
+    template_name = 'subscriptions/plan_list_list.html'
+
+class PlanListCreateView(
+        PermissionRequiredMixin, SuccessMessageMixin, abstract.CreateView
+):
+    """View to create a new plan list."""
+    model = models.PlanList
+    permission_required = 'subscriptions.subscriptions'
+    raise_exception = True
+    context_object_name = 'plan_list'
+    fields = ['title', 'subtitle', 'header', 'footer', 'active']
+    success_message = 'Plan list successfully added'
+    success_url = reverse_lazy('dfs_plan_list_list')
+    template_name = 'subscriptions/plan_list_create.html'
+
+class PlanListUpdateView(
+        PermissionRequiredMixin, SuccessMessageMixin, abstract.UpdateView
+):
+    """View to update the details of a plan list."""
+    model = models.PlanList
+    permission_required = 'subscriptions.subscriptions'
+    raise_exception = True
+    context_object_name = 'plan_list'
+    fields = ['title', 'subtitle', 'header', 'footer', 'active']
+    success_message = 'Plan list successfully updated'
+    success_url = reverse_lazy('dfs_plan_list_list')
+    pk_url_kwarg = 'plan_list_id'
+    template_name = 'subscriptions/plan_list_update.html'
+
+class PlanListDeleteView(PermissionRequiredMixin, abstract.DeleteView):
+    """View to delete a plan list.
+
+        View is extended to handle additional attributes noted below.
+
+        Attributes:
+            success_message (str): Message to display on successful deletion.
+            success_url (str): URL to redirect to on successful deletion.
+    """
+    model = models.PlanList
+    permission_required = 'subscriptions.subscriptions'
+    raise_exception = True
+    context_object_name = 'plan_list'
+    pk_url_kwarg = 'plan_list_id'
+    success_message = 'Plan list successfully deleted'
+    success_url = reverse_lazy('dfs_plan_list_list')
+    template_name = 'subscriptions/plan_list_delete.html'
+
+    def delete(self, request, *args, **kwargs):
+        """Override delete to allow success message to be added."""
+        messages.success(self.request, self.success_message)
+        return super(PlanListDeleteView, self).delete(request, *args, **kwargs)
+
+
+# PlanListDetail Views
+# -----------------------------------------------------------------------------
+class PlanListDetailListView(PermissionRequiredMixin, abstract.DetailView):
+    """List of plan lists."""
+    model = models.PlanList
+    pk_url_kwarg = 'plan_list_id'
+    permission_required = 'subscriptions.subscriptions'
+    raise_exception = True
+    context_object_name = 'plan_list'
+    template_name = 'subscriptions/plan_list_detail_list.html'
+
+class PlanListDetailCreateView(
+        PermissionRequiredMixin, SuccessMessageMixin, abstract.CreateView
+):
+    """View to create a new plan list."""
+    model = models.PlanListDetail
+    fields = ['plan', 'plan_list', 'html_content', 'subscribe_button_text']
+    permission_required = 'subscriptions.subscriptions'
+    raise_exception = True
+    success_message = 'Subscription plan successfully added to plan list'
+    template_name = 'subscriptions/plan_list_detail_create.html'
+
+    def get_context_data(self, **kwargs):
+        """Extend context to include the parent PlanList object."""
+        context = super().get_context_data(**kwargs)
+
+        context['plan_list'] = get_object_or_404(
+            models.PlanList, id=self.kwargs.get('plan_list_id', None)
+        )
+
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy(
+            'dfs_plan_list_detail_list',
+            kwargs={'plan_list_id': self.kwargs['plan_list_id']},
+        )
+
+class PlanListDetailUpdateView(
+        PermissionRequiredMixin, SuccessMessageMixin, abstract.UpdateView
+):
+    """View to update the details of a plan list detail."""
+    model = models.PlanListDetail
+    permission_required = 'subscriptions.subscriptions'
+    raise_exception = True
+    fields = ['plan', 'plan_list', 'html_content', 'subscribe_button_text']
+    success_message = 'Plan list details successfully updated'
+    pk_url_kwarg = 'plan_list_detail_id'
+    template_name = 'subscriptions/plan_list_detail_update.html'
+
+    def get_context_data(self, **kwargs):
+        """Extend context to include the parent PlanList object."""
+        context = super().get_context_data(**kwargs)
+
+        context['plan_list'] = get_object_or_404(
+            models.PlanList, id=self.kwargs.get('plan_list_id', None)
+        )
+
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy(
+            'dfs_plan_list_detail_list',
+            kwargs={'plan_list_id': self.kwargs['plan_list_id']},
+        )
+
+class PlanListDetailDeleteView(PermissionRequiredMixin, abstract.DeleteView):
+    """View to delete a plan list detail.
+
+        View is extended to handle additional attributes noted below.
+
+        Attributes:
+            success_message (str): Message to display on successful deletion.
+            success_url (str): URL to redirect to on successful deletion.
+    """
+    model = models.PlanListDetail
+    permission_required = 'subscriptions.subscriptions'
+    raise_exception = True
+    context_object_name = 'plan_list_detail'
+    pk_url_kwarg = 'plan_list_detail_id'
+    success_message = 'Subscription plan successfully removed from plan list'
+    template_name = 'subscriptions/plan_list_detail_delete.html'
+
+    def delete(self, request, *args, **kwargs):
+        """Override delete to allow success message to be added."""
+        messages.success(self.request, self.success_message)
+        return super(PlanListDetailDeleteView, self).delete(
+            request, *args, **kwargs
+        )
+
+    def get_success_url(self):
+        return reverse_lazy(
+            'dfs_plan_list_detail_list',
+            kwargs={'plan_list_id': self.kwargs['plan_list_id']},
+        )
+
+
 # Subscribe Views
 # -----------------------------------------------------------------------------
+class SubscribeList(abstract.TemplateView):
+    """Detail view of the first active PlanList instance.
+
+        View is designed to be the user-facing subscription list and
+        customizable through the PlanList and PlanListDetail models.
+    """
+    context_object_name = 'plan_list'
+    template_name = 'subscriptions/subscribe_list.html'
+
+    def get(self, request, *args, **kwargs):
+        """Ensures content is available to display, then returns page."""
+        plan_list = models.PlanList.objects.filter(active=True).first()
+
+        if plan_list:
+            response = TemplateResponse(
+                request,
+                self.template_name,
+                self.get_context_data(plan_list=plan_list)
+            )
+
+            return response
+
+        return HttpResponseNotFound('No subscription plans are available')
+
+    def get_context_data(self, **kwargs):
+        """Extend context to include the parent PlanList object."""
+        context = super().get_context_data(**kwargs)
+
+        context['plan_list'] = kwargs['plan_list']
+
+        return context
+
 class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
     """View to handle all aspects of the subscribing process.
 
@@ -438,7 +630,7 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
     confirmation = False
     payment_form = forms.PaymentForm
     subscription_plan = None
-    success_url = 'dfs_subscribe_list'
+    success_url = 'dfs_subscribe_user_list'
     template_preview = 'subscriptions/subscribe_preview.html'
     template_confirmation = 'subscriptions/subscribe_confirmation.html'
 
@@ -686,11 +878,11 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
             amount=subscription.subscription.cost,
         )
 
-class SubscribeList(LoginRequiredMixin, abstract.ListView):
+class SubscribeUserList(LoginRequiredMixin, abstract.ListView):
     """List of all a user's subscriptions."""
     model = models.UserSubscription
     context_object_name = 'subscriptions'
-    template_name = 'subscriptions/subscribe_list.html'
+    template_name = 'subscriptions/subscribe_user_list.html'
 
     def get_queryset(self):
         """Overrides get_queryset to restrict list to logged in user."""
@@ -733,7 +925,7 @@ class SubscribeCancelView(LoginRequiredMixin, abstract.DetailView):
     context_object_name = 'subscription'
     pk_url_kwarg = 'subscription_id'
     success_message = 'Subscription successfully cancelled'
-    success_url = 'dfs_subscribe_list'
+    success_url = 'dfs_subscribe_user_list'
     template_name = 'subscriptions/subscribe_cancel.html'
 
     def get_object(self, queryset=None):

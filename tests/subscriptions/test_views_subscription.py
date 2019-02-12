@@ -68,7 +68,7 @@ def test_subscription_list_200_if_authorized(client, django_user_model):
 
 @pytest.mark.django_db
 def test_subscription_list_retrives_all_users(admin_client, django_user_model):
-    """Tests that the list view retrieves all the subscrpitions."""
+    """Tests that the list view retrieves all the subscriptions."""
     # Create subscriptons to retrieve
     user_1 = django_user_model.objects.create_user(
         username='user_1', password='password'
