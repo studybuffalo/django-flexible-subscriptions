@@ -2,13 +2,15 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import (
-    LoginRequiredMixin, PermissionRequiredMixin)
+    LoginRequiredMixin, PermissionRequiredMixin
+)
 from django.contrib.messages.views import SuccessMessageMixin
 from django.forms import HiddenInput
 from django.forms.models import inlineformset_factory
 from django.http import HttpResponseRedirect
-from django.http.response import HttpResponseNotAllowed
+from django.http.response import HttpResponseNotAllowed, HttpResponseNotFound
 from django.shortcuts import get_object_or_404
+from django.template.response import TemplateResponse
 from django.urls import reverse_lazy
 from django.utils import timezone
 
@@ -484,7 +486,7 @@ class PlanListDetailCreateView(
 ):
     """View to create a new plan list."""
     model = models.PlanListDetail
-    fields = ['plan', 'plan_list', 'title', 'subtitle', 'header', 'footer']
+    fields = ['plan', 'plan_list', 'html_content', 'subscribe_button_text']
     permission_required = 'subscriptions.subscriptions'
     raise_exception = True
     success_message = 'Subscription plan successfully added to plan list'
@@ -527,6 +529,7 @@ class PlanListDetailUpdateView(
         )
 
         return context
+
     def get_success_url(self):
         return reverse_lazy(
             'dfs_plan_list_detail_list',
@@ -566,20 +569,38 @@ class PlanListDetailDeleteView(PermissionRequiredMixin, abstract.DeleteView):
 
 # Subscribe Views
 # -----------------------------------------------------------------------------
-class SubscribeList(LoginRequiredMixin, abstract.DetailView):
+class SubscribeList(abstract.TemplateView):
     """Detail view of the first active PlanList instance.
 
         View is designed to be the user-facing subscription list and
         customizable through the PlanList and PlanListDetail models.
     """
-    permission_required = 'subscriptions.subscriptions'
-    raise_exception = True
     context_object_name = 'plan_list'
     template_name = 'subscriptions/subscribe_list.html'
 
-    def get_queryset(self):
-        """Override view to get proper PlanList instance."""
-        return models.PlanList.objects.filter(active=True).first()
+    def get(self, request, *args, **kwargs):
+        """Ensures content is available to display, then returns page."""
+        plan_list = models.PlanList.objects.filter(active=True).first()
+
+        if plan_list:
+            response = TemplateResponse(
+                request,
+                self.template_name,
+                self.get_context_data(plan_list=plan_list)
+            )
+
+
+            return response
+
+        return HttpResponseNotFound('No subscription plans are available')
+
+    def get_context_data(self, **kwargs):
+        """Extend context to include the parent PlanList object."""
+        context = super().get_context_data(**kwargs)
+
+        context['plan_list'] = kwargs['plan_list']
+
+        return context
 
 class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
     """View to handle all aspects of the subscribing process.
