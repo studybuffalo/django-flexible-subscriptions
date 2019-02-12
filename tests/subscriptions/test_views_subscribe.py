@@ -121,7 +121,7 @@ def test_subscribe_list_get_404_on_no_plans(admin_client):
 @pytest.mark.django_db
 def test_subscribe_list_get_context_data(admin_client):
     """Tests get_context_data adds plan list to context."""
-    plan_list = create_plan_list('1')
+    create_plan_list('1')
 
     response = admin_client.get(reverse('dfs_subscribe_list'))
 
