@@ -6,7 +6,15 @@ Changelog
 Version 0 (Beta)
 ----------------
 
-0.3.0 (2019-Jan-30)
+0.4.0 (2019-Feb-12)
+===================
+
+Feature Updates
+---------------
+
+* Adding responsive styling to all base HTML templates.
+
+0.3.0 (2019-Feb-11)
 ===================
 
 Feature Updates
