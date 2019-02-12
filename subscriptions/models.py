@@ -347,9 +347,6 @@ class PlanListDetail(models.Model):
     )
 
     def __str__(self):
-        if self.plan_list.title:
-            return '{} - {}'.format(self.plan_list.title, self.plan.plan_name)
-
         return 'Plan List {} - {}'.format(
             self.plan_list.id, self.plan.plan_name
         )
