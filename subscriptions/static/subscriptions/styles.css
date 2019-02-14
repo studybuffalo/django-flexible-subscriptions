@@ -82,6 +82,17 @@ body {
     padding: 1rem 0;
   }
 
+  #dfs-container input {
+    box-sizing: border-box;
+    font-size: 1.5rem;
+    padding: 0.25rem 0.5rem;
+    width: 100%;
+  }
+
+  #dfs-container select {
+    font-size: 1.5rem;
+  }
+
   #dfs-container main a {
     color: rgb(10, 90, 100);
     font-weight: 700;
@@ -96,13 +107,23 @@ body {
     font-size: 1rem;
   }
 
+  #dfs-container input[type="submit"] {
+    background-color: transparent;
+    cursor: pointer;
+    font-weight: 500;
+    width: auto;
+  }
+
   #dfs-container .button-positive {
     border: 2px solid rgb(10, 90, 100);
+    box-sizing: border-box;
     border-radius: 5px;
     color: rgb(10, 90, 100);
     display: inline-block;
     margin: 0.25rem 0;
+    min-width: 120px;
     padding: 0.5rem;
+    text-align: center;
   }
 
     #dfs-container .button-positive:hover {
@@ -110,19 +131,22 @@ body {
       color: rgb(0, 40, 40);
     }
 
-    #dfs-container .button-negative {
-      border: 2px solid rgb(150, 10, 10);
-      border-radius: 5px;
-      color: rgb(150, 10, 10);
-      display: inline-block;
-      margin: 0.25rem 0;
-      padding: 0.5rem;
-    }
+  #dfs-container .button-negative {
+    border: 2px solid rgb(150, 10, 10);
+    box-sizing: border-box;
+    border-radius: 5px;
+    color: rgb(150, 10, 10);
+    display: inline-block;
+    margin: 0.25rem 0;
+    min-width: 120px;
+    padding: 0.5rem;
+    text-align: center;
+  }
 
-      #dfs-container .button-negative:hover {
-        border-color: rgb(80, 10, 10);
-        color: rgb(80, 10, 10);
-      }
+    #dfs-container .button-negative:hover {
+      border-color: rgb(80, 10, 10);
+      color: rgb(80, 10, 10);
+    }
 
   #dfs-container .table-header {
     display: none;
@@ -142,3 +166,20 @@ body {
     font-size: 1rem;
     margin: 0.25rem 0;
   }
+
+  #dfs-container .form-field {
+    margin: 0.5rem 0;
+  }
+
+    #dfs-container .form-field-label {
+      display: block;
+      font-weight: 700;
+      padding: 0.25rem 0;
+    }
+
+    #dfs-container .form-field-help-text {
+      display: block;
+      font-size: 1rem;
+      font-style: italic;
+      padding: 0.5rem 0;
+    }
