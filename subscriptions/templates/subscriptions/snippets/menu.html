@@ -1,0 +1,10 @@
+{% load i18n %}
+<nav>
+  <ul>
+    <li><a href="{% url 'dfs_plan_list' %}">{% trans 'Subscription plans' %}</a></li>
+    <li><a href="{% url 'dfs_tag_list' %}">{% trans 'Tags' %}</a></li>
+    <li><a href="{% url 'dfs_plan_list_list' %}">{% trans 'Plan lists' %}</a></li>
+    <li><a href="{% url 'dfs_subscription_list' %}">{% trans 'User subscriptions' %}</a></li>
+    <li><a href="{% url 'dfs_transaction_list' %}">{% trans 'Payment transactions' %}</a></li>
+  </ul>
+</nav>

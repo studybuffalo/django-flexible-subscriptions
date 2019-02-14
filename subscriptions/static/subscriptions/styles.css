@@ -1,0 +1,144 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#dfs-container {
+  color: rgb(25, 25, 25);
+  font-family: 'Telex', sans-serif;
+  font-size: 1.5rem;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  min-width: 300px;
+  width: 100%;
+}
+
+#dfs-container .grid-container {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: auto auto auto;
+}
+
+#dfs-container header {
+  background-color: rgb(0, 40, 40);
+  color: rgb(250, 250, 250);
+}
+
+#dfs-container h1 {
+  font-size: 2.25rem;
+  margin: 0;
+  padding: 0.5rem;
+}
+
+#dfs-container .subtitle {
+  display: block;
+  margin: 0;
+  padding: 1rem 0.5rem 0.5rem 0.5rem;
+}
+
+#dfs-container nav {
+  background-color: rgb(10, 90, 100);
+  color: rgb(195, 220, 225);
+  margin: 0;
+  padding: 0;
+}
+
+  #dfs-container nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  #dfs-container nav li {
+    margin: 0;
+    padding: 0;
+  }
+
+  #dfs-container nav a {
+    border-bottom: 1px solid rgb(195, 220, 225);
+    color: inherit;
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0.25rem;
+    padding: 0.5rem;
+    text-decoration: none;
+  }
+
+    #dfs-container nav a:hover {
+      color: rgb(250, 250, 250);
+    }
+
+  #dfs-container main {
+    margin: 0;
+    padding: 0.5rem;
+  }
+
+  #dfs-container h2 {
+    margin: 0;
+    padding: 1rem 0;
+  }
+
+  #dfs-container main a {
+    color: rgb(10, 90, 100);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+    #dfs-container main a:hover {
+      color: rgb(195, 220, 225);
+    }
+
+  #dfs-container .breadcrumb {
+    font-size: 1rem;
+  }
+
+  #dfs-container .button-positive {
+    border: 2px solid rgb(10, 90, 100);
+    border-radius: 5px;
+    color: rgb(10, 90, 100);
+    display: inline-block;
+    margin: 0.25rem 0;
+    padding: 0.5rem;
+  }
+
+    #dfs-container .button-positive:hover {
+      border-color: rgb(0, 40, 40);
+      color: rgb(0, 40, 40);
+    }
+
+    #dfs-container .button-negative {
+      border: 2px solid rgb(150, 10, 10);
+      border-radius: 5px;
+      color: rgb(150, 10, 10);
+      display: inline-block;
+      margin: 0.25rem 0;
+      padding: 0.5rem;
+    }
+
+      #dfs-container .button-negative:hover {
+        border-color: rgb(80, 10, 10);
+        color: rgb(80, 10, 10);
+      }
+
+  #dfs-container .table-header {
+    display: none;
+  }
+
+  #dfs-container .table-body {
+    border-bottom: 3px solid rgb(10, 90, 100);
+    margin: 1rem 0;
+  }
+
+    #dfs-container .table-body > div {
+      margin: 1rem 0;
+    }
+
+  #dfs-container .table-title {
+    display: block;
+    font-size: 1rem;
+    margin: 0.25rem 0;
+  }
