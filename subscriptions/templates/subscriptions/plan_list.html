@@ -1,4 +1,4 @@
-{% extends template_extends %}
+{% extends 'subscriptions/base_developer.html' %}
 
 {% load i18n %}
 {% load currency_filters %}
@@ -17,73 +17,65 @@
   </style>
 {% endblock %}
 
-{% block content %}
-  <div class="grid-container">
-    {% include 'subscriptions/snippets/header.html' %}
-
-    {% include 'subscriptions/snippets/menu.html' %}
-
-    <main>
-      <div class="breadcrumb">
-          <a href="{% url 'dfs_dashboard' %}">Developer Dashboard</a>
-          > Subscription Plans
-      </div>
-
-      <h2>Subscription Plans</h2>
-
-      {% include 'subscriptions/snippets/messages.html' %}
-
-      <a class="button-positive" href="{% url 'dfs_plan_create' %}">Create new plan</a>
-
-      {% if plans %}
-        <div class="plan-table">
-          <div class="table-header">
-            <div>{% trans "Plan name" %}</div>
-            <div>{% trans "Description" %}</div>
-            <div>{% trans "Tags" %}</div>
-            <div>{% trans "Costs" %}</div>
-          </div>
-          {% for plan in plans %}
-            <div class="table-body">
-              <div>
-                <span class="table-title">{% trans "Plan name" %}</span>
-                {{ plan.plan_name }}
-              </div>
-              <div>
-                <span class="table-title">{% trans "Description" %}</span>
-                {{ plan.plan_description }}
-              </div>
-              <div>
-                <span class="table-title">{% trans "Tags" %}</span>
-                {% if plan.display_tags %}
-                  {{ plan.display_tags }}
-                {% else %}
-                  None
-                {% endif %}
-              </div>
-              <div>
-                <span class="table-title">{% trans "Costs" %}</span>
-                <ul class="plan-costs">
-                  {% for cost in plan.costs.all %}
-                    <li>
-                      {{ cost.cost|currency }}
-                      {{ cost.display_billing_frequency_text }}
-                    </li>
-                  {% endfor %}
-                </ul>
-              </div>
-              <div>
-                <a class="button-positive" href="{% url 'dfs_plan_update' plan.id %}">{% trans "Edit" %}</a>
-                <a class="button-negative" href="{% url 'dfs_plan_delete' plan.id %}">{% trans "Delete" %}</a>
-              </div>
-            </div>
-          {% endfor %}
-        </div>
-
-        <a class="button-positive" href="{% url 'dfs_plan_create' %}">Create new plan</a>
-      {% else %}
-        <p>{% trans "No subscription plans have been added yet." %}</p>
-      {% endif %}
-    </main>
+{% block main %}
+  <div class="breadcrumb">
+      <a href="{% url 'dfs_dashboard' %}">Developer Dashboard</a>
+      > Subscription Plans
   </div>
+
+  <h2>Subscription Plans</h2>
+
+  {% include 'subscriptions/snippets/messages.html' %}
+
+  <a class="button-positive" href="{% url 'dfs_plan_create' %}">Create new plan</a>
+
+  {% if plans %}
+    <div class="plan-table">
+      <div class="table-header">
+        <div>{% trans "Plan name" %}</div>
+        <div>{% trans "Description" %}</div>
+        <div>{% trans "Tags" %}</div>
+        <div>{% trans "Costs" %}</div>
+      </div>
+      {% for plan in plans %}
+        <div class="table-body">
+          <div>
+            <span class="table-title">{% trans "Plan name" %}</span>
+            {{ plan.plan_name }}
+          </div>
+          <div>
+            <span class="table-title">{% trans "Description" %}</span>
+            {{ plan.plan_description }}
+          </div>
+          <div>
+            <span class="table-title">{% trans "Tags" %}</span>
+            {% if plan.display_tags %}
+              {{ plan.display_tags }}
+            {% else %}
+              None
+            {% endif %}
+          </div>
+          <div>
+            <span class="table-title">{% trans "Costs" %}</span>
+            <ul class="plan-costs">
+              {% for cost in plan.costs.all %}
+                <li>
+                  {{ cost.cost|currency }}
+                  {{ cost.display_billing_frequency_text }}
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+          <div>
+            <a class="button-positive" href="{% url 'dfs_plan_update' plan.id %}">{% trans "Edit" %}</a>
+            <a class="button-negative" href="{% url 'dfs_plan_delete' plan.id %}">{% trans "Delete" %}</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <a class="button-positive" href="{% url 'dfs_plan_create' %}">Create new plan</a>
+  {% else %}
+    <p>{% trans "No subscription plans have been added yet." %}</p>
+  {% endif %}
 {% endblock %}
