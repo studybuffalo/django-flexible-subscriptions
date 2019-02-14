@@ -1,46 +1,38 @@
-{% extends template_extends %}
+{% extends 'subscriptions/base_developer.html' %}
 
 {% load i18n %}
 
 {% block subscriptions_styles %}
 {% endblock %}
 
-{% block content %}
-  <div class="grid-container">
-    {% include 'subscriptions/snippets/header.html' %}
-
-    {% include 'subscriptions/snippets/menu.html' %}
-
-    <main>
-      <div class="breadcrumb">
-          <a href="{% url 'dfs_dashboard' %}">Developer Dashboard</a>
-          > <a href="{% url 'dfs_plan_list' %}">Subscription Plans</a>
-          > Plan Creation
-      </div>
-
-      <h2>Plan Creation</h2>
-
-      <form method="post">
-        {% csrf_token %}
-
-        {% include 'subscriptions/snippets/form_table.html' with form=form %}
-
-        <fieldset>
-          <legend>Plan cost</legend>
-
-          <div class="form-errors">{{ cost_forms.non_form_errors }}</div>
-
-          {% for cost_form in cost_forms %}
-            {% include 'subscriptions/snippets/form_table.html' with form=cost_form %}
-          {% endfor %}
-
-          {{ cost_forms.management_form }}
-        </fieldset>
-
-        <input type="submit" class="button-positive" value="Save">
-      </form>
-
-      <a class="button-negative" href="{% url 'dfs_plan_list' %}">Cancel</a>
-    </main>
+{% block main %}
+  <div class="breadcrumb">
+      <a href="{% url 'dfs_dashboard' %}">Developer Dashboard</a>
+      > <a href="{% url 'dfs_plan_list' %}">Subscription Plans</a>
+      > Plan Creation
   </div>
+
+  <h2>Plan Creation</h2>
+
+  <form method="post">
+    {% csrf_token %}
+
+    {% include 'subscriptions/snippets/form_table.html' with form=form %}
+
+    <fieldset>
+      <legend>Plan cost</legend>
+
+      <div class="form-errors">{{ cost_forms.non_form_errors }}</div>
+
+      {% for cost_form in cost_forms %}
+        {% include 'subscriptions/snippets/form_table.html' with form=cost_form %}
+      {% endfor %}
+
+      {{ cost_forms.management_form }}
+    </fieldset>
+
+    <input type="submit" class="button-positive" value="Save">
+  </form>
+
+  <a class="button-negative" href="{% url 'dfs_plan_list' %}">Cancel</a>
 {% endblock %}
