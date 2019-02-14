@@ -2,6 +2,8 @@
 
 {% load i18n %}
 
+{% block title %}DFS Dashboard | Create Subscription Plan{% endblock %}
+
 {% block main %}
   <div class="breadcrumb">
       <a href="{% url 'dfs_dashboard' %}">Developer Dashboard</a>
@@ -23,6 +25,7 @@
 
       {% for cost_form in cost_forms %}
         {% include 'subscriptions/snippets/form_table.html' with form=cost_form %}
+        <hr>
       {% endfor %}
 
       {{ cost_forms.management_form }}
