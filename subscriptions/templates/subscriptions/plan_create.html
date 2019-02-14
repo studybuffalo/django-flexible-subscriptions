@@ -2,27 +2,45 @@
 
 {% load i18n %}
 
+{% block subscriptions_styles %}
+{% endblock %}
+
 {% block content %}
-  <h1>Subscription Plan Creation</h1>
+  <div class="grid-container">
+    {% include 'subscriptions/snippets/header.html' %}
 
-  <form method="post">{% csrf_token %}
-    <ul>
-      {{ form.as_ul }}
-    </ul>
-    <fieldset>
-      <legend>Plan cost</legend>
-      {{ cost_forms.management_form }}
-      {{ cost_forms.non_form_errors }}
-      {% for cost_form in cost_forms %}
-        <ul>
-          {{ cost_form.as_ul }}
-        </ul>
-      {% endfor %}
-    </fieldset>
-    <input type="submit" value="Save">
-  </form>
+    {% include 'subscriptions/snippets/menu.html' %}
 
-  <div>
-    <a href="{% url 'dfs_plan_list' %}">Cancel</a>
+    <main>
+      <div class="breadcrumb">
+          <a href="{% url 'dfs_dashboard' %}">Developer Dashboard</a>
+          > <a href="{% url 'dfs_plan_list' %}">Subscription Plans</a>
+          > Plan Creation
+      </div>
+
+      <h2>Plan Creation</h2>
+
+      <form method="post">
+        {% csrf_token %}
+
+        {% include 'subscriptions/snippets/form_table.html' with form=form %}
+
+        <fieldset>
+          <legend>Plan cost</legend>
+
+          <div class="form-errors">{{ cost_forms.non_form_errors }}</div>
+
+          {% for cost_form in cost_forms %}
+            {% include 'subscriptions/snippets/form_table.html' with form=cost_form %}
+          {% endfor %}
+
+          {{ cost_forms.management_form }}
+        </fieldset>
+
+        <input type="submit" class="button-positive" value="Save">
+      </form>
+
+      <a class="button-negative" href="{% url 'dfs_plan_list' %}">Cancel</a>
+    </main>
   </div>
 {% endblock %}
