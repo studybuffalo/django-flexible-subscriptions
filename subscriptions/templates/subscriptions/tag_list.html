@@ -1,53 +1,53 @@
-{% extends template_extends %}
+{% extends 'subscriptions/base_developer.html' %}
 
 {% load i18n %}
+{% load currency_filters %}
 
-{% block content %}
-  <h1>Subscription Plan Tags</h1>
+{% block title %}DFS Dashboard | Tags{% endblock %}
 
-  {% if messages %}
-    <ul class="messages">
-      {% for message in messages %}
-        <li class="{{ message.tags }}">{{ message }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
+{% block subscriptions_styles %}
+  <style>
+    @media screen and (min-width: 48em) {
+      #dfs-container .table-header {
+        display: block;
+      }
+    }
+  </style>
+{% endblock %}
 
-  <div>
-    <a href="{% url 'dfs_dashboard' %}">Back to dashboard</a>
+{% block main %}
+  <div class="breadcrumb">
+    <a href="{% url 'dfs_dashboard' %}">Developer Dashboard</a>
+    > Tags
   </div>
 
-  <div>
-    <a href="{% url 'dfs_tag_create' %}">Create new tag</a>
-  </div>
+  <h2>Tags</h2>
+
+  {% include 'subscriptions/snippets/messages.html' %}
+
+  <a class="button-positive" href="{% url 'dfs_tag_create' %}">Create new tag</a>
 
   {% if tags %}
-    <table>
-      <thead>
-        <tr>
-          <th>{% trans "Tag name" %}</th>
-          <th></th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for tag in tags %}
-          <tr>
-            <td>{{ tag.tag }}</td>
-            <td>
-                <a href="{% url 'dfs_tag_update' tag.id %}">
-                  {% trans "Edit" %}
-                </a>
-              </td>
-            <td>
-              <a href="{% url 'dfs_tag_delete' tag.id %}">
-                {% trans "Delete" %}
-              </a>
-            </td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <div class="plan-table">
+      <div class="table-header">
+        <div>{% trans "Tag name" %}</div>
+      </div>
+
+      {% for tag in tags %}
+        <div class="table-body">
+          <div>
+            <span class="table-title">{% trans "Tag name" %}</span>
+            {{ tag.tag }}
+          </div>
+          <div>
+            <a class="button-positive" href="{% url 'dfs_tag_update' tag.id %}">{% trans "Edit" %}</a>
+            <a class="button-negative" href="{% url 'dfs_tag_update' tag.id %}">{% trans "Delete" %}</a>
+          </div>
+        </div>
+      {% endfor %}
+
+      <a class="button-positive" href="{% url 'dfs_tag_create' %}">Create new tag</a>
+    </div>
   {% else %}
     <p>{% trans "No tags have been added yet." %}</p>
   {% endif %}
