@@ -553,6 +553,16 @@ class PlanListDetailDeleteView(PermissionRequiredMixin, abstract.DeleteView):
     success_message = 'Subscription plan successfully removed from plan list'
     template_name = 'subscriptions/plan_list_detail_delete.html'
 
+    def get_context_data(self, **kwargs):
+        """Extend context to include the parent PlanList object."""
+        context = super().get_context_data(**kwargs)
+
+        context['plan_list'] = get_object_or_404(
+            models.PlanList, id=self.kwargs.get('plan_list_id', None)
+        )
+
+        return context
+
     def delete(self, request, *args, **kwargs):
         """Override delete to allow success message to be added."""
         messages.success(self.request, self.success_message)
