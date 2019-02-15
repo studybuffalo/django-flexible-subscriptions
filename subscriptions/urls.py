@@ -110,12 +110,12 @@ urlpatterns = [
         name='dfs_plan_list_detail_create',
     ),
     url(
-        r'dfs/plan-lists/(?P<plan_list_id>[0-9]+)/details/(?P<plan_list_detail_id>[0-9]+)/$',
+        r'^dfs/plan-lists/(?P<plan_list_id>[0-9]+)/details/(?P<plan_list_detail_id>[0-9]+)/$',
         views.PlanListDetailUpdateView.as_view(),
         name='dfs_plan_list_detail_update',
     ),
     url(
-        r'dfs/plan-lists/(?P<plan_list_id>[0-9]+)/details/(?P<plan_list_detail_id>[0-9]+)/delete/$',
+        r'^dfs/plan-lists/(?P<plan_list_id>[0-9]+)/details/(?P<plan_list_detail_id>[0-9]+)/delete/$',
         views.PlanListDetailDeleteView.as_view(),
         name='dfs_plan_list_detail_delete',
     ),
