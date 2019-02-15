@@ -8,16 +8,16 @@
   <div class="breadcrumb">
     <a href="{% url 'dfs_dashboard' %}">Developer Dashboard</a>
     > <a href="{% url 'dfs_plan_list' %}">Subscription Plans</a>
-    > Plan Delete
+    > Delete Subscription Plan
   </div>
 
-  <h1>Subscription Plan Deletion</h1>
+  <h2>Delete Subscription Plan</h2>
 
   <div>Are you sure you want to delete this subscription plan?</div>
 
   <blockquote>
-    <strong>Plan name: </strong>{{ plan.plan_name }}<br>
-    <strong>Plan description: </strong>{{ plan.plan_description }}
+    <strong>Plan name:</strong> {{ plan.plan_name }}<br>
+    <strong>Plan description:</strong> {{ plan.plan_description }}
   </blockquote>
 
   <form method="POST">
@@ -25,7 +25,5 @@
     <input class="button-negative" type="submit" value="Delete">
   </form>
 
-  <div>
-    <a class="button-positive" href="{% url 'dfs_plan_list' %}">Cancel</a>
-  </div>
+  <a class="button-positive" href="{% url 'dfs_plan_list' %}">Cancel</a>
 {% endblock %}

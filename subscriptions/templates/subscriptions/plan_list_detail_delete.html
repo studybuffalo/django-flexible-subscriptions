@@ -1,32 +1,29 @@
-{% extends template_extends %}
+{% extends 'subscriptions/base_developer.html' %}
 
 {% load i18n %}
 
-{% block content %}
-  <h1>Remove Subscription Plan From Plan List</h1>
+{% block title %}DFS Dashboard | Remove Subscription Plan{% endblock %}
 
-  {% if messages %}
-    <ul class="messages">
-      {% for message in messages %}
-        <li class="{{ message.tags }}">{{ message }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
+{% block main %}
+  <div class="breadcrumb">
+    <a href="{% url 'dfs_dashboard' %}">Developer Dashboard</a>
+    > <a href="{% url 'dfs_plan_list_list' %}">Plans Lists</a>
+    > <a href="{% url 'dfs_plan_list_detail_list' plan_list.id %}">{{ plan }}</a>
+    > Remove Subscription Plan
+  </div>
 
-  <p>
-    <strong>Are you sure you want to remove this plan from the plan list?</strong>
+  <h2>Remove Subscription Plan</h2>
 
-    <ul>
-      <li><strong>Plan List:</strong> {{ plan_list_detail }}</li>
-    </ul>
-  </p>
+  <div>Are you sure you want to remove this plan from the plan list?</div>
+
+  <blockquote>
+    <strong>Plan List:</strong> {{ plan_list_detail }}
+  </blockquote>
 
   <form method="POST">
     {% csrf_token %}
-    <input type="submit" value="Delete">
+    <input class="button-negative" type="submit" value="Delete">
   </form>
 
-  <div>
-    <a href="{% url 'dfs_plan_list_list' %}">Cancel</a>
-  </div>
+  <a class="button-positive" href="{% url 'dfs_plan_list_list' %}">Cancel</a>
 {% endblock %}

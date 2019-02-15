@@ -1,16 +1,27 @@
-{% extends template_extends %}
+{% extends 'subscriptions/base_developer.html' %}
 
 {% load i18n %}
 
-{% block content %}
-  <h1>Plan List Update</h1>
+{% block title %}DFS Dashboard | Update Plan List{% endblock %}
 
-  <form method="post">{% csrf_token %}
-    {{ form.as_ul }}
-    <input type="submit" value="Save">
+{% block main %}
+  <div class="breadcrumb">
+    <a href="{% url 'dfs_dashboard' %}">Developer Dashboard</a>
+    > <a href="{% url 'dfs_plan_list_list' %}">Plans Lists</a>
+    > Update Plan List
+  </div>
+
+  <h2>Update Plan List</h2>
+
+  {% include 'subscriptions/snippets/messages.html' %}
+
+  <form method="post">
+    {% csrf_token %}
+
+    {% include 'subscriptions/snippets/form_table.html' with form=form %}
+
+    <input type="submit" class="button-positive" value="Save">
   </form>
 
-  <div>
-    <a href="{% url 'dfs_plan_list_list' %}">Cancel</a>
-  </div>
+  <a class="button-negative" href="{% url 'dfs_plan_list_list' %}">Cancel</a>
 {% endblock %}

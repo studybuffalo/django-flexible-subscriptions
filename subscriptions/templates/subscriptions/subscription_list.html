@@ -1,114 +1,103 @@
-{% extends template_extends %}
+{% extends 'subscriptions/base_developer.html' %}
 
 {% load i18n %}
+{% load currency_filters %}
 
-{% block content %}
-  <h1>User Subscriptions</h1>
+{% block title %}DFS Dashboard | User Subscriptions{% endblock %}
 
-  {% if messages %}
-    <ul class="messages">
-      {% for message in messages %}
-        <li class="{{ message.tags }}">{{ message }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
+{% block subscriptions_styles %}
+  <style>
+    @media screen and (min-width: 48em) {
+      #dfs-container .table-header {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-template-rows: auto;
+      }
 
-  <div>
-    <a href="{% url 'dfs_dashboard' %}">Back to dashboard</a>
+      #dfs-container .table-body {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-template-rows: auto;
+      }
+    }
+  </style>
+{% endblock %}
+
+{% block main %}
+  <div class="breadcrumb">
+      <a href="{% url 'dfs_dashboard' %}">Developer Dashboard</a>
+      > User Subscriptions
   </div>
 
-  <div>
-    <a href="{% url 'dfs_subscription_create' %}">Create new user subscription</a>
-  </div>
+  <h2>User Subscriptions</h2>
+
+  {% include 'subscriptions/snippets/messages.html' %}
+
+  <a class="button-positive" href="{% url 'dfs_plan_create' %}">Create new user subscription</a>
 
   {% if users %}
-    <table>
-      <thead>
-        <tr>
-          <th>{% trans "User" %}</th>
-          <th>{% trans "Plan" %}</th>
-          <th>{% trans "Billing start date" %}</th>
-          <th>{% trans "Billing end date" %}</th>
-          <th>{% trans "Last billing date" %}</th>
-          <th>{% trans "Next billing date" %}</th>
-          <th>{% trans "Active?" %}</th>
-          <th>{% trans "Cancelled?" %}</th>
-          <th></th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for user in users %}
-          {% for subscription in user.subscriptions.all %}
-            {% if forloop.first %}
-              <tr>
-                <td colspan="{{ user.subscriptions.all.count }}">
-                  {{ user }}
-                </td>
-                <td>{{ subscription.plan }}</td>
-                <td>{{ subscription.date_billing_start }}</td>
-                <td>{{ subscription.date_billing_end }}</td>
-                <td>{{ subscription.date_billing_last }}</td>
-                <td>{{ subscription.date_billing_next }}</td>
-                <td>{{ subscription.active }}</td>
-                <td>{{ subscription.cancelled }}</td>
-                <td>
-                  <a href="{% url 'dfs_subscription_update' subscription.id %}">
-                    {% trans "Edit" %}
-                  </a>
-                </td>
-                <td>
-                  <a href="{% url 'dfs_subscription_delete' subscription.id %}">
-                    {% trans "Delete" %}
-                  </a>
-                </td>
-              </tr>
-            {% else %}
-              <tr>
-                <td>{{ subscription.plan }}</td>
-                <td>{{ subscription.date_billing_start }}</td>
-                <td>{{ subscription.date_billing_end }}</td>
-                <td>{{ subscription.date_billing_last }}</td>
-                <td>{{ subscription.date_billing_next }}</td>
-                <td>{{ subscription.active }}</td>
-                <td>{{ subscription.cancelled }}</td>
-                <td>
-                  <a href="{% url 'dfs_subscription_update' subscription.id %}">
-                    {% trans "Edit" %}
-                  </a>
-                </td>
-                <td>
-                  <a href="{% url 'dfs_subscription_delete' subscription.id %}">
-                    {% trans "Delete" %}
-                  </a>
-                </td>
-              </tr>
-            {% endif %}
-          {% endfor %}
+    <div class="plan-table">
+      <div class="table-header">
+        <div>{% trans "User" %}</div>
+        <div>{% trans "Plan" %}</div>
+        <div>{% trans "Billing start date" %}</div>
+        <div>{% trans "Billing end date" %}</div>
+        <div>{% trans "Last billing date" %}</div>
+        <div>{% trans "Next billing date" %}</div>
+        <div>{% trans "Active?" %}</div>
+        <div>{% trans "Cancelled?" %}</div>
+      </div>
+
+      {% for user in users %}
+        {% for subscription in user.subscriptions.all %}
+          <div class="table-body">
+            <div>
+              {% if forloop.first %}
+                <span class="table-title">{% trans "User" %}</span>
+                {{ user }}
+              {% endif %}
+            </div>
+            <div>
+              <span class="table-title">{% trans "Plan" %}</span>
+              {{ subscription.plan }}
+            </div>
+            <div>
+              <span class="table-title">{% trans "Billing start date" %}</span>
+              {{ subscription.date_billing_start }}
+            </div>
+            <div>
+              <span class="table-title">{% trans "Billing end date" %}</span>
+              {{ subscription.date_billing_end }}
+            </div>
+            <div>
+              <span class="table-title">{% trans "Last billing date" %}</span>
+              {{ subscription.date_billing_last }}
+            </div>
+            <div>
+              <span class="table-title">{% trans "Next billing date" %}</span>
+              {{ subscription.date_billing_next }}
+            </div>
+            <div>
+              <span class="table-title">{% trans "Active?" %}</span>
+              {{ subscription.active }}
+            </div>
+            <div>
+              <span class="table-title">{% trans "Cancelled?" %}</span>
+              {{ subscription.cancelled }}
+            </div>
+            <div>
+                <a class="button-positive" href="{% url 'dfs_subscription_update' subscription.id %}">{% trans "Edit" %}</a>
+                <a class="button-negative" href="{% url 'dfs_subscription_delete' subscription.id %}">{% trans "Delete" %}</a>
+            </div>
+          </div>
         {% endfor %}
-      </tbody>
-    </table>
+      {% endfor %}
+    </div>
+
+    <a class="button-positive" href="{% url 'dfs_plan_create' %}">Create new user subscription</a>
   {% else %}
     <p>{% trans "No user subscriptions have been added yet." %}</p>
   {% endif %}
 
-  {% if is_paginated %}
-    <div class="pagination">
-      <span class="step-links">
-        {% if page_obj.has_previous %}
-          <a href="?page=1">&laquo; first</a>
-          <a href="?page={{ page_obj.previous_page_number }}">previous</a>
-        {% endif %}
-
-        <span class="current">
-          Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-        </span>
-
-        {% if page_obj.has_next %}
-          <a href="?page={{ page_obj.next_page_number }}">next</a>
-          <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-        {% endif %}
-      </span>
-    </div>
-  {% endif %}
+  {% include 'subscriptions/snippets/pagination.html' with page_obj=page_obj %}
 {% endblock %}

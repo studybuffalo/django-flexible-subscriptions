@@ -1,40 +1,38 @@
-{% extends template_extends %}
+{% extends 'subscriptions/base_developer.html' %}
 
 {% load i18n %}
+{% load currency_filters %}
 
-{% block content %}
-  <h1>Subscription Payment Transaction Detail</h1>
+{% block title %}DFS Dashboard | Transaction Detail{% endblock %}
 
-  {% if messages %}
-    <ul class="messages">
-      {% for message in messages %}
-        <li class="{{ message.tags }}">{{ message }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-
-  <div>
-    <a href="{% url 'dfs_transaction_list' %}">
-      {% trans "Back to subscription payment transactions" %}
-    </a>
+{% block main %}
+  <div class="breadcrumb">
+    <a href="{% url 'dfs_dashboard' %}">Developer Dashboard</a>
+    > <a href="{% url 'dfs_transaction_list' %}">Transactions</a>
+    > Transaction Detail
   </div>
 
-  <ul>
-    <li>
-      <strong>{% trans "User" %}: </strong>
-      {{ transaction.user }}
-    </li>
-    <li>
-      <strong>{% trans "Plan" %}: </strong>
-      {{ transaction.plan }}
-    </li>
-    <li>
-      <strong>{% trans "Transaction date" %}: </strong>
-      {{ transaction.date_transaction }}
-    </li>
-    <li>
-      <strong></strong>{% trans "Amount" %}: </strong>
-      ${{ transaction.amount }}
-    </li>
-  </ul>
+  <h2>Transaction Detail</h2>
+
+  <div>
+    <strong>{% trans "User" %}:</strong>
+    {% if transaction.user %}{{ transaction.user }}{% else %}No user{% endif %}
+  </div>
+
+  <div>
+    <strong>{% trans "Plan" %}:</strong>
+    {% if transaction.plan %}{{ transaction.plan }}{% else %}No plan{% endif %}
+  </div>
+
+  <div>
+    <strong>{% trans "Transaction date" %}:</strong>
+    {{ transaction.date_transaction }}
+  </div>
+
+  <div>
+    <strong>{% trans "Amount" %}:</strong>
+    {% if transaction.amount %}{{ transaction.amount|currency }}{% else %}{{ 0|currency }}{% endif %}
+  </div>
+
+  <div><br><a href="{% url 'dfs_transaction_list' %}">Back to Transactions</a></div>
 {% endblock %}
