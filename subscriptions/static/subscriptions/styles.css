@@ -158,6 +158,10 @@ html, body {
       color: rgb(80, 10, 10);
     }
 
+  #dfs-container .pagination {
+    margin: 0.5rem 0;
+  }
+
   #dfs-container .table-header {
     display: none;
     font-weight: 700;
