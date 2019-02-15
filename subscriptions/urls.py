@@ -40,7 +40,7 @@ urlpatterns = [
         name='dfs_subscribe_user_list',
     ),
     url(
-        r'dfs/tags/$',
+        r'^dfs/tags/$',
         views.TagListView.as_view(),
         name='dfs_tag_list',
     ),
@@ -65,12 +65,12 @@ urlpatterns = [
         name='dfs_plan_list',
     ),
     url(
-        r'dfs/plans/create/$',
+        r'^dfs/plans/create/$',
         views.PlanCreateView.as_view(),
         name='dfs_plan_create',
     ),
     url(
-        r'dfs/plans/(?P<plan_id>[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12})/$',
+        r'^dfs/plans/(?P<plan_id>[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12})/$',
         views.PlanUpdateView.as_view(),
         name='dfs_plan_update',
     ),
@@ -95,7 +95,7 @@ urlpatterns = [
         name='dfs_plan_list_update',
     ),
     url(
-        r'dfs/plan-lists/(?P<plan_list_id>[0-9]+)/delete/$',
+        r'^dfs/plan-lists/(?P<plan_list_id>[0-9]+)/delete/$',
         views.PlanListDeleteView.as_view(),
         name='dfs_plan_list_delete',
     ),
