@@ -183,6 +183,7 @@ html, body {
 
   #dfs-container .form-field {
     margin: 0.5rem 0;
+    max-width: 600px;
   }
 
     #dfs-container .form-field-label {
