@@ -3,7 +3,7 @@
 {% load i18n %}
 {% load currency_filters %}
 
-{% block title %}DFS Dashboard | Subscription Plan List{% endblock %}
+{% block title %}DFS Dashboard | Subscription Plans{% endblock %}
 
 {% block subscriptions_styles %}
   <style>
@@ -53,6 +53,7 @@
         <div>{% trans "Tags" %}</div>
         <div>{% trans "Costs" %}</div>
       </div>
+
       {% for plan in plans %}
         <div class="table-body">
           <div>
