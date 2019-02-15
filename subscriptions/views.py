@@ -396,7 +396,7 @@ class TransactionListView(PermissionRequiredMixin, abstract.ListView):
     permission_required = 'subscriptions.subscriptions'
     raise_exception = True
     context_object_name = 'transactions'
-    paginate_by = 100
+    paginate_by = 50
     template_name = 'subscriptions/transaction_list.html'
 
 class TransactionDetailView(PermissionRequiredMixin, abstract.DetailView):
