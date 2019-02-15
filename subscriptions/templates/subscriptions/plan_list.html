@@ -16,6 +16,20 @@
     .plan-costs li {
       margin: 0.5rem 0;
     }
+
+    @media screen and (min-width: 48em) {
+      #dfs-container .table-header {
+        display: grid;
+        grid-template-columns: 2fr 3fr 2fr 3fr 2fr;
+        grid-template-rows: auto;
+      }
+
+      #dfs-container .table-body {
+        display: grid;
+        grid-template-columns: 2fr 3fr 2fr 3fr 2fr;
+        grid-template-rows: auto;
+      }
+    }
   </style>
 {% endblock %}
 
