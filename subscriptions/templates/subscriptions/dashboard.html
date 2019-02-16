@@ -1,15 +1,3 @@
-{% extends template_extends %}
-
-{% load i18n %}
+{% extends 'subscriptions/base_developer.html' %}
 
 {% block title %}DFS Dashboard{% endblock %}
-
-{% block content %}
-  <div class="grid-container">
-    {% include 'subscriptions/snippets/header.html' %}
-
-    {% include 'subscriptions/snippets/menu.html' %}
-
-    <main>{% block main %}{% endblock %}</main>
-  </div>
-{% endblock %}
