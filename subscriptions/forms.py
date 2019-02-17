@@ -109,8 +109,8 @@ class PaymentForm(forms.Form):
 class SubscriptionPlanCostForm(forms.Form):
     """Form to handle choosing a subscription plan for payment."""
     plan_cost = forms.UUIDField(
-        label='Choose subscription',
-        widget=forms.RadioSelect()
+        label='',
+        widget=forms.RadioSelect(),
     )
 
     def __init__(self, *args, **kwargs):
