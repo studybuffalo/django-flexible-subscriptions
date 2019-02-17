@@ -1,24 +1,12 @@
 {% load i18n %}
 {% load currency_filters %}
 
-{% if plan %}
-  <h2>Subscription Details</h2>
 
-  <ul class="plan-costs">
-    {% for cost in plan.costs.all %}
-      <li>
-        <label for="plan-cost-{{ forloop.counter }}">
-          <input
-            type="radio"
-            name="plan-cost"
-            id="plan-cost-{{ forloop.counter }}"
-            value="{{ cost.id }}"
-            {% if forloop.last %}checked="checked"{% endif %}
-          >
-          {{ cost.cost|currency }}
-          {{ cost.display_billing_frequency_text }}
-        </label>
-      </li>
-    {% endfor %}
-  </ul>
-{% endif %}
+<h2>Subscription Details</h2>
+
+<div class="form-errors">{{ form.non_field_errors }}</div>
+
+<div class="form_field">
+  {{ form.plan_cost.errors }}
+  {{ form.plan_cost }}
+</div>
