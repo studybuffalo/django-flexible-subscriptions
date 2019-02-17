@@ -28,6 +28,7 @@ html, body {
   #dfs-container .subscribe-container {
     display: flex;
     flex-direction: column;
+    padding: 0.5rem;
     min-width: 300px;
     width: 100%;
     max-width: 48em;
@@ -52,7 +53,7 @@ html, body {
     }
 
     #dfs-container .subscribe-container .header {
-      padding: 0.5rem;
+      padding: 0.5rem 0;
     }
 
     #dfs-container .subscribe-container .plans {
@@ -61,7 +62,7 @@ html, body {
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 0.5rem;
+      padding: 0.5rem 0;
       width: 100%;
     }
 
@@ -96,8 +97,24 @@ html, body {
         color: rgb(10, 90, 100);
       }
 
+    #dfs-container .subscribe-container .button {
+      border: 1px solid rgb(50, 160, 175);
+      box-shadow: none;
+      color: rgb(50, 160, 175);
+      cursor: pointer;
+      font-size: 1.5rem;
+      margin: 1rem 0;
+      padding: 0.5rem 1rem;
+      text-decoration: none;
+    }
+
+      #dfs-container .subscribe-container .button:hover {
+        border: 1px solid rgb(10, 90, 100);
+        color: rgb(10, 90, 100);
+      }
+
     #dfs-container .subscribe-container .footer {
-      padding: 0.5rem;
+      padding: 0.5rem 0;
     }
 
     #dfs-container .subscribe-container .plan-costs {
@@ -111,7 +128,7 @@ html, body {
       }
 
     #dfs-container .subscribe-container .subscribe-form {
-      padding: 0 1rem;
+      padding: 1rem 0;
     }
 
       #dfs-container .subscribe-container .subscribe-form button {
@@ -146,6 +163,31 @@ html, body {
         font-size: 1rem;
         padding: 0.25rem 0;
       }
+
+    #dfs-container .subscribe-container .form-buttons {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+
+  #dfs-container .subscribe-container .confirmation-details {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+    #dfs-container .subscribe-container .confirmation-details li {
+      margin: 1rem 0;
+    }
+
+    #dfs-container .subscribe-container .confirmation-details strong {
+      display: block;
+      font-size: 1rem;
+    }
+
+    #dfs-container .subscribe-container .confirmation-details span {
+      display: block;
+    }
 
   #dfs-container .dashboard-container {
     display: grid;

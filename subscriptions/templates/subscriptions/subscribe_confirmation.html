@@ -1,16 +1,79 @@
 {% extends template_extends %}
 
 {% load i18n %}
+{% load currency_filters %}
+
+{% block title %}Subscribe | Confirmation{% endblock %}
 
 {% block content %}
-  <h1>Confirmation</h1>
+  <main class="subscribe-container">
+    <h1>Confirmation</h1>
 
-  <form method="post" action="{% url 'dfs_subscribe_add' %}">
-    {% csrf_token %}
-    <input type="hidden" name="action" value="process">
-    <input type="hidden" name="plan_id" value="{{ plan.id }}">
-    {{ plan_cost_form.as_p }}
-    {{ payment_form.as_p }}
-    <button type="submit">Subscribe</button>
-  </form>
+    <p>
+      Below are the details of your subscription for you to review and confirm.
+      Your credit card has not been charged yet.
+    </p>
+
+    <h2>Subscription Details</h2>
+
+    <ul class="confirmation-details">
+      <li>
+        <strong>Plan</strong>
+        <span>{{ plan }}</span>
+      </li>
+      <li>
+        <strong>Cost</strong>
+        <span>
+          {{ plan_cost.cost|currency }}
+          {{ plan_cost.display_billing_frequency_text }}
+        </span>
+      </li>
+    </ul>
+
+    <h2>Payment Details</h2>
+
+    <ul class="confirmation-details">
+      <li>
+        <strong>Cardholder Name</strong>
+        <span>{{ payment_form.cardholder_name.value }}</span>
+      </li>
+      <li>
+        <strong>Card Number</strong>
+        <span>
+          {{ payment_form.card_number.value|make_list|slice:':4'|join:'' }}********{{ payment_form.card_number.value|make_list|slice:'12:'|join:'' }}
+        </span>
+      </li>
+      <li>
+        <strong>Card Expiry</strong>
+        <span>
+          {{ payment_form.card_expiry_month.value }}/{{ payment_form.card_expiry_year.value }}
+        </span>
+      </li>
+      <li>
+        <strong>Billing Address</strong>
+        <span>
+          {{ payment_form.address_name.value }}<br>
+          {{ payment_form.address_line_1.value }}<br>
+          {% if payment_form.address_line_2.value %}{{ payment_form.address_line_2.value }}<br>{% endif %}
+          {% if payment_form.address_line_3.value %}{{ payment_form.address_line_3.value }}<br>{% endif %}
+          {{ payment_form.address_city.value }},
+          {{ payment_form.address_province.value }},
+          {% if payment_form.address_postcode.value %}{{ payment_form.address_postcode.value }},{% endif %}
+          {{ payment_form.address_country.value }}
+        </span>
+      </li>
+    </ul>
+    <form class="subscribe-form" action="{% url 'dfs_subscribe_add' %}" method="POST">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="process">
+      <input type="hidden" name="plan_id" value="{{ plan.id }}">
+      {{ plan_cost_form.as_p }}
+      {{ payment_form.as_p }}
+
+      <div class="form-buttons">
+        <button type="submit">Confirm Subscription</button>
+        <a class="button" href="">Go back</a>
+      </div>
+    </form>
+  </main>
 {% endblock %}
