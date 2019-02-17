@@ -17,6 +17,14 @@ html, body {
   width: 100%;
 }
 
+  #dfs-container .errorlist {
+    color: rgb(150, 10, 10);
+    font-size: 1.25rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
   #dfs-container .subscribe-container {
     display: flex;
     flex-direction: column;
