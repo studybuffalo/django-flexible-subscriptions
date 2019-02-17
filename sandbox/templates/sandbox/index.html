@@ -20,7 +20,7 @@
         color: rgb(255, 255, 255);
         display: block;
         background-color: rgb(235, 235, 235);
-        background-image: linear-gradient(to right, rgb(0, 75, 175), rgb(25, 100, 200));
+        background-image: linear-gradient(to right, rgb(10, 90, 100), rgb(50, 160, 175));
         margin: 0;
         padding: 2rem;
       }
@@ -37,7 +37,6 @@
         list-style-type: none;
         margin: 1rem 0;
         padding: 0;
-        max-width: 300px;
       }
 
         .menu-list li {
@@ -45,18 +44,18 @@
         }
 
         .menu-list a {
-          border-radius: 10px;
-          background-color: rgb(10, 100, 200);
-          color: rgb(255, 255, 255);
+          border: 1px solid rgb(50, 160, 175);
+          color: rgb(50, 160, 175);
           display: block;
-          font-size: 1.3rem;
+          font-size: 1.5rem;
           padding: 1.5rem;
           text-decoration: none;
           width: 100%;
         }
 
           .menu-list a:hover {
-            color: rgb(255, 255, 255);
+            border-color: rgb(10, 90, 100);
+            color: rgb(10, 90, 100);
             cursor: pointer;
           }
     </style>
@@ -79,7 +78,12 @@
         </li>
         <li>
           <a href="{% url 'dfs_subscribe_list' %}">
-            Test Subscribe Page
+            Plan List Subscribe Page
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'dfs_subscribe_user_list' %}">
+            User Subscription Management
           </a>
         </li>
       </ul>
