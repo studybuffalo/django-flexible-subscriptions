@@ -712,9 +712,9 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
 
         # Forms to collect subscription details
         context['plan_cost_form'] = forms.SubscriptionPlanCostForm(
-            subscription_plan=self.subscription_plan
+            request.POST, subscription_plan=self.subscription_plan
         )
-        context['payment_form'] = self.payment_form()
+        context['payment_form'] = self.payment_form(request.POST)
 
         return self.render_to_response(context)
 
@@ -731,7 +731,7 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
         payment_form = self.payment_form(request.POST)
 
         # Validate form submission
-        if payment_form.is_valid() and plan_cost_form.is_valid():
+        if all([payment_form.is_valid(), plan_cost_form.is_valid()]):
             self.confirmation = True
             context = self.get_context_data(**kwargs)
 
@@ -747,12 +747,7 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
             return self.render_to_response(context)
 
         # Invalid form submission - render preview again
-        self.confirmation = False
-        context = self.get_context_data(**kwargs)
-        context['plan_cost_form'] = plan_cost_form
-        context['payment_form'] = payment_form
-
-        return self.render_to_response(context)
+        return self.render_preview(request, **kwargs)
 
     def process_subscription(self, request, **kwargs):
         """Moves forward with payment & subscription processing.
@@ -766,7 +761,7 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
         )
         payment_form = self.payment_form(request.POST)
 
-        if payment_form.is_valid() and plan_cost_form.is_valid():
+        if all([payment_form.is_valid(), plan_cost_form.is_valid()]):
             # Attempt to process payment
             payment_transaction = self.process_payment(
                 payment_form=payment_form,
@@ -792,13 +787,10 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
             # Payment unsuccessful, add message for confirmation page
             messages.error(request, 'Error processing payment')
 
-        # Invalid form submission/payment - render confirmation again
-        self.confirmation = True
-        context = self.get_context_data(**kwargs)
-        context['plan_cost_form'] = self.hide_form(plan_cost_form)
-        context['payment_form'] = self.hide_form(payment_form)
+        # Invalid form submission/payment - render preview again
+        return self.render_confirmation(request, **kwargs)
 
-        return self.render_to_response(context)
+        #return self.render_to_response(context)
 
     def hide_form(self, form):
         """Replaces form widgets with hidden inputs.
