@@ -13,8 +13,9 @@ def test_subscribe_add_exists_at_desired_location(admin_client):
     plan = models.SubscriptionPlan.objects.create(
         plan_name='a', plan_description='b'
     )
+    cost = models.PlanCost.objects.create(plan=plan, cost='1.00')
     response = admin_client.post(
-        reverse('dfs_subscribe_add'), {'plan_id': plan.id}
+        reverse('dfs_subscribe_add'), {'plan_id': plan.id, 'plan_cost': cost}
     )
 
     assert response.status_code == 200
@@ -25,21 +26,38 @@ def test_subscribe_add_exists_at_desired_url(admin_client):
     plan = models.SubscriptionPlan.objects.create(
         plan_name='a', plan_description='b'
     )
-    response = admin_client.post('/subscribe/add/', {'plan_id': plan.id})
+    cost = models.PlanCost.objects.create(plan=plan, cost='1.00')
+    response = admin_client.post(
+        '/subscribe/add/', {'plan_id': plan.id, 'plan_cost': cost}
+    )
 
     assert response.status_code == 200
 
 @pytest.mark.django_db
-def test_thank_you_exists_at_desired_location(admin_client):
+def test_thank_you_exists_at_desired_location(admin_client, django_user_model):
     """Tests that thank you page URL name works."""
-    response = admin_client.get(reverse('dfs_subscribe_thank_you'))
+    user = django_user_model.objects.create_user(username='a', password='b')
+    transaction = models.SubscriptionTransaction.objects.create(
+        user=user, amount='1.00', date_transaction=timezone.now()
+    )
+
+    response = admin_client.get(reverse(
+        'dfs_subscribe_thank_you', kwargs={'transaction_id': transaction.id}
+    ))
 
     assert response.status_code == 200
 
 @pytest.mark.django_db
-def test_thank_you_exists_at_desired_url(admin_client):
+def test_thank_you_exists_at_desired_url(admin_client, django_user_model):
     """Tests that thank you page URL works."""
-    response = admin_client.get('/subscribe/thank-you/')
+    user = django_user_model.objects.create_user(username='a', password='b')
+    transaction = models.SubscriptionTransaction.objects.create(
+        user=user, amount='1.00', date_transaction=timezone.now()
+    )
+
+    response = admin_client.get(
+        '/subscribe/thank-you/{}/'.format(transaction.id)
+    )
 
     assert response.status_code == 200
 
