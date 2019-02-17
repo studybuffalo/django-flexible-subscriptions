@@ -42,7 +42,7 @@ html, body {
     }
 
     #dfs-container .subscribe-container .plans {
-      align-items: top;
+      align-items: stretch;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
@@ -52,12 +52,15 @@ html, body {
     }
 
     #dfs-container .subscribe-container .plan {
+      align-items: center;
       border: 1px solid rgb(50, 160, 175);
       box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
       margin: 1rem 0;
       max-width: 400px;
       padding: 1rem;
-      text-align: center;
       width: 100%;
     }
 
