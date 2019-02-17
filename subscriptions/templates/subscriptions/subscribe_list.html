@@ -2,24 +2,30 @@
 
 {% load i18n %}
 
+{% block title %}Subscribe{% endblock %}
+
 {% block content %}
-  <h1>{{ plan_list.title|safe }}</h1>
-  <em>{{ plan_list.subtitle|safe }}</em>
+  <main class="subscribe-container">
+    <h1>{{ plan_list.title|safe }}</h1>
 
-  <div>{{ plan_list.header|safe }}</div>
+    <span class="subtitle">{{ plan_list.subtitle|safe }}</span>
 
-  <ul>
-    {% for detail in plan_list.planlistdetail_set.all %}
-      <li>
-        <form method="post" action="{% url 'dfs_subscribe_add' %}">
-          <h2>{{ detail.html_content|safe }}</h2>
-          {% csrf_token %}
-          <input type="hidden" name="plan_id" value="{{ detail.plan.id }}">
-          <button type="submit">Subscribe!</button>
-        </form>
-      </li>
-    {% endfor %}
-  </ul>
+    <div class="header">{{ plan_list.header|safe }}</div>
 
-  <div>{{ plan_list.footer|safe }}</div>
+    <div class="plans">
+      {% for detail in plan_list.planlistdetail_set.all %}
+        <div class="plan">
+          {{ detail.html_content|safe }}
+
+          <form method="post" action="{% url 'dfs_subscribe_add' %}">
+            {% csrf_token %}
+            <input type="hidden" name="plan_id" value="{{ detail.plan.id }}">
+            <button type="submit">{{ detail.subscribe_button_text|safe }}</button>
+          </form>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="footer">{{ plan_list.footer|safe }}</div>
+  </main>
 {% endblock %}
