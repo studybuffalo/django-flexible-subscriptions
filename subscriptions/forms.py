@@ -138,3 +138,6 @@ class SubscriptionPlanCostForm(forms.Form):
 
         # Update the radio widget with proper choices
         self.fields['plan_cost'].widget.choices = PLAN_COST_CHOICES
+
+        # Set the last value as the default
+        self.fields['plan_cost'].initial = [PLAN_COST_CHOICES[-1][0]]
