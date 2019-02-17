@@ -640,7 +640,7 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
     confirmation = False
     payment_form = forms.PaymentForm
     subscription_plan = None
-    success_url = 'dfs_subscribe_user_list'
+    success_url = 'dfs_subscribe_thank_you'
     template_preview = 'subscriptions/subscribe_preview.html'
     template_confirmation = 'subscriptions/subscribe_confirmation.html'
 
@@ -669,9 +669,9 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
 
         return conf_templates if self.confirmation else prev_templates
 
-    def get_success_url(self):
+    def get_success_url(self, **kwargs):
         """Returns the success URL."""
-        return reverse_lazy(self.success_url)
+        return reverse_lazy(self.success_url, kwargs=kwargs)
 
     def get(self, request, *args, **kwargs):
         """Returns 404 error as this method is not implemented."""
@@ -739,6 +739,11 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
             context['plan_cost_form'] = self.hide_form(plan_cost_form)
             context['payment_form'] = self.hide_form(payment_form)
 
+            # Add the PlanCost instance to context for use in template
+            context['plan_cost'] = models.PlanCost.objects.get(
+                id=plan_cost_form.cleaned_data['plan_cost']
+            )
+
             return self.render_to_response(context)
 
         # Invalid form submission - render preview again
@@ -775,12 +780,14 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
                 )
 
                 # Record the transaction details
-                self.record_transaction(
+                transaction = self.record_transaction(
                     subscription,
                     self.retrieve_transaction_date(payment_transaction)
                 )
 
-                return HttpResponseRedirect(self.get_success_url())
+                return HttpResponseRedirect(
+                    self.get_success_url(transaction_id=transaction.id)
+                )
 
             # Payment unsuccessful, add message for confirmation page
             messages.error(request, 'Error processing payment')
@@ -907,7 +914,7 @@ class SubscribeThankYouView(LoginRequiredMixin, abstract.TemplateView):
         """Returns the provided transaction instance."""
         try:
             return models.SubscriptionTransaction.objects.get(
-                id=self.request.GET.get('transaction_id', None),
+                id=self.kwargs['transaction_id'],
                 user=self.request.user,
             )
         except models.SubscriptionTransaction.DoesNotExist:
