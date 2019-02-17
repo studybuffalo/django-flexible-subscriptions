@@ -2,9 +2,9 @@
 {% load currency_filters %}
 
 {% if plan %}
-  <h2>{{ plan.plan_name }}</h2>
-  <p>{{ plan.plan_description }}</p>
-  <ul>
+  <h2>Subscription Details</h2>
+
+  <ul class="plan-costs">
     {% for cost in plan.costs.all %}
       <li>
         <label for="plan-cost-{{ forloop.counter }}">
