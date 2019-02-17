@@ -63,17 +63,27 @@
         </span>
       </li>
     </ul>
-    <form class="subscribe-form" action="{% url 'dfs_subscribe_add' %}" method="POST">
-      {% csrf_token %}
-      <input type="hidden" name="action" value="process">
-      <input type="hidden" name="plan_id" value="{{ plan.id }}">
-      {{ plan_cost_form.as_p }}
-      {{ payment_form.as_p }}
 
-      <div class="form-buttons">
+    <div class="form-buttons">
+      <form class="subscribe-form" action="{% url 'dfs_subscribe_add' %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="plan_id" value="{{ plan.id }}">
+        {{ plan_cost_form.as_p }}
+        {{ payment_form.as_p }}
+
+        <button type="submit">Go back</button>
+      </form>
+
+      <form class="subscribe-form" action="{% url 'dfs_subscribe_add' %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="process">
+        <input type="hidden" name="plan_id" value="{{ plan.id }}">
+        {{ plan_cost_form.as_p }}
+        {{ payment_form.as_p }}
+
         <button type="submit">Confirm Subscription</button>
-        <a class="button" href="">Go back</a>
-      </div>
-    </form>
+      </form>
+
+    </div>
   </main>
 {% endblock %}
