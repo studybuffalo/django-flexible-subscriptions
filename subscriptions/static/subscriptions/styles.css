@@ -164,6 +164,20 @@ html, body {
         padding: 0.25rem 0;
       }
 
+    #dfs-container .subscribe-container #id_plan_cost {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+      #dfs-container .subscribe-container #id_plan_cost li {
+        margin: 0.5rem 0;
+      }
+
+      #dfs-container .subscribe-container #id_plan_cost label {
+        cursor: pointer;
+      }
+
     #dfs-container .subscribe-container .form-buttons {
       display: flex;
       flex-direction: row;
