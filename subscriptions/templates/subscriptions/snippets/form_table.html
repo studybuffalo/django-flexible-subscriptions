@@ -2,7 +2,7 @@
 
 {% for field in form.visible_fields %}
   <div class="form-field">
-    <label for="id_for_label">
+    <label for="{{ field.id_for_label }}">
         <span class="form-field-label">{{ field.label }}</span>
         {{ field }}
     </label>
