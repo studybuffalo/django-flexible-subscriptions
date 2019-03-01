@@ -117,6 +117,6 @@ STATIC_ROOT = ROOT_DIR.path('static')
 
 # django-flexible-subscriptions settings
 # -----------------------------------------------------------------------------
-DSF_CURRENCY_LOCALE = 'en_ca'
-DSF_ENABLE_ADMIN = True
+DFS_CURRENCY_LOCALE = 'en_ca'
+DFS_ENABLE_ADMIN = True
 DFS_BASE_TEMPLATE = 'subscriptions/base.html'
