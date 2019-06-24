@@ -141,7 +141,7 @@ def test_subscribe_view_redirect_anonymous(client):
 def test_subscribe_view_no_redirect_on_login(client, django_user_model):
     """Tests that logged in users are not redirected."""
     plan = create_plan()
-    post_data = {'action': None, 'plan_id': plan.id}
+    post_data = {'action': '', 'plan_id': plan.id}
 
     django_user_model.objects.create_user(username='a', password='b')
     client.login(username='a', password='b')
@@ -153,7 +153,7 @@ def test_subscribe_view_no_redirect_on_login(client, django_user_model):
 def test_subscribe_view_get_object_404_without_plan(admin_client):
     """Tests get_object returns 404 when plan is missing."""
     post_data = {
-        'action': None,
+        'action': '',
     }
     response = admin_client.post(
         reverse('dfs_subscribe_add'),
@@ -199,7 +199,7 @@ def test_subscribe_view_post_preview_200_response(admin_client):
     plan = create_plan()
 
     post_data = {
-        'action': None,
+        'action': '',
         'plan_id': plan.id,
     }
 
@@ -239,7 +239,7 @@ def test_subscribe_view_post_preview_added_context(admin_client):
     """Tests preview POST adds required forms to context."""
     plan = create_plan()
     post_data = {
-        'action': None,
+        'action': '',
         'plan_id': plan.id,
     }
 
