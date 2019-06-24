@@ -7,7 +7,7 @@ python:
   - 3.7
 install:
   - pip install pipenv
-  - pipenv run python -m pip install -U
+  - pipenv run python -m pip install -U pip
   # Fixes issue where package versions may not exist on python version
   - pipenv update --dev
 script:
