@@ -22,6 +22,7 @@ restructuredtext-lint = "*"  # https://github.com/twolfson/restructuredtext-lint
 pytest = "*"  # https://github.com/pytest-dev/pytest
 pytest-cov = "*"  # https://github.com/pytest-dev/pytest-cov
 pytest-django = "*"  # https://pytest-django.readthedocs.io/en/latest/
+tox = "==3.7.0"  # https://github.com/tox-dev/tox/
 tox-pipenv = "*"  # https://github.com/tox-dev/tox-pipenv
 tox-travis = "*"  # https://github.com/tox-dev/tox-travis
 # Package Documentation
