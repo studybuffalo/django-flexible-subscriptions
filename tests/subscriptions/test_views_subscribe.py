@@ -297,7 +297,7 @@ def test_subscribe_view_post_preview_to_confirm_invalid(admin_client):
     post_data = {
         'action': 'confirm',
         'plan_id': plan.id,
-        'plan_cost': None,
+        'plan_cost': '',
         'cardholder_name': 'a',
         'card_number': '1111222233334444',
         'card_expiry_month': '01',
@@ -408,7 +408,7 @@ def test_subscribe_view_post_confirm_to_process_invalid(admin_client):
     post_data = {
         'action': 'process',
         'plan_id': plan.id,
-        'plan_cost': None,
+        'plan_cost': '',
         'cardholder_name': 'a',
         'card_number': '1111222233334444',
         'card_expiry_month': '01',
