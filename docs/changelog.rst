@@ -6,6 +6,13 @@ Changelog
 Version 0 (Beta)
 ----------------
 
+0.3.1 (2019-Jul-02)
+===================
+
+Feature Updates
+---------------
+* Adding Australian Dollars to available currencies.
+
 0.3.0 (2019-Jan-30)
 ===================
 
