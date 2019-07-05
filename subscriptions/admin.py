@@ -2,7 +2,7 @@
 from django.contrib import admin
 
 from subscriptions import models
-from subscriptions.conf import SETTINGS
+from django.conf import settings
 
 
 class SubscriptionPlanAdmin(admin.ModelAdmin):
@@ -24,8 +24,6 @@ class UserSubscriptionAdmin(admin.ModelAdmin):
     """Admin class for the UserSubscription model."""
     fields = [
         'user',
-        'plan',
-        'payment_method',
         'date_billing_start',
         'date_billing_end',
         'date_billing_last',
@@ -35,7 +33,6 @@ class UserSubscriptionAdmin(admin.ModelAdmin):
     ]
     list_display = [
         'user',
-        'plan',
         'date_billing_last',
         'date_billing_next',
         'active',
@@ -45,7 +42,7 @@ class UserSubscriptionAdmin(admin.ModelAdmin):
 class TransactionAdmin(admin.ModelAdmin):
     """Admin class for the SubscriptionTransaction model."""
 
-if SETTINGS['enable_admin']:
+if settings.DSF_ENABLE_ADMIN:
     admin.site.register(models.SubscriptionPlan, SubscriptionPlanAdmin)
     admin.site.register(models.UserSubscription, UserSubscriptionAdmin)
     admin.site.register(models.SubscriptionTransaction, TransactionAdmin)
