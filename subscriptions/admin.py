@@ -20,6 +20,27 @@ class SubscriptionPlanAdmin(admin.ModelAdmin):
         'display_tags',
     ]
 
+class SubscriptionPlanInlineAdmin(admin.TabularInline):
+    """Admin inline class for the SubscriptionPlan model."""
+    model = models.PlanList.plans.through
+
+class PlanListAdmin(admin.ModelAdmin):
+    """Admin class for the PlanList model."""
+    fields = [
+        'title',
+        'subtitle',
+        'active'
+    ]
+    list_display = [
+        'title',
+        'subtitle',
+        'header',
+        'footer',
+        'active'
+    ]
+
+    inlines = (SubscriptionPlanInlineAdmin,)
+
 class UserSubscriptionAdmin(admin.ModelAdmin):
     """Admin class for the UserSubscription model."""
     fields = [
