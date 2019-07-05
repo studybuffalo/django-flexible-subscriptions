@@ -65,5 +65,6 @@ class TransactionAdmin(admin.ModelAdmin):
 
 if settings.DSF_ENABLE_ADMIN:
     admin.site.register(models.SubscriptionPlan, SubscriptionPlanAdmin)
+    admin.site.register(models.PlanList, PlanListAdmin)
     admin.site.register(models.UserSubscription, UserSubscriptionAdmin)
     admin.site.register(models.SubscriptionTransaction, TransactionAdmin)
