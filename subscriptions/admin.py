@@ -2,7 +2,7 @@
 from django.contrib import admin
 
 from subscriptions import models
-from django.conf import settings
+from subscriptions.conf import SETTINGS
 
 
 class SubscriptionPlanAdmin(admin.ModelAdmin):
@@ -19,27 +19,6 @@ class SubscriptionPlanAdmin(admin.ModelAdmin):
         'group',
         'display_tags',
     ]
-
-class SubscriptionPlanInlineAdmin(admin.TabularInline):
-    """Admin inline class for the SubscriptionPlan model."""
-    model = models.PlanList.plans.through
-
-class PlanListAdmin(admin.ModelAdmin):
-    """Admin class for the PlanList model."""
-    fields = [
-        'title',
-        'subtitle',
-        'active'
-    ]
-    list_display = [
-        'title',
-        'subtitle',
-        'header',
-        'footer',
-        'active'
-    ]
-
-    inlines = (SubscriptionPlanInlineAdmin,)
 
 class UserSubscriptionAdmin(admin.ModelAdmin):
     """Admin class for the UserSubscription model."""
@@ -63,8 +42,7 @@ class UserSubscriptionAdmin(admin.ModelAdmin):
 class TransactionAdmin(admin.ModelAdmin):
     """Admin class for the SubscriptionTransaction model."""
 
-if settings.DSF_ENABLE_ADMIN:
+if SETTINGS['enable_admin']:
     admin.site.register(models.SubscriptionPlan, SubscriptionPlanAdmin)
-    admin.site.register(models.PlanList, PlanListAdmin)
     admin.site.register(models.UserSubscription, UserSubscriptionAdmin)
     admin.site.register(models.SubscriptionTransaction, TransactionAdmin)
