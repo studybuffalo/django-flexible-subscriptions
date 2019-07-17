@@ -11,7 +11,7 @@ Admin Settings
 
 These are settings to control aspects of the Django admin support.
 
-``DSF_ENABLE_ADMIN``
+``DFS_ENABLE_ADMIN``
 ====================
 
 **Required:** ``False``
@@ -26,7 +26,7 @@ Currency Settings
 
 These are the settings to control aspects of currency repsentation.
 
-``DSF_CURRENCY_LOCALE``
+``DFS_CURRENCY_LOCALE``
 =======================
 
 **Required:** ``False``
@@ -62,7 +62,7 @@ allows you to easily specify the main site design for the provided
 Django Flexible Subscription views. The template must include a
 ``content`` block, which is what all the templates override.
 
-``DSF_SUBSCRIBE_VIEW``
+``DFS_SUBSCRIBE_VIEW``
 ======================
 
 **Required:** ``False``
