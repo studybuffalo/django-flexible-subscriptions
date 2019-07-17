@@ -1,5 +1,5 @@
 # pylint: disable=missing-docstring, invalid-name
-__version__ = '0.3.1'
+__version__ = '0.3.2'
 
 # Provide DepreciationWarning for older Django versions
 import warnings
