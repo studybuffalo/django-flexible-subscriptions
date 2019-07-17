@@ -6,6 +6,13 @@ Changelog
 Version 0 (Beta)
 ----------------
 
+0.3.2 (2019-Jul-17)
+===================
+
+Feature Updates
+---------------
+* Bug fixes with settings, sandbox site, and admin pages.
+
 0.3.1 (2019-Jul-02)
 ===================
 
