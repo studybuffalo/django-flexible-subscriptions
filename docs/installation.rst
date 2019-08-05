@@ -208,6 +208,16 @@ Once you have created you subscription plan, you can create your
 6. You can now visit ``/subscriptions/subscribe/`` to see your plan
    list.
 
+----------
+Next Steps
+----------
+
+If you completed all the steps above, you should now have a working
+subscription system on your development server. You will likely want
+to add payment handling and a task runner to automate subscription
+renewals and expiries. Instructions and examples for this can be found
+the :doc:`Advanced usage</advanced>` section.
+
 -----------------------------
 Considerations for Production
 -----------------------------
@@ -218,3 +228,7 @@ you will probably want to consider the following:
 * ``django-flexible-subscriptions`` comes with its own ``styles.css``
   file - you will need to ensure you run the ``collectstatic``
   management command if you have not overriden it with yoru own file.
+* The ``SubscribeView`` with this package is intended to be extended
+  to implement payment processing. The base view will automatically
+  approve all payment requests and should be overriden if this is not
+  the desired behaviour.
