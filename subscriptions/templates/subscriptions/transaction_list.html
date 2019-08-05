@@ -7,14 +7,18 @@
 
 {% block subscriptions_styles %}
   <style>
+    #dfs-container .dashboard-container .plan-table {
+      font-size: 1.2rem;
+    }
+
     @media screen and (min-width: 48em) {
-      #dfs-container .table-header {
+      #dfs-container .dashboard-container .table-header {
         display: grid;
         grid-template-columns: 3fr 4fr 4fr 2fr;
         grid-template-rows: auto;
       }
 
-      #dfs-container .table-body {
+      #dfs-container .dashboard-container .table-body {
         display: grid;
         grid-template-columns: 3fr 4fr 4fr 2fr;
         grid-template-rows: auto;
