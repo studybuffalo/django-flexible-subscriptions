@@ -6,7 +6,16 @@ Changelog
 Version 0 (Beta)
 ----------------
 
+0.4.1 (2019-Aug-05)
+===================
+
+Bug Fixes
+---------
+
+* Adding ``styles.css`` to package data.
+
 0.4.0 (2019-Aug-05)
+===================
 
 Feature Updates
 ---------------
