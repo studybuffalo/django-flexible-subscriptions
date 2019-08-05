@@ -24,8 +24,6 @@ class UserSubscriptionAdmin(admin.ModelAdmin):
     """Admin class for the UserSubscription model."""
     fields = [
         'user',
-        'plan',
-        'payment_method',
         'date_billing_start',
         'date_billing_end',
         'date_billing_last',
@@ -35,7 +33,6 @@ class UserSubscriptionAdmin(admin.ModelAdmin):
     ]
     list_display = [
         'user',
-        'plan',
         'date_billing_last',
         'date_billing_next',
         'active',

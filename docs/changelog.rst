@@ -6,15 +6,31 @@ Changelog
 Version 0 (Beta)
 ----------------
 
-0.4.0 (2019-Feb-12)
-===================
+0.4.0 (2019-Aug-05)
 
 Feature Updates
 ---------------
 
 * Adding responsive styling to all base HTML templates.
 
-0.3.0 (2019-Feb-11)
+0.3.2 (2019-Jul-17)
+===================
+
+Bug Fixes
+---------
+
+* Bug fixes with settings, sandbox site, and admin pages.
+
+
+0.3.1 (2019-Jul-02)
+===================
+
+Feature Updates
+---------------
+
+* Adding Australian Dollars to available currencies.
+
+0.3.0 (2019-Jan-30)
 ===================
 
 Feature Updates
