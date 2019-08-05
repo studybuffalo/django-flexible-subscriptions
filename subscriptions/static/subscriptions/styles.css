@@ -1,0 +1,452 @@
+/* Basic Styles For All Templates */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#dfs-container {
+  color: rgb(25, 25, 25);
+  font-family: 'Telex', sans-serif;
+  font-size: 1.5rem;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;;
+  width: 100%;
+}
+
+  #dfs-container .errorlist {
+    color: rgb(150, 10, 10);
+    font-size: 1.25rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+/* Styles for Subscribe Page Templates */
+  #dfs-container .subscribe-container {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem;
+    min-width: 300px;
+    width: 100%;
+    max-width: 48em;
+  }
+
+    #dfs-container .subscribe-container h1 {
+      color: rgb(50, 160, 175);
+      text-align: center;
+      width: 100%;
+    }
+
+    #dfs-container .subscribe-container h2 {
+      color: rgb(50, 160, 175);
+      font-size: 1.75rem;
+      width: 100%;
+    }
+
+    #dfs-container .subscribe-container .subtitle {
+      font-size: 1.25rem;
+      text-align: center;
+      width: 100%;
+    }
+
+    #dfs-container .subscribe-container .header {
+      padding: 0.5rem 0;
+    }
+
+    #dfs-container .subscribe-container .plans {
+      align-items: flex-start;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0.5rem 0;
+      width: 100%;
+    }
+
+    #dfs-container .subscribe-container .plan {
+      align-items: center;
+      border: 1px solid rgb(50, 160, 175);
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      margin: 1rem 0;
+      max-width: 400px;
+      padding: 1rem;
+      width: 100%;
+    }
+
+      #dfs-container .subscribe-container .plan button {
+        background: none;
+        background-color: transparent;
+        border: 1px solid rgb(50, 160, 175);
+        box-shadow: none;
+        color: rgb(50, 160, 175);
+        cursor: pointer;
+        font-size: 1.5rem;
+        font-weight: 500;
+        margin: 1rem 0;
+        padding: 0.5rem 1rem;
+      }
+
+      #dfs-container .subscribe-container .plan button:hover {
+        border: 1px solid rgb(10, 90, 100);
+        color: rgb(10, 90, 100);
+      }
+
+    #dfs-container .subscribe-container .button {
+      border: 1px solid rgb(50, 160, 175);
+      box-shadow: none;
+      color: rgb(50, 160, 175);
+      cursor: pointer;
+      font-size: 1.5rem;
+      margin: 1rem 0;
+      padding: 0.5rem 1rem;
+      text-decoration: none;
+    }
+
+      #dfs-container .subscribe-container .button:hover {
+        border: 1px solid rgb(10, 90, 100);
+        color: rgb(10, 90, 100);
+      }
+
+    #dfs-container .subscribe-container .footer {
+      padding: 0.5rem 0;
+    }
+
+    #dfs-container .subscribe-container .plan-costs {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+      #dfs-container .subscribe-container .plan-costs label {
+        cursor: pointer;
+      }
+
+    #dfs-container .subscribe-container .subscribe-form {
+      padding: 1rem 0;
+    }
+
+      #dfs-container .subscribe-container .subscribe-form button {
+        background: none;
+        background-color: transparent;
+        border: 1px solid rgb(50, 160, 175);
+        box-shadow: none;
+        color: rgb(50, 160, 175);
+        cursor: pointer;
+        font-size: 1.5rem;
+        font-weight: 500;
+        margin: 1rem 0;
+        padding: 0.5rem 1rem;
+      }
+
+        #dfs-container .subscribe-container .subscribe-form button:hover {
+          border: 1px solid rgb(10, 90, 100);
+          color: rgb(10, 90, 100);
+        }
+
+    #dfs-container .subscribe-container .form-field {
+      padding: 0.5rem 1rem;
+    }
+
+      #dfs-container .subscribe-container .form-field input {
+        display: block;
+        font-size: 1.5rem;
+      }
+
+      #dfs-container .subscribe-container .form-field-label {
+        display: block;
+        font-size: 1rem;
+        padding: 0.25rem 0;
+      }
+
+    #dfs-container .subscribe-container #id_plan_cost {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+      #dfs-container .subscribe-container #id_plan_cost li {
+        margin: 0.5rem 0;
+      }
+
+      #dfs-container .subscribe-container #id_plan_cost label {
+        cursor: pointer;
+      }
+
+    #dfs-container .subscribe-container .form-buttons {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+
+  #dfs-container .subscribe-container .confirmation-details {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+    #dfs-container .subscribe-container .confirmation-details li {
+      margin: 1rem 0;
+    }
+
+    #dfs-container .subscribe-container .confirmation-details strong {
+      display: block;
+      font-size: 1rem;
+    }
+
+    #dfs-container .subscribe-container .confirmation-details span {
+      display: block;
+    }
+
+  /* Styles for Developer Dashboard Page Templates */
+  #dfs-container .dashboard-container {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: min-content min-content auto auto;
+    grid-template-areas:
+      "header"
+      "nav"
+      "main";
+    min-height: 100%;
+    width: 100%;
+    max-width: 100%;
+  }
+
+    #dfs-container .dashboard-container header {
+      background-color: rgb(235, 235, 235);
+      box-sizing: border-box;
+      color: rgb(100, 100, 100);
+      grid-area: header;
+    }
+
+    #dfs-container .dashboard-container h1 {
+      font-size: 2.25rem;
+      margin: 0;
+      padding: 0.5rem;
+    }
+
+    #dfs-container .dashboard-container h2 {
+      margin: 0;
+      padding: 1rem 0;
+    }
+
+    #dfs-container .dashboard-container .subtitle {
+      display: block;
+      margin: 0;
+      padding: 1rem 0.5rem 0.5rem 0.5rem;
+    }
+
+    #dfs-container .dashboard-container nav {
+      background-color: rgb(255, 255, 255);
+      border-right: 2px solid rgb(235, 235, 235);
+      color: rgb(25, 25, 25);
+      grid-area: nav;
+      margin: 0;
+      padding: 0;
+    }
+
+      #dfs-container .dashboard-container nav ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      #dfs-container .dashboard-container nav li {
+        margin: 0;
+        padding: 0;
+      }
+
+      #dfs-container .dashboard-container nav a {
+        border-left: 4px solid rgb(255, 255, 255);
+        border-bottom: 1px solid rgb(235, 235, 235);
+        box-sizing: border-box;
+        color: inherit;
+        display: block;
+        font-size: 1.5rem;
+        font-weight: 400;
+        padding: 1rem 0.5rem;
+        text-decoration: none;
+      }
+
+        #dfs-container .dashboard-container nav a:hover {
+          border-left: 4px solid rgb(50, 160, 175);
+          color: rgb(50, 160, 175);
+        }
+
+        #dfs-container .dashboard-container nav a.selected {
+          border-left: 4px solid rgb(50, 160, 175);
+          color: rgb(50, 160, 175);
+        }
+
+    #dfs-container .dashboard-container input {
+      box-sizing: border-box;
+      font-size: 1.5rem;
+      padding: 0.25rem 0.5rem;
+      width: 100%;
+    }
+
+      #dfs-container .dashboard-container input:focus {
+        border: 1px solid rgb(50, 160, 175);
+      }
+
+      #dfs-container .dashboard-container input[type="submit"] {
+        background-color: transparent;
+        cursor: pointer;
+        font-weight: 500;
+        width: auto;
+      }
+
+    #dfs-container .dashboard-container select {
+      font-size: 1.5rem;
+    }
+
+    #dfs-container .dashboard-container main {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 1rem 2rem;
+      grid-area: main;
+    }
+
+      #dfs-container .dashboard-container main a {
+        color: rgb(50, 160, 175);
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+        #dfs-container .dashboard-container main a:hover {
+          color: rgb(10, 90, 100);
+        }
+
+    #dfs-container .dashboard-container .breadcrumb {
+      font-size: 1rem;
+    }
+
+    #dfs-container .dashboard-container .button-positive {
+      border: 1px solid  rgb(50, 160, 175);
+      box-sizing: border-box;
+      border-radius: 5px;
+      color:  rgb(50, 160, 175);
+      display: inline-block;
+      font-size: 1rem;
+      font-weight: 500;
+      margin: 0.25rem 0;
+      min-width: 120px;
+      padding: 0.5rem;
+      text-align: center;
+    }
+
+      #dfs-container .dashboard-container .button-positive:hover {
+        border-color: rgb(10, 90, 100);
+        color: rgb(10, 90, 100);
+      }
+
+    #dfs-container .dashboard-container .button-negative {
+      border: 1px solid rgb(150, 10, 10);
+      box-sizing: border-box;
+      border-radius: 5px;
+      color: rgb(150, 10, 10);
+      display: inline-block;
+      font-size: 1rem;
+      font-weight: 500;
+      margin: 0.25rem 0;
+      min-width: 120px;
+      padding: 0.5rem;
+      text-align: center;
+    }
+
+      #dfs-container .dashboard-container .button-negative:hover {
+        border-color: rgb(80, 10, 10);
+        color: rgb(80, 10, 10);
+      }
+
+    #dfs-container .dashboard-container .pagination {
+      margin: 0.5rem 0;
+    }
+
+    #dfs-container .dashboard-container .plan-table {
+      margin: 1rem 0;
+    }
+
+    #dfs-container .dashboard-container .table-header {
+      display: none;
+      font-weight: 700;
+      padding: 0.5rem 1rem;
+    }
+
+      #dfs-container .dashboard-container .table-header > div {
+        padding: 0 0.5rem;
+      }
+
+    #dfs-container .dashboard-container .table-body {
+      padding: 0.5rem 1rem;
+    }
+
+      #dfs-container .dashboard-container .table-body > div {
+        margin: 1rem 0;
+        padding: 0 0.5rem;
+      }
+
+      #dfs-container .dashboard-container .table-body:nth-child(even) {
+        background-color: rgb(245, 245, 245);
+      }
+
+    #dfs-container .dashboard-container .table-title {
+      display: block;
+      font-size: 1rem;
+      font-weight: 700;
+      margin: 0.25rem 0;
+    }
+
+    #dfs-container .dashboard-container .form-field {
+      margin: 0.5rem 0;
+      max-width: 600px;
+    }
+
+      #dfs-container .dashboard-container .form-field-label {
+        display: block;
+        font-size: 1rem;
+        font-weight: 700;
+        padding: 0.25rem 0;
+      }
+
+      #dfs-container .dashboard-container .form-field-help-text {
+        display: block;
+        font-size: 1rem;
+        font-style: italic;
+        padding: 0.5rem 0;
+      }
+
+@media screen and (min-width: 64em) {
+  /* Subscription Template Styles */
+  #dfs-container .subscribe-container .plans {
+    align-items: stretch;
+    flex-direction: row;
+  }
+
+  #dfs-container .subscribe-container .plan {
+    margin: 1rem 0.5rem;
+  }
+
+  /* Developer Dashboard Template Styles */
+  #dfs-container .dashboard-container {
+    display: grid;
+    grid-template-columns: 12em auto;
+    grid-template-rows: 8rem auto;
+    grid-template-areas:
+      "header header"
+      "nav main";
+    width: 100%;
+  }
+
+    #dfs-container .dashboard-container .table-title {
+      display: none;
+    }
+
+}

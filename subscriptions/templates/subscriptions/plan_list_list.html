@@ -1,59 +1,66 @@
-{% extends template_extends %}
+{% extends 'subscriptions/base_developer.html' %}
 
 {% load i18n %}
 {% load currency_filters %}
 
-{% block content %}
-  <h1>Plan Lists</h1>
+{% block title %}DFS Dashboard | Plan Lists{% endblock %}
 
-  {% if messages %}
-    <ul class="messages">
-      {% for message in messages %}
-        <li class="{{ message.tags }}">{{ message }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
+{% block subscriptions_styles %}
+  <style>
+    @media screen and (min-width: 64em) {
+      #dfs-container .dashboard-container .table-header {
+        display: grid;
+        grid-template-columns: 2fr 1fr 2fr;
+        grid-template-rows: auto;
+      }
 
-  <div>
-    <a href="{% url 'dfs_dashboard' %}">Back to dashboard</a>
+      #dfs-container .dashboard-container .table-body {
+        display: grid;
+        grid-template-columns: 2fr 1fr 2fr;
+        grid-template-rows: auto;
+      }
+    }
+  </style>
+{% endblock %}
+
+{% block main %}
+  <div class="breadcrumb">
+    <a href="{% url 'dfs_dashboard' %}">Developer Dashboard</a>
+    > Plan Lists
   </div>
 
-  <div>
-    <a href="{% url 'dfs_plan_list_create' %}">Create new plan list</a>
-  </div>
+  <h2>Plan Lists</h2>
+
+  {% include 'subscriptions/snippets/messages.html' %}
+
+  <a class="button-positive" href="{% url 'dfs_plan_list_create' %}">Create new plan list</a>
 
   {% if plan_lists %}
-    <table>
-      <thead>
-        <tr>
-          <th>{% trans "Plan list title" %}</th>
-          <th>{% trans "Active?" %}</th>
-          <th></th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
+    <div class="plan-table">
+      <div class="table-header">
+        <div>{% trans "Plan list title" %}</div>
+        <div>{% trans "Active?" %}</div>
+      </div>
+
         {% for plan_list in plan_lists %}
-          <tr>
-            <td>{{ plan_list.title }}</td>
-            <td>{{ plan_list.active }}</td>
-            <td>
-              <a href="{% url 'dfs_plan_list_detail_list' plan_list.id %}">
-                {% trans "Manage plans" %}
-              </a>
-            </td>
-            <td>
-              <a href="{% url 'dfs_plan_list_update' plan_list.id %}">
-                {% trans "Edit" %}
-              </a>
-            </td>
-            <td>
-              <a href="{% url 'dfs_plan_list_delete' plan_list.id %}">
-                {% trans "Delete" %}
-              </a>
-            </td>
-          </tr>
+          <div class="table-body">
+            <div>
+              <span class="table-title">{% trans "Plan list title" %}</span>
+              {{ plan_list.title }}
+            </div>
+            <div>
+              <span class="table-title">{% trans "Active?" %}</span>
+              {{ plan_list.active }}
+            </div>
+            <div>
+              <a class="button-positive" href="{% url 'dfs_plan_list_detail_list' plan_list.id %}">{% trans "Manage plans" %}</a>
+              <a class="button-positive" href="{% url 'dfs_plan_list_update' plan_list.id %}">{% trans "Edit" %}</a>
+              <a class="button-negative" href="{% url 'dfs_plan_list_delete' plan_list.id %}">{% trans "Delete" %}</a>
+            </div>
+          </div>
         {% endfor %}
+
+        <a class="button-positive" href="{% url 'dfs_plan_list_create' %}">Create new plan list</a>
       </tbody>
     </table>
   {% else %}

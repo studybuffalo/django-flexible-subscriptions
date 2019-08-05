@@ -141,7 +141,12 @@ def test_subscribe_view_redirect_anonymous(client):
 def test_subscribe_view_no_redirect_on_login(client, django_user_model):
     """Tests that logged in users are not redirected."""
     plan = create_plan()
-    post_data = {'action': '', 'plan_id': plan.id}
+    cost = create_cost(plan=plan)
+    post_data = {
+        'action': '',
+        'plan_id': plan.id,
+        'plan_cost': cost,
+    }
 
     django_user_model.objects.create_user(username='a', password='b')
     client.login(username='a', password='b')
@@ -182,9 +187,13 @@ def test_subscribe_view_get_template_names_override_confirmation_false():
 def test_subscribe_view_get_success_url():
     """Tests get_success_url method works as expected."""
     view = views.SubscribeView()
-    success_url = view.get_success_url()
+    success_url = view.get_success_url(
+        transaction_id='11111111-1111-4111-a111-111111111111'
+    )
 
-    assert success_url == '/subscriptions/'
+    assert success_url == (
+        '/subscribe/thank-you/11111111-1111-4111-a111-111111111111/'
+    )
 
 @pytest.mark.django_db
 def test_subscribe_view_get_405_response(admin_client):
@@ -197,10 +206,12 @@ def test_subscribe_view_get_405_response(admin_client):
 def test_subscribe_view_post_preview_200_response(admin_client):
     """Tests post returns 200 response on preview request."""
     plan = create_plan()
+    cost = create_cost(plan=plan)
 
     post_data = {
         'action': '',
         'plan_id': plan.id,
+        'plan_cost': cost,
     }
 
     response = admin_client.post(
@@ -215,10 +226,12 @@ def test_subscribe_view_post_preview_200_response(admin_client):
 def test_subscribe_view_post_preview_proper_page(admin_client):
     """Tests preview POST returns proper details."""
     plan = create_plan()
+    cost = create_cost(plan=plan)
 
     post_data = {
         'action': 'confirm',
         'plan_id': plan.id,
+        'plan_cost': cost,
     }
 
     response = admin_client.post(
@@ -238,9 +251,12 @@ def test_subscribe_view_post_preview_proper_page(admin_client):
 def test_subscribe_view_post_preview_added_context(admin_client):
     """Tests preview POST adds required forms to context."""
     plan = create_plan()
+    cost = create_cost(plan=plan)
+
     post_data = {
         'action': '',
         'plan_id': plan.id,
+        'plan_cost': cost,
     }
 
     response = admin_client.post(
@@ -294,11 +310,12 @@ def test_subscribe_view_post_preview_progress_to_confirmation(admin_client):
 def test_subscribe_view_post_preview_to_confirm_invalid(admin_client):
     """Tests invalid preview to confirmation POST returns to preview."""
     plan = create_plan()
+    cost = create_cost(plan=plan)
     post_data = {
         'action': 'confirm',
         'plan_id': plan.id,
-        'plan_cost': '',
-        'cardholder_name': 'a',
+        'plan_cost': cost,
+        'cardholder_name': '',
         'card_number': '1111222233334444',
         'card_expiry_month': '01',
         'card_expiry_year': '20',
@@ -356,10 +373,12 @@ def test_subscribe_view_post_preview_to_confirm_invalid_values(admin_client):
 def test_subscribe_view_post_confirmation_200_response(admin_client):
     """Tests post returns 200 response on confirmation request."""
     plan = create_plan()
+    cost = create_cost(plan=plan)
 
     post_data = {
         'action': 'confirm',
         'plan_id': plan.id,
+        'plan_cost': cost,
     }
 
     response = admin_client.post(
@@ -372,7 +391,7 @@ def test_subscribe_view_post_confirmation_200_response(admin_client):
 
 @pytest.mark.django_db
 def test_subscribe_view_post_confirm_to_process_valid(admin_client):
-    """Tests proper confirmation POST moves to process page."""
+    """Tests proper confirmation POST moves to success URL page."""
     plan = create_plan()
     cost = create_cost(plan=plan)
     post_data = {
@@ -399,17 +418,18 @@ def test_subscribe_view_post_confirm_to_process_valid(admin_client):
 
     url, _ = response.redirect_chain[-1]
 
-    assert url == '/subscriptions/'
+    assert '/subscribe/thank-you' in url
 
 @pytest.mark.django_db
 def test_subscribe_view_post_confirm_to_process_invalid(admin_client):
     """Tests invalid process POST returns to confirmation."""
     plan = create_plan()
+    cost = create_cost(plan=plan)
     post_data = {
         'action': 'process',
         'plan_id': plan.id,
-        'plan_cost': '',
-        'cardholder_name': 'a',
+        'plan_cost': cost.id,
+        'cardholder_name': '',
         'card_number': '1111222233334444',
         'card_expiry_month': '01',
         'card_expiry_year': '20',
@@ -427,11 +447,11 @@ def test_subscribe_view_post_confirm_to_process_invalid(admin_client):
         follow=True,
     )
 
-    assert response.context['confirmation'] is True
+    assert response.context['confirmation'] is False
 
     templates = [t.name for t in response.templates]
     assert (
-        'subscriptions/subscribe_confirmation.html' in templates
+        'subscriptions/subscribe_preview.html' in templates
     )
 
 @pytest.mark.django_db
@@ -509,10 +529,12 @@ def test_subscribe_view_post_confirm_payment_error(admin_client):
 def test_subscribe_view_post_process_200_response(admin_client):
     """Tests post returns 200 response on process request."""
     plan = create_plan()
+    cost = create_cost(plan=plan)
 
     post_data = {
         'action': 'process',
         'plan_id': plan.id,
+        'plan_cost': cost.id,
     }
 
     response = admin_client.post(
@@ -663,19 +685,40 @@ def test_subscribe_user_list_requires_user_owner(client, django_user_model):
 
 # SubscribeThankYouView Tests
 # ----------------------------------------------------------------------------
-def test_thank_you_view_redirect_anonymous(client):
+def test_thank_you_view_redirect_anonymous(client, django_user_model):
     """Tests that anonymous users are redirected to login page."""
-    response = client.get(reverse('dfs_subscribe_thank_you'), follow=True)
+    user = django_user_model.objects.create_user(username='a', password='b')
+    transaction = models.SubscriptionTransaction.objects.create(
+        user=user, amount='1.00', date_transaction=timezone.now()
+    )
+    response = client.get(
+        reverse(
+            'dfs_subscribe_thank_you',
+            kwargs={'transaction_id': transaction.id},
+        ),
+        follow=True,
+    )
     redirect_url, redirect_code = response.redirect_chain[-1]
 
     assert redirect_code == 302
-    assert redirect_url == '/accounts/login/?next=/subscribe/thank-you/'
+    assert redirect_url == (
+        '/accounts/login/?next=/subscribe/thank-you/{}/'.format(transaction.id)
+    )
 
 def test_thank_you_view_no_redirect_on_login(client, django_user_model):
     """Tests that logged in users are not redirected."""
-    django_user_model.objects.create_user(username='a', password='b')
+    user = django_user_model.objects.create_user(username='a', password='b')
     client.login(username='a', password='b')
-    response = client.get(reverse('dfs_subscribe_thank_you'), follow=True)
+    transaction = models.SubscriptionTransaction.objects.create(
+        user=user, amount='1.00', date_transaction=timezone.now()
+    )
+    response = client.get(
+        reverse(
+            'dfs_subscribe_thank_you',
+            kwargs={'transaction_id': transaction.id},
+        ),
+        follow=True,
+    )
 
     assert response.status_code == 200
 
@@ -687,8 +730,9 @@ def test_thank_you_view_returns_object(client, django_user_model):
         user=user, amount='1.00', date_transaction=timezone.now()
     )
     client.login(username='a', password='b')
-    response = client.get('{}?transaction_id={}'.format(
-        reverse('dfs_subscribe_thank_you'), transaction.id))
+    response = client.get(reverse(
+        'dfs_subscribe_thank_you', kwargs={'transaction_id': transaction.id}
+    ))
 
     assert response.status_code == 200
 
@@ -699,8 +743,9 @@ def test_thank_you_view_adds_context(client, django_user_model):
         user=user, amount='1.00', date_transaction=timezone.now()
     )
     client.login(username='a', password='b')
-    response = client.get('{}?transaction_id={}'.format(
-        reverse('dfs_subscribe_thank_you'), transaction.id))
+    response = client.get(reverse(
+        'dfs_subscribe_thank_you', kwargs={'transaction_id': transaction.id}
+    ))
 
     assert 'transaction' in response.context
     assert response.context['transaction'] == transaction
@@ -735,7 +780,7 @@ def test_cancel_view_no_redirect_on_login(client, django_user_model):
 
 def test_cancel_view_get_success_url():
     """Tests that get_success_url works properly."""
-    view = views.SubscribeView()
+    view = views.SubscribeCancelView()
     assert view.get_success_url() == '/subscriptions/'
 
 @pytest.mark.django_db

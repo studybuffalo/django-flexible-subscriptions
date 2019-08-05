@@ -1,0 +1,30 @@
+{% load i18n %}
+<nav>
+  <ul>
+    <li>
+        <a href="{% url 'dfs_plan_list' %}" {% if plans or plan%}class="selected"{% endif %}>
+          {% trans 'Subscription plans' %}
+      </a>
+    </li>
+    <li>
+      <a href="{% url 'dfs_tag_list' %}" {% if tags or tag %}class="selected"{% endif %}>
+        {% trans 'Tags' %}
+      </a>
+    </li>
+    <li>
+      <a href="{% url 'dfs_plan_list_list' %}" {% if plan_lists or plan_list %}class="selected"{% endif %}>
+        {% trans 'Plan lists' %}
+      </a>
+    </li>
+    <li>
+      <a href="{% url 'dfs_subscription_list' %}" {% if users or subscription %}class="selected"{% endif %}>
+        {% trans 'User subscriptions' %}
+      </a>
+    </li>
+    <li>
+      <a href="{% url 'dfs_transaction_list' %}" {% if transactions or transaction %}class="selected"{% endif %}>
+        {% trans 'Payment transactions' %}
+      </a>
+    </li>
+  </ul>
+</nav>

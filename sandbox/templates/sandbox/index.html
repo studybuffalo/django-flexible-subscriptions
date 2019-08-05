@@ -5,37 +5,88 @@
 <html>
   <head>
     <title>Django Flexible Subscriptions Sandbox Site</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+      body {
+        color: rgb(25, 25, 25);
+        font-family: Helvetica, Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      h1 {
+        background-color: rgb(235, 235, 235);
+        color: rgb(100, 100, 100);
+        display: block;
+        margin: 0;
+        padding: 2rem;
+      }
+      .content-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+      }
+
+      .menu-list {
+        display: flex;
+        flex-direction: column;
+        list-style: none;
+        list-style-type: none;
+        margin: 1rem 0;
+        padding: 0;
+      }
+
+        .menu-list li {
+          margin: 1rem;
+        }
+
+        .menu-list a {
+          border: 1px solid rgb(50, 160, 175);
+          box-sizing: border-box;
+          color: rgb(50, 160, 175);
+          display: block;
+          font-size: 1.5rem;
+          padding: 1.5rem;
+          text-decoration: none;
+          width: 100%;
+        }
+
+          .menu-list a:hover {
+            border-color: rgb(10, 90, 100);
+            color: rgb(10, 90, 100);
+            cursor: pointer;
+          }
+    </style>
   </head>
+
   <body>
     <h1>Django Flexible Subscriptions Sandbox Site</h1>
 
-    {% if messages %}
-      <ul class="messages">
-        {% for message in messages %}
-          <li {% if message.tags %}class="{{ message.tags }}"{% endif %}>
-            {{ message }}
-          </li>
-        {% endfor %}
-      </ul>
-    {% endif %}
-
-    <ul>
-      {% if user.is_authenticated %}
-        <li><a href="{% url 'logout' %}">Logout</a></li>
-      {% else %}
-        <li><a href="{% url 'login' %}">Login</a></li>
-      {% endif %}
-      <li>
-        <a href="{% url 'dfs_dashboard' %}">
-          Django Flexible Subscriptions Developer Dashboard
-        </a>
-      </li>
-      <li>
-          <a href="{% url 'dfs_subscribe_list' %}">
-            Django Flexible Subscriptions Subscribe Page
+    <div class="content-container">
+      <ul class="menu-list">
+        {% if user.is_authenticated %}
+          <li><a href="{% url 'logout' %}">Logout</a></li>
+        {% else %}
+          <li><a href="{% url 'login' %}">Login</a></li>
+        {% endif %}
+        <li>
+          <a href="{% url 'dfs_dashboard' %}">
+            Developer Dashboard
           </a>
         </li>
-    </ul>
-
+        <li>
+          <a href="{% url 'dfs_subscribe_list' %}">
+            Plan List Subscribe Page
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'dfs_subscribe_user_list' %}">
+            User Subscription Management
+          </a>
+        </li>
+      </ul>
+    </div>
   </body>
 </html>

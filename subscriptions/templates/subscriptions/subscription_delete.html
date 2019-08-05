@@ -1,39 +1,35 @@
-{% extends template_extends %}
+{% extends 'subscriptions/base_developer.html' %}
 
 {% load i18n %}
 
-{% block content %}
-  <h1>User Subscription Deletion</h1>
+{% block title %}DFS Dashboard | Delete User Subscription{% endblock %}
 
-  {% if messages %}
-    <ul class="messages">
-      {% for message in messages %}
-        <li class="{{ message.tags }}">{{ message }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
+{% block main %}
+  <div class="breadcrumb">
+    <a href="{% url 'dfs_dashboard' %}">Developer Dashboard</a>
+    > <a href="{% url 'dfs_subscription_list' %}">User Subscriptions</a>
+    > Delete User Subscription
+  </div>
 
-  <p>
-    <strong>Are you sure you want to delete this user subscription?</strong>
+  <h2>Delete User Subscription</h2>
 
-    <ul>
-      <li><strong>User: </strong>{{ subscription.user }}</li>
-      <li><strong>Plan: </strong>{{ subscription.plan }}</li>
-      <li><strong>Billing start date: </strong>{{ subscription.date_billing_start }}</li>
-      <li><strong>Billing end date: </strong>{{ subscription.date_billing_end }}</li>
-      <li><strong>Last billing date: </strong>{{ subscription.date_billing_last }}</li>
-      <li><strong>Next billing date: </strong>{{ subscription.date_billing_next }}</li>
-      <li><strong>Active?: </strong>{{ subscription.active }}</li>
-      <li><strong>Cancelled?: </strong>{{ subscription.cancelled }}</li>
-    </ul>
-  </p>
+  <div>Are you sure you want to delete this user subscription?</div>
+
+  <blockquote>
+    <strong>User:</strong> {{ subscription.user }}<br>
+    <strong>Plan:</strong> {{ subscription.plan }}<br>
+    <strong>Billing start date:</strong> {{ subscription.date_billing_start }}<br>
+    <strong>Billing end date:</strong> {{ subscription.date_billing_end }}<br>
+    <strong>Last billing date:</strong> {{ subscription.date_billing_last }}<br>
+    <strong>Next billing date:</strong> {{ subscription.date_billing_next }}<br>
+    <strong>Active?:</strong> {{ subscription.active }}<br>
+    <strong>Cancelled?:</strong> {{ subscription.cancelled }}
+  </blockquote>
 
   <form method="POST">
     {% csrf_token %}
-    <input type="submit" value="Delete">
+    <input class="button-negative" type="submit" value="Delete">
   </form>
 
-  <div>
-    <a href="{% url 'dfs_subscription_list' %}">Cancel</a>
-  </div>
+  <a class="button-positive" href="{% url 'dfs_subscription_list' %}">Cancel</a>
 {% endblock %}

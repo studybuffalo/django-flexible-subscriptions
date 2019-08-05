@@ -396,7 +396,7 @@ class TransactionListView(PermissionRequiredMixin, abstract.ListView):
     permission_required = 'subscriptions.subscriptions'
     raise_exception = True
     context_object_name = 'transactions'
-    paginate_by = 100
+    paginate_by = 50
     template_name = 'subscriptions/transaction_list.html'
 
 class TransactionDetailView(PermissionRequiredMixin, abstract.DetailView):
@@ -553,6 +553,16 @@ class PlanListDetailDeleteView(PermissionRequiredMixin, abstract.DeleteView):
     success_message = 'Subscription plan successfully removed from plan list'
     template_name = 'subscriptions/plan_list_detail_delete.html'
 
+    def get_context_data(self, **kwargs):
+        """Extend context to include the parent PlanList object."""
+        context = super().get_context_data(**kwargs)
+
+        context['plan_list'] = get_object_or_404(
+            models.PlanList, id=self.kwargs.get('plan_list_id', None)
+        )
+
+        return context
+
     def delete(self, request, *args, **kwargs):
         """Override delete to allow success message to be added."""
         messages.success(self.request, self.success_message)
@@ -630,7 +640,7 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
     confirmation = False
     payment_form = forms.PaymentForm
     subscription_plan = None
-    success_url = 'dfs_subscribe_user_list'
+    success_url = 'dfs_subscribe_thank_you'
     template_preview = 'subscriptions/subscribe_preview.html'
     template_confirmation = 'subscriptions/subscribe_confirmation.html'
 
@@ -659,9 +669,9 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
 
         return conf_templates if self.confirmation else prev_templates
 
-    def get_success_url(self):
+    def get_success_url(self, **kwargs):
         """Returns the success URL."""
-        return reverse_lazy(self.success_url)
+        return reverse_lazy(self.success_url, kwargs=kwargs)
 
     def get(self, request, *args, **kwargs):
         """Returns 404 error as this method is not implemented."""
@@ -702,9 +712,9 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
 
         # Forms to collect subscription details
         context['plan_cost_form'] = forms.SubscriptionPlanCostForm(
-            subscription_plan=self.subscription_plan
+            request.POST, subscription_plan=self.subscription_plan
         )
-        context['payment_form'] = self.payment_form()
+        context['payment_form'] = self.payment_form(request.POST)
 
         return self.render_to_response(context)
 
@@ -721,7 +731,7 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
         payment_form = self.payment_form(request.POST)
 
         # Validate form submission
-        if payment_form.is_valid() and plan_cost_form.is_valid():
+        if all([payment_form.is_valid(), plan_cost_form.is_valid()]):
             self.confirmation = True
             context = self.get_context_data(**kwargs)
 
@@ -729,15 +739,15 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
             context['plan_cost_form'] = self.hide_form(plan_cost_form)
             context['payment_form'] = self.hide_form(payment_form)
 
+            # Add the PlanCost instance to context for use in template
+            context['plan_cost'] = models.PlanCost.objects.get(
+                id=plan_cost_form.cleaned_data['plan_cost']
+            )
+
             return self.render_to_response(context)
 
         # Invalid form submission - render preview again
-        self.confirmation = False
-        context = self.get_context_data(**kwargs)
-        context['plan_cost_form'] = plan_cost_form
-        context['payment_form'] = payment_form
-
-        return self.render_to_response(context)
+        return self.render_preview(request, **kwargs)
 
     def process_subscription(self, request, **kwargs):
         """Moves forward with payment & subscription processing.
@@ -751,7 +761,7 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
         )
         payment_form = self.payment_form(request.POST)
 
-        if payment_form.is_valid() and plan_cost_form.is_valid():
+        if all([payment_form.is_valid(), plan_cost_form.is_valid()]):
             # Attempt to process payment
             payment_transaction = self.process_payment(
                 payment_form=payment_form,
@@ -765,23 +775,22 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
                 )
 
                 # Record the transaction details
-                self.record_transaction(
+                transaction = self.record_transaction(
                     subscription,
                     self.retrieve_transaction_date(payment_transaction)
                 )
 
-                return HttpResponseRedirect(self.get_success_url())
+                return HttpResponseRedirect(
+                    self.get_success_url(transaction_id=transaction.id)
+                )
 
             # Payment unsuccessful, add message for confirmation page
             messages.error(request, 'Error processing payment')
 
-        # Invalid form submission/payment - render confirmation again
-        self.confirmation = True
-        context = self.get_context_data(**kwargs)
-        context['plan_cost_form'] = self.hide_form(plan_cost_form)
-        context['payment_form'] = self.hide_form(payment_form)
+        # Invalid form submission/payment - render preview again
+        return self.render_confirmation(request, **kwargs)
 
-        return self.render_to_response(context)
+        #return self.render_to_response(context)
 
     def hide_form(self, form):
         """Replaces form widgets with hidden inputs.
@@ -897,7 +906,7 @@ class SubscribeThankYouView(LoginRequiredMixin, abstract.TemplateView):
         """Returns the provided transaction instance."""
         try:
             return models.SubscriptionTransaction.objects.get(
-                id=self.request.GET.get('transaction_id', None),
+                id=self.kwargs['transaction_id'],
                 user=self.request.user,
             )
         except models.SubscriptionTransaction.DoesNotExist:

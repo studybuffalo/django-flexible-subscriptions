@@ -1,0 +1,13 @@
+{% extends template_extends %}
+
+{% load i18n %}
+
+{% block content %}
+  <div class="dashboard-container">
+    {% include 'subscriptions/snippets/header.html' %}
+
+    {% include 'subscriptions/snippets/menu.html' %}
+
+    <main>{% block main %}{% endblock %}</main>
+  </div>
+{% endblock %}

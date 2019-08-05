@@ -22,6 +22,7 @@ def create_cost(plan=None, period=1, unit=6, cost='1.00'):
 def test_subscription_plan_cost_form_with_plan():
     """Tests minimal creation of SubscriptionPlanCostForm."""
     plan = create_plan()
+    create_cost(plan=plan)
 
     try:
         forms.SubscriptionPlanCostForm(subscription_plan=plan)
