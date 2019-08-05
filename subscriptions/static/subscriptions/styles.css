@@ -423,7 +423,7 @@ html, body {
         padding: 0.5rem 0;
       }
 
-@media screen and (min-width: 48em) {
+@media screen and (min-width: 64em) {
   /* Subscription Template Styles */
   #dfs-container .subscribe-container .plans {
     align-items: top;
