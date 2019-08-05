@@ -59,7 +59,7 @@ html, body {
     }
 
     #dfs-container .subscribe-container .plans {
-      align-items: stretch;
+      align-items: flex-start;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
@@ -426,7 +426,7 @@ html, body {
 @media screen and (min-width: 64em) {
   /* Subscription Template Styles */
   #dfs-container .subscribe-container .plans {
-    align-items: top;
+    align-items: stretch;
     flex-direction: row;
   }
 
