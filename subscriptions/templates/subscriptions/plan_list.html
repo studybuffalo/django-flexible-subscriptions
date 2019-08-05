@@ -11,17 +11,13 @@
       font-size: 1.2rem;
     }
 
-    #dfs-container .dashboard-container .plan-name {
-      font-weight: 700;
-    }
-
     #dfs-container .dashboard-container .plan-costs {
       margin: 0;
       padding: 0;
     }
 
       #dfs-container .dashboard-container .plan-costs li {
-        margin: 0.25rem 0;
+        margin: 0.25rem 0 0.25rem 1.5rem;
         padding: 0;
       }
 
@@ -30,10 +26,6 @@
         display: grid;
         grid-template-columns: 2fr 3fr 2fr 3fr 2fr;
         grid-template-rows: auto;
-      }
-
-      #dfs-container .dashboard-container .table-title {
-        display: none;
       }
 
       #dfs-container .table-body {
@@ -70,7 +62,7 @@
         <div class="table-body">
           <div>
             <span class="table-title">{% trans "Plan name" %}</span>
-            <span class="plan-name">{{ plan.plan_name }}</span>
+            {{ plan.plan_name }}
           </div>
           <div>
             <span class="table-title">{% trans "Description" %}</span>
