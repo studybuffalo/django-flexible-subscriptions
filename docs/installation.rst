@@ -106,17 +106,17 @@ grant a user permissions with a subscription, you may ignore the
 A subscription ``Plan`` contains the following details to dictate
 how it functions:
 
-    * **Plan name**: The name of the subscription plan. This will be
-      displayed to the end user in various views.
-    * **Plan description**: An optional internal description to help
-      describe or differentiate the plan for the developer. The end user
-      does not see this.
-    * **Group**: The ``Group`` model(s) associated to this plan.
-    * **Tag**: Custom tags associated with this plan. Can be used to
-      organize or categorize related plans.
-    * **Grade period**: The number of days a subscription will remain
-      active for a user after a plan ends (e.g. due to non-payment).
-    * **Plan cost**: Describes the pricing details of the plan.
+* **Plan name**: The name of the subscription plan. This will be
+  displayed to the end user in various views.
+* **Plan description**: An optional internal description to help
+  describe or differentiate the plan for the developer. The end user
+  does not see this.
+* **Group**: The ``Group`` model(s) associated to this plan.
+* **Tag**: Custom tags associated with this plan. Can be used to
+  organize or categorize related plans.
+* **Grade period**: The number of days a subscription will remain
+  active for a user after a plan ends (e.g. due to non-payment).
+* **Plan cost**: Describes the pricing details of the plan.
 
 One or more ``PlanCost`` models may be associated to a ``Plan``. This
 allows you to offer the same plan at difference prices depending on
@@ -125,12 +125,12 @@ discounted price when the user subscribes for a longer period of time
 (e.g. annually instead of monthly). A ``PlanCost`` will contain the
 following details:
 
-    * **Recurrence period**: How often the plan is billed per
-      recurrence unit.
-    * **Recurrence unit**: The unit of measurement for the recurrence
-      period. ``one-time``, ``second``, ``minute``, ``hour``, ``day``,
-      ``week``, ``month``, and ``year`` are supported.
-    * **Cost**: The amount to charge at each recurrence period.
+* **Recurrence period**: How often the plan is billed per recurrence
+  unit.
+* **Recurrence unit**: The unit of measurement for the recurrence
+  period. ``one-time``, ``second``, ``minute``, ``hour``, ``day``,
+  ``week``, ``month``, and ``year`` are supported.
+* **Cost**: The amount to charge at each recurrence period.
 
 -------------------------
 Setup a Subscription Plan
@@ -151,6 +151,62 @@ able to add your first subscription.
 ``/subscriptions/dfs/plans/``. Click on the **Create new plan** button.
 
 3. Fill in the plan details and click the **Save** button.
+
+--------------------------------------
+Understanding a Subscription Plan List
+--------------------------------------
+
+Django Flexible Subscriptions provides basic support to add a
+"Subscribe" page to your site to allow users to select a subscription
+plan. The plans listed on this page are controlled by the ``PlanList``
+model. The ``PlanList`` model includes the following details:
+
+* **Title**: A title to display on the page (may include HTML content).
+* **Subttile**: A subtitle to display on the page (may include HTML
+  content).
+* **Header**: Content to display before the subscription plans are
+  listed (may include HTML content).
+* **Header**: Content to display after the subscription plans are
+  listed (may include HTML content).
+* **Active**: Whether this list is active or not.
+
+.. note::
+
+    The first active ``PlanList`` instance is used to populate the
+    subscribe page. You will need to inactivate or delete older
+    ``PlanList`` instances if you want a newer one to be used.
+
+Once a ``PlanList`` is created, you will be able to associate ``Plan``
+instances to specify the following details:
+
+* **HTML content**: How you want the plan details to be presented
+  (may include HTML content).
+* **Subscribe button text**: The text to display on the "Subscribe"
+  button at the end of the plan description.
+
+--------------------
+Creating a Plan List
+--------------------
+
+Once you have created you subscription plan, you can create your
+``PlanList``.
+
+1. Visit ``/subscriptions/dfs/`` to access the **Developer Dashboard**.
+
+2. Click the **Plan lists** button or visit
+   ``/subscriptions/dfs/plan-lists/``.  Click on the **Create a new
+   plan list** button.
+
+3. Fill in the plan list details and click the **Save** button.
+
+4. To add ``Plan`` instances to your ``PlanList`` click the **Manage
+   plans** button on the Plan Lists page.
+
+5. Click on the **Add plan** button, fill in the desired details and
+   click the **Save** buton.
+
+6. You can now visit ``/subscriptions/subscribe/`` to see your plan
+   list.
 
 -----------------------------
 Considerations for Production
