@@ -227,8 +227,13 @@ you will probably want to consider the following:
 
 * ``django-flexible-subscriptions`` comes with its own ``styles.css``
   file - you will need to ensure you run the ``collectstatic``
-  management command if you have not overriden it with yoru own file.
-* The ``SubscribeView`` with this package is intended to be extended
-  to implement payment processing. The base view will automatically
-  approve all payment requests and should be overriden if this is not
-  the desired behaviour.
+  management command if you have not overriden it with your own file.
+* The ``SubscribeView`` included with ``django-flexible-subscriptions``
+  is intended to be extended to implement payment processing. The base
+  view will automatically approve all payment requests and should be
+  overriden if this is not the desired behaviour.
+* ``django-flexible-subscriptions`` includes management commands to
+  assist with managing subscription renewals and expiries. While these
+  can be ran manually, you should consider implementing some task
+  manager, such as ``cron`` or ``celery``, to run these commands on a
+  regular basis.
