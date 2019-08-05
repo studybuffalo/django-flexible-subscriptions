@@ -345,6 +345,10 @@ class PlanListDetail(models.Model):
         max_length=128,
         null=True,
     )
+    order = models.PositiveIntegerField(
+        default=1,
+        help_text='Order to display plan in (lower numbers displayed first)',
+    )
 
     def __str__(self):
         return 'Plan List {} - {}'.format(
