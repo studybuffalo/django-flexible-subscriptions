@@ -380,21 +380,27 @@ html, body {
       padding: 0.5rem 1rem;
     }
 
+      #dfs-container .dashboard-container .table-header > div {
+        padding: 0 0.5rem;
+      }
+
     #dfs-container .dashboard-container .table-body {
       padding: 0.5rem 1rem;
     }
+
+      #dfs-container .dashboard-container .table-body > div {
+        margin: 1rem 0;
+        padding: 0 0.5rem;
+      }
 
       #dfs-container .dashboard-container .table-body:nth-child(even) {
         background-color: rgb(245, 245, 245);
       }
 
-      #dfs-container .dashboard-container .table-body > div {
-        margin: 1rem 0;
-      }
-
     #dfs-container .dashboard-container .table-title {
       display: block;
       font-size: 1rem;
+      font-weight: 700;
       margin: 0.25rem 0;
     }
 
@@ -438,4 +444,9 @@ html, body {
       "nav main";
     width: 100%;
   }
+
+    #dfs-container .dashboard-container .table-title {
+      display: none;
+    }
+
 }
