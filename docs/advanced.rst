@@ -107,7 +107,7 @@ custom handling (e.g. payment processing). To extend this view:
 
 .. code-block:: python
 
-    # /custom/view.py
+    # /custom/views.py
     from subscriptions import views
 
     class CustomSubscriptionView(views.SubscriptionView):
