@@ -36,6 +36,7 @@ These are the settings to control aspects of currency repsentation.
 The currency locale to use for currency formatting. The following
 formats are currently available:
 
+* ``en_au`` (Australia, English)
 * ``en_ca`` (Canada, English)
 * ``en_us`` (United States of America, English)
 * ``fr_ca`` (Canada, French)

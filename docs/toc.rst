@@ -3,6 +3,7 @@
 
    installation
    settings
+   advanced
    contributing
    Package reference <subscriptions>
    changelog
