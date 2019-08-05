@@ -12,6 +12,10 @@ Feature Updates
 ---------------
 
 * Adding responsive styling to all base HTML templates.
+* Updating sandbox site to improve demo and testing functions.
+* Breaking more template components into snippets and adding base
+  templates to make it easier to override pages.
+* Adding pagination to views to better handle long lists.
 
 0.3.2 (2019-Jul-17)
 ===================
