@@ -161,6 +161,11 @@ custom ``SubscribeView``:
     class CustomSubscriptionView(views.SubscriptionView):
         payment_form = CustomPaymentForm
 
+Between the PaymentForm and the SubscribeView you should be able to
+implement most payment providers. The exact details will depend on the
+payment provider you implement and is out of the scope of this
+documentation.
+
 ----------------------------------
 Subscription renewals and expiries
 ----------------------------------
