@@ -7,21 +7,33 @@
 
 {% block subscriptions_styles %}
   <style>
-    .plan-costs {
-      list-style-type: circle;
-      margin: 0;
-      padding-left: 1.5rem;
+    #dfs-container .dashboard-container .plan-table {
+      font-size: 1.2rem;
     }
 
-    .plan-costs li {
-      margin: 0.5rem 0;
+    #dfs-container .dashboard-container .plan-name {
+      font-weight: 700;
     }
+
+    #dfs-container .dashboard-container .plan-costs {
+      margin: 0;
+      padding: 0;
+    }
+
+      #dfs-container .dashboard-container .plan-costs li {
+        margin: 0.25rem 0;
+        padding: 0;
+      }
 
     @media screen and (min-width: 48em) {
-      #dfs-container .table-header {
+      #dfs-container .dashboard-container .table-header {
         display: grid;
         grid-template-columns: 2fr 3fr 2fr 3fr 2fr;
         grid-template-rows: auto;
+      }
+
+      #dfs-container .dashboard-container .table-title {
+        display: none;
       }
 
       #dfs-container .table-body {
@@ -58,7 +70,7 @@
         <div class="table-body">
           <div>
             <span class="table-title">{% trans "Plan name" %}</span>
-            {{ plan.plan_name }}
+            <span class="plan-name">{{ plan.plan_name }}</span>
           </div>
           <div>
             <span class="table-title">{% trans "Description" %}</span>

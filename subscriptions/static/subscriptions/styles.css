@@ -1,3 +1,4 @@
+/* Basic Styles For All Templates */
 html, body {
   height: 100%;
   margin: 0;
@@ -13,7 +14,7 @@ html, body {
   padding: 0;
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: left;;
   width: 100%;
 }
 
@@ -25,6 +26,7 @@ html, body {
     padding: 0;
   }
 
+/* Styles for Subscribe Page Templates */
   #dfs-container .subscribe-container {
     display: flex;
     flex-direction: column;
@@ -203,21 +205,24 @@ html, body {
       display: block;
     }
 
+  /* Styles for Developer Dashboard Page Templates */
   #dfs-container .dashboard-container {
     display: grid;
     grid-template-columns: 100%;
-    grid-template-rows: 10rem 14.4rem auto;
+    grid-template-rows: min-content min-content auto auto;
     grid-template-areas:
       "header"
       "nav"
       "main";
     min-height: 100%;
-    max-width: 56em;
+    width: 100%;
+    max-width: 100%;
   }
 
     #dfs-container .dashboard-container header {
-      background-color: rgb(0, 40, 40);
-      color: rgb(250, 250, 250);
+      background-color: rgb(235, 235, 235);
+      box-sizing: border-box;
+      color: rgb(100, 100, 100);
       grid-area: header;
     }
 
@@ -239,8 +244,9 @@ html, body {
     }
 
     #dfs-container .dashboard-container nav {
-      background-color: rgb(10, 90, 100);
-      color: rgb(195, 220, 225);
+      background-color: rgb(255, 255, 255);
+      border-right: 2px solid rgb(235, 235, 235);
+      color: rgb(25, 25, 25);
       grid-area: nav;
       margin: 0;
       padding: 0;
@@ -258,18 +264,25 @@ html, body {
       }
 
       #dfs-container .dashboard-container nav a {
-        border-bottom: 1px solid rgb(195, 220, 225);
+        border-left: 4px solid rgb(255, 255, 255);
+        border-bottom: 1px solid rgb(235, 235, 235);
+        box-sizing: border-box;
         color: inherit;
         display: block;
         font-size: 1.5rem;
-        font-weight: 700;
-        margin: 0 0.25rem;
-        padding: 0.5rem;
+        font-weight: 400;
+        padding: 1rem 0.5rem;
         text-decoration: none;
       }
 
         #dfs-container .dashboard-container nav a:hover {
-          color: rgb(250, 250, 250);
+          border-left: 4px solid rgb(50, 160, 175);
+          color: rgb(50, 160, 175);
+        }
+
+        #dfs-container .dashboard-container nav a.selected {
+          border-left: 4px solid rgb(50, 160, 175);
+          color: rgb(50, 160, 175);
         }
 
     #dfs-container .dashboard-container input {
@@ -278,6 +291,10 @@ html, body {
       padding: 0.25rem 0.5rem;
       width: 100%;
     }
+
+      #dfs-container .dashboard-container input:focus {
+        border: 1px solid rgb(50, 160, 175);
+      }
 
       #dfs-container .dashboard-container input[type="submit"] {
         background-color: transparent;
@@ -291,19 +308,20 @@ html, body {
     }
 
     #dfs-container .dashboard-container main {
+      box-sizing: border-box;
       margin: 0;
-      padding: 0.5rem;
+      padding: 1rem 2rem;
       grid-area: main;
     }
 
       #dfs-container .dashboard-container main a {
-        color: rgb(10, 90, 100);
+        color: rgb(50, 160, 175);
         font-weight: 700;
         text-decoration: none;
       }
 
         #dfs-container .dashboard-container main a:hover {
-          color: rgb(195, 220, 225);
+          color: rgb(10, 90, 100);
         }
 
     #dfs-container .dashboard-container .breadcrumb {
@@ -311,11 +329,13 @@ html, body {
     }
 
     #dfs-container .dashboard-container .button-positive {
-      border: 2px solid rgb(10, 90, 100);
+      border: 1px solid  rgb(50, 160, 175);
       box-sizing: border-box;
       border-radius: 5px;
-      color: rgb(10, 90, 100);
+      color:  rgb(50, 160, 175);
       display: inline-block;
+      font-size: 1rem;
+      font-weight: 500;
       margin: 0.25rem 0;
       min-width: 120px;
       padding: 0.5rem;
@@ -323,16 +343,18 @@ html, body {
     }
 
       #dfs-container .dashboard-container .button-positive:hover {
-        border-color: rgb(0, 40, 40);
-        color: rgb(0, 40, 40);
+        border-color: rgb(10, 90, 100);
+        color: rgb(10, 90, 100);
       }
 
     #dfs-container .dashboard-container .button-negative {
-      border: 2px solid rgb(150, 10, 10);
+      border: 1px solid rgb(150, 10, 10);
       box-sizing: border-box;
       border-radius: 5px;
       color: rgb(150, 10, 10);
       display: inline-block;
+      font-size: 1rem;
+      font-weight: 500;
       margin: 0.25rem 0;
       min-width: 120px;
       padding: 0.5rem;
@@ -348,17 +370,22 @@ html, body {
       margin: 0.5rem 0;
     }
 
+    #dfs-container .dashboard-container .plan-table {
+      margin: 1rem 0;
+    }
+
     #dfs-container .dashboard-container .table-header {
       display: none;
       font-weight: 700;
+      padding: 0.5rem 1rem;
     }
 
     #dfs-container .dashboard-container .table-body {
-      padding: 0.5rem;
+      padding: 0.5rem 1rem;
     }
 
       #dfs-container .dashboard-container .table-body:nth-child(even) {
-        background-color: rgb(225, 240, 245);
+        background-color: rgb(245, 245, 245);
       }
 
       #dfs-container .dashboard-container .table-body > div {
@@ -378,6 +405,7 @@ html, body {
 
       #dfs-container .dashboard-container .form-field-label {
         display: block;
+        font-size: 1rem;
         font-weight: 700;
         padding: 0.25rem 0;
       }
@@ -390,6 +418,7 @@ html, body {
       }
 
 @media screen and (min-width: 48em) {
+  /* Subscription Template Styles */
   #dfs-container .subscribe-container .plans {
     align-items: top;
     flex-direction: row;
@@ -399,6 +428,7 @@ html, body {
     margin: 1rem 0.5rem;
   }
 
+  /* Developer Dashboard Template Styles */
   #dfs-container .dashboard-container {
     display: grid;
     grid-template-columns: 12em auto;
@@ -408,8 +438,4 @@ html, body {
       "nav main";
     width: 100%;
   }
-
-    #dfs-container .dashboard-container .table-title {
-      display: none;
-    }
 }
