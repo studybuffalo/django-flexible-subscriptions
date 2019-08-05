@@ -21,6 +21,7 @@ setup(
     packages=find_packages(exclude=['sandbox*', 'tests*']),
     package_data={
         'subscriptions': [
+            'static/subscriptions/*.css',
             'templates/subscriptions/*.html',
             'templates/subscriptions/snippets/*.html',
         ]
