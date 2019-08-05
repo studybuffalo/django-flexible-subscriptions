@@ -30,7 +30,7 @@ setup(
         'Source code': 'https://github.com/studybuffalo/django-flexible-subscriptions',
         'Issues': 'https://github.com/studybuffalo/django-flexible-subscriptions/issues',
     },
-    python_requires='>=3',
+    python_requires='>=3.5',
     install_requires=[
         'django>=1.11',
     ],
@@ -45,6 +45,7 @@ setup(
         'Framework :: Django :: 1.11',
         'Framework :: Django :: 2.0',
         'Framework :: Django :: 2.1',
+        'Framework :: Django :: 2.2',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Operating System :: Unix',
