@@ -1,32 +1,33 @@
-{% extends template_extends %}
+{% extends 'subscriptions/base_developer.html' %}
 
 {% load i18n %}
 
-{% block content %}
-  <h1>Subscription Plan Tag Deletion</h1>
+{% block title %}DFS Dashboard | Delete Tag{% endblock %}
 
-  {% if messages %}
-    <ul class="messages">
-      {% for message in messages %}
-        <li class="{{ message.tags }}">{{ message }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
+{% block main %}
+  <div class="breadcrumb">
+    <a href="{% url 'dfs_dashboard' %}">Developer Dashboard</a>
+    > <a href="{% url 'dfs_tag_list' %}">Tags</a>
+    > Delete Tag
+  </div>
 
-  <p>
-    <strong>Are you sure you want to delete this tag?</strong>
+  <h1>Delete Tag</h1>
 
-    <ul>
-      <li><strong>Tag:</strong> {{ token.tag }}</li>
-    </ul>
-  </p>
+  <div>Are you sure you want to delete this tag?</div>
+
+  <blockquote>
+    <strong>Tag:</strong> {{ token.tag }}
+  </blockquote>
 
   <form method="POST">
     {% csrf_token %}
     <input type="submit" value="Delete">
   </form>
 
-  <div>
-    <a href="{% url 'dfs_tag_list' %}">Cancel</a>
-  </div>
+  <form method="POST">
+    {% csrf_token %}
+    <input class="button-negative" type="submit" value="Delete">
+  </form>
+
+  <a class="button-positive" href="{% url 'dfs_tag_list' %}">Cancel</a>
 {% endblock %}

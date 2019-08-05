@@ -1,71 +1,78 @@
-{% extends template_extends %}
+{% extends 'subscriptions/base_developer.html' %}
 
 {% load i18n %}
 {% load currency_filters %}
 
-{% block content %}
-  <h1>Subscription payment transactions</h1>
+{% block title %}DFS Dashboard | Transactions{% endblock %}
 
-  {% if messages %}
-    <ul class="messages">
-      {% for message in messages %}
-        <li class="{{ message.tags }}">{{ message }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
+{% block subscriptions_styles %}
+  <style>
+    #dfs-container .dashboard-container .plan-table {
+      font-size: 1.2rem;
+    }
 
-  <div>
-    <a href="{% url 'dfs_dashboard' %}">Back to dashboard</a>
+    @media screen and (min-width: 64em) {
+      #dfs-container .dashboard-container .table-header {
+        display: grid;
+        grid-template-columns: 3fr 4fr 4fr 2fr;
+        grid-template-rows: auto;
+      }
+
+      #dfs-container .dashboard-container .table-body {
+        display: grid;
+        grid-template-columns: 3fr 4fr 4fr 2fr;
+        grid-template-rows: auto;
+      }
+    }
+  </style>
+{% endblock %}
+
+{% block main %}
+  <div class="breadcrumb">
+    <a href="{% url 'dfs_dashboard' %}">Developer Dashboard</a>
+    > Transactions
   </div>
 
+  <h2>Transactions</h2>
+
+  {% include 'subscriptions/snippets/messages.html' %}
+
   {% if transactions %}
-    <table>
-      <thead>
-        <tr>
-          <th>{% trans "User" %}</th>
-          <th>{% trans "Plan" %}</th>
-          <th>{% trans "Transaction date" %}</th>
-          <th>{% trans "Amount" %}</th>=
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for transaction in transactions %}
-          <tr>
-            <td>{{ transaction.user }}</td>
-            <td>{{ transaction.plan }}</td>
-            <td>{{ transaction.date_transaction }}</td>
-            <td>{{ transaction.amount|currency }}</td>
-            <td>
-              <a href="{% url 'dfs_transaction_detail' transaction.id %}">
-                {% trans "View" %}
-              </a>
-            </td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <div class="plan-table">
+      <div class="table-header">
+        <div>{% trans "User" %}</div>
+        <div>{% trans "Plan" %}</div>
+        <div>{% trans "Transaction date" %}</div>
+        <div>{% trans "Amount" %}</div>
+      </div>
+
+      {% for transaction in transactions %}
+        <div class="table-body">
+          <div>
+            <span class="table-title">{% trans "User" %}</span>
+            {% if transaction.user %}{{ transaction.user }}{% else %}No user{% endif %}
+          </div>
+          <div>
+            <span class="table-title">{% trans "Plan" %}</span>
+            {% if transaction.plan %}{{ transaction.plan }}{% else %}No subscription plan{% endif %}
+          </div>
+          <div>
+            <span class="table-title">{% trans "Transaction date" %}</span>
+            {{ transaction.date_transaction }}
+          </div>
+          <div>
+            <span class="table-title">{% trans "Amount" %}</span>
+            {% if transaction.amount %}{{ transaction.amount|currency }}{% else %}{{ 0|currency }}{% endif %}
+          </div>
+          <div>
+            <a class="button-positive" href="{% url 'dfs_transaction_detail' transaction.id %}">{% trans "View" %}</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
   {% else %}
     <p>{% trans "No subscription payment transactions have occurred have been added yet." %}</p>
   {% endif %}
 
-  {% if is_paginated %}
-    <div class="pagination">
-      <span class="step-links">
-        {% if page_obj.has_previous %}
-          <a href="?page=1">&laquo; first</a>
-          <a href="?page={{ page_obj.previous_page_number }}">previous</a>
-        {% endif %}
-
-        <span class="current">
-          Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-        </span>
-
-        {% if page_obj.has_next %}
-          <a href="?page={{ page_obj.next_page_number }}">next</a>
-          <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-        {% endif %}
-      </span>
-    </div>
-  {% endif %}
+  {% include 'subscriptions/snippets/pagination.html' with page_obj=page_obj %}
 {% endblock %}

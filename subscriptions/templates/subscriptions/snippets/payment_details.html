@@ -2,5 +2,6 @@
 
 {% if form %}
   <h2>Payment details</h2>
-  {{ form.as_p }}
+
+  {% include 'subscriptions/snippets/form_table.html' with form=form %}
 {% endif %}

@@ -2,15 +2,22 @@
 
 {% load i18n %}
 
-{% block content %}
-  <h1>Subscribe</h1>
+{% block title %}Subscribe{% endblock %}
 
-  <form method="post" action="{% url 'dfs_subscribe_add' %}">
-    {% csrf_token %}
-    <input type="hidden" name="action" value="confirm">
-    <input type="hidden" name="plan_id" value="{{ plan.id }}">
-    {{ plan_cost_form.as_p }}
-    {% include 'subscriptions/snippets/payment_details.html' with form=payment_form %}
-    <button type="submit">Confirm order</button>
-  </form>
+{% block content %}
+  <main class="subscribe-container">
+    <h1>Subscribe</h1>
+    <span class="subtitle">{{ plan.plan_name }}</span>
+
+    <form class="subscribe-form" action="{% url 'dfs_subscribe_add' %}" method="POST">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="confirm">
+      <input type="hidden" name="plan_id" value="{{ plan.id }}">
+
+      {% include 'subscriptions/snippets/subscription_plan_cost.html' with form=plan_cost_form %}
+      {% include 'subscriptions/snippets/payment_details.html' with form=payment_form %}
+
+      <button type="submit">Confirm order</button>
+    </form>
+  </main>
 {% endblock %}

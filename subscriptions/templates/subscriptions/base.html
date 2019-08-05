@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load static %}
 
 <!DOCTYPE html>
 
@@ -6,10 +7,17 @@
   <head>
     <title>{% block title %}Subscriptions{% endblock %}</title>
 
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSS Styles -->
+    <link href="https://fonts.googleapis.com/css?family=Telex" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'subscriptions/styles.css' %}">
     {% block subscriptions_styles %}{% endblock %}
   </head>
 
   <body>
-    {% block content %}{% endblock %}
+    <div id="dfs-container">
+      {% block content %}{% endblock %}
+    </div>
   </body>
 </html>
