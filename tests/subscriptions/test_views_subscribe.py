@@ -320,7 +320,7 @@ def test_subscribe_view_post_preview_progress_to_confirmation(admin_client):
     post_data = {
         'action': 'confirm',
         'plan_id': plan.id,
-        'plan_cost': cost.id,
+        'plan_cost': str(cost.id),
         'cardholder_name': 'a',
         'card_number': '1111222233334444',
         'card_expiry_month': '01',
@@ -538,7 +538,7 @@ def test_subscribe_view_post_confirm_payment_error(admin_client):
     post_data = {
         'action': 'process',
         'plan_id': plan.id,
-        'plan_cost': cost.id,
+        'plan_cost': str(cost.id),
         'cardholder_name': 'a',
         'card_number': '1111222233334444',
         'card_expiry_month': '01',
@@ -647,7 +647,7 @@ def test_subscribe_view_setup_subscription_user_group(django_user_model):
 
     view = views.SubscribeView()
     view.subscription_plan = plan
-    view.setup_subscription(user, cost.id)
+    view.setup_subscription(user, cost)
 
     assert user in group.user_set.all()
     assert group.user_set.all().count() == user_count + 1
@@ -666,7 +666,7 @@ def test_subscribe_view_setup_subscription_user_subscription(django_user_model):
 
     view = views.SubscribeView()
     view.subscription_plan = plan
-    view.setup_subscription(user, cost.id)
+    view.setup_subscription(user, cost)
 
     assert models.UserSubscription.objects.all().count() == sub_count + 1
 
@@ -682,7 +682,7 @@ def test_subscribe_view_setup_subscription_no_group(django_user_model):
 
     view = views.SubscribeView()
     view.subscription_plan = plan
-    view.setup_subscription(user, cost.id)
+    view.setup_subscription(user, cost)
 
     assert user not in group.user_set.all()
     assert group.user_set.all().count() == user_count
