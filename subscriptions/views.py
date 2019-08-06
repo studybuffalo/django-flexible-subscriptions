@@ -486,7 +486,9 @@ class PlanListDetailCreateView(
 ):
     """View to create a new plan list."""
     model = models.PlanListDetail
-    fields = ['plan', 'plan_list', 'html_content', 'subscribe_button_text']
+    fields = [
+        'plan', 'plan_list', 'html_content', 'subscribe_button_text', 'order'
+    ]
     permission_required = 'subscriptions.subscriptions'
     raise_exception = True
     success_message = 'Subscription plan successfully added to plan list'
@@ -515,7 +517,9 @@ class PlanListDetailUpdateView(
     model = models.PlanListDetail
     permission_required = 'subscriptions.subscriptions'
     raise_exception = True
-    fields = ['plan', 'plan_list', 'html_content', 'subscribe_button_text']
+    fields = [
+        'plan', 'plan_list', 'html_content', 'subscribe_button_text', 'order'
+    ]
     success_message = 'Plan list details successfully updated'
     pk_url_kwarg = 'plan_list_detail_id'
     template_name = 'subscriptions/plan_list_detail_update.html'
@@ -590,13 +594,24 @@ class SubscribeList(abstract.TemplateView):
 
     def get(self, request, *args, **kwargs):
         """Ensures content is available to display, then returns page."""
+        # Get the appropriate plan list
         plan_list = models.PlanList.objects.filter(active=True).first()
+
+        # Retrieve the plans from plan_list that have a cost
+        plans = models.SubscriptionPlan.objects.filter(
+            plan_lists=plan_list, costs__isnull=False
+        )
+
+        # Retrieve the plan details for template display
+        details = models.PlanListDetail.objects.filter(
+            plan__in=plans, plan_list=plan_list
+        ).order_by('order')
 
         if plan_list:
             response = TemplateResponse(
                 request,
                 self.template_name,
-                self.get_context_data(plan_list=plan_list)
+                self.get_context_data(plan_list=plan_list, details=details)
             )
 
             return response
@@ -608,6 +623,7 @@ class SubscribeList(abstract.TemplateView):
         context = super().get_context_data(**kwargs)
 
         context['plan_list'] = kwargs['plan_list']
+        context['details'] = kwargs['details']
 
         return context
 
