@@ -141,3 +141,12 @@ class SubscriptionPlanCostForm(forms.Form):
 
         # Set the last value as the default
         self.fields['plan_cost'].initial = [PLAN_COST_CHOICES[-1][0]]
+
+    def clean_plan_cost(self):
+        """Validates that UUID is valid and returns model instance."""
+        try:
+            data = PlanCost.objects.get(id=self.cleaned_data['plan_cost'])
+        except PlanCost.DoesNotExist:
+            raise forms.ValidationError('Invalid plan cost submitted.')
+
+        return data
