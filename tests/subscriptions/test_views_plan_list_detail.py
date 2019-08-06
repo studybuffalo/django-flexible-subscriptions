@@ -9,6 +9,8 @@ from django.urls import reverse
 from subscriptions import models
 
 
+pytestmark = pytest.mark.django_db  # pylint: disable=invalid-name
+
 def create_plan_list(title='test'):
     """Creates and returns a PlanList instance."""
     return models.PlanList.objects.create(title=title)
@@ -34,7 +36,6 @@ def create_plan_list_detail(plan=None, plan_list=None):
 
 # PlanListDetailListView
 # -----------------------------------------------------------------------------
-@pytest.mark.django_db
 def test_detail_list_template(admin_client):
     """Tests for proper plan_list_detail_list template."""
     plan_list = create_plan_list()
@@ -49,7 +50,6 @@ def test_detail_list_template(admin_client):
         ]
     )
 
-@pytest.mark.django_db
 def test_detail_list_403_if_not_authorized(client, django_user_model):
     """Tests for 403 error for PlanListDetail list if inadequate permissions."""
     django_user_model.objects.create_user(username='user', password='password')
@@ -63,7 +63,6 @@ def test_detail_list_403_if_not_authorized(client, django_user_model):
 
     assert response.status_code == 403
 
-@pytest.mark.django_db
 def test_detail_list_200_if_authorized(client, django_user_model):
     """Tests for 200 response for detail list adequate permissions."""
     # Retrieve proper permission, add to user, and login
@@ -85,7 +84,6 @@ def test_detail_list_200_if_authorized(client, django_user_model):
 
     assert response.status_code == 200
 
-@pytest.mark.django_db
 def test_detail_list_adds_plan_list_context(admin_client):
     """Tests that Detail list view adds plan_list to context."""
     plan_list = create_plan_list()
@@ -100,7 +98,6 @@ def test_detail_list_adds_plan_list_context(admin_client):
 
 # # PlanListCreateView
 # -----------------------------------------------------------------------------
-@pytest.mark.django_db
 def test_detail_create_template(admin_client):
     """Tests for proper plan_list_detail_create template."""
     plan_list = create_plan_list()
@@ -115,7 +112,6 @@ def test_detail_create_template(admin_client):
         ]
     )
 
-@pytest.mark.django_db
 def test_detail_create_403_if_not_authorized(client, django_user_model):
     """Tests for 403 error for PlanListCreate if inadequate permissions."""
     django_user_model.objects.create_user(username='user', password='password')
@@ -129,7 +125,6 @@ def test_detail_create_403_if_not_authorized(client, django_user_model):
 
     assert response.status_code == 403
 
-@pytest.mark.django_db
 def test_detail_create_200_if_authorized(client, django_user_model):
     """Tests for 200 response for Detail create with adequate permissions."""
     # Retrieve proper permission, add to user, and login
@@ -151,7 +146,6 @@ def test_detail_create_200_if_authorized(client, django_user_model):
 
     assert response.status_code == 200
 
-@pytest.mark.django_db
 def test_detail_create_create_and_success(admin_client):
     """Tests detail creation and success message."""
     plan = create_plan()
@@ -179,7 +173,6 @@ def test_detail_create_create_and_success(admin_client):
         'Subscription plan successfully added to plan list'
     )
 
-@pytest.mark.django_db
 def test_detail_create_adds_plan_list_context(admin_client):
     """Tests that Detail create view adds plan_list to context."""
     plan_list = create_plan_list()
@@ -191,7 +184,6 @@ def test_detail_create_adds_plan_list_context(admin_client):
     assert 'plan_list' in response.context
     assert response.context['plan_list'].id == plan_list.id
 
-@pytest.mark.django_db
 def test_detail_create_creates_proper_url(admin_client):
     """Tests that Detail create view generates proper success URL."""
     plan = create_plan()
@@ -215,7 +207,6 @@ def test_detail_create_creates_proper_url(admin_client):
 
 # # PlanListUpdateView
 # -----------------------------------------------------------------------------
-@pytest.mark.django_db
 def test_detail_update_template(admin_client):
     """Tests for proper plan_list_detail_update template."""
     plan_list = create_plan_list()
@@ -232,7 +223,6 @@ def test_detail_update_template(admin_client):
         ]
     )
 
-@pytest.mark.django_db
 def test_detail_update_403_if_not_authorized(client, django_user_model):
     """Tests for 403 error for Detail update if inadequate permissions."""
     plan_list = create_plan_list()
@@ -248,7 +238,6 @@ def test_detail_update_403_if_not_authorized(client, django_user_model):
 
     assert response.status_code == 403
 
-@pytest.mark.django_db
 def test_detail_update_200_if_authorized(client, django_user_model):
     """Tests for 200 response for Detail Update with adequate permissions."""
     plan_list = create_plan_list()
@@ -272,7 +261,6 @@ def test_detail_update_200_if_authorized(client, django_user_model):
 
     assert response.status_code == 200
 
-@pytest.mark.django_db
 def test_detail_update_update_and_success(admin_client):
     """Tests that plan list update and success message works as expected."""
     plan = create_plan()
@@ -307,7 +295,6 @@ def test_detail_update_update_and_success(admin_client):
     assert messages[0].tags == 'success'
     assert messages[0].message == 'Plan list details successfully updated'
 
-@pytest.mark.django_db
 def test_detail_update_adds_plan_list_context(admin_client):
     """Tests that Detail update view adds plan_list to context."""
     plan_list = create_plan_list()
@@ -321,7 +308,6 @@ def test_detail_update_adds_plan_list_context(admin_client):
     assert 'plan_list' in response.context
     assert response.context['plan_list'].id == plan_list.id
 
-@pytest.mark.django_db
 def test_detail_update_creates_proper_url(admin_client):
     """Tests that Detail update view generates proper success URL."""
     plan = create_plan()
@@ -348,7 +334,6 @@ def test_detail_update_creates_proper_url(admin_client):
 
 # PlanListDeleteView
 # -----------------------------------------------------------------------------
-@pytest.mark.django_db
 def test_detail_delete_template(admin_client):
     """Tests for proper plan_list_detail_delete template."""
     plan_list = create_plan_list()
@@ -365,7 +350,6 @@ def test_detail_delete_template(admin_client):
         ]
     )
 
-@pytest.mark.django_db
 def test_detail_delete_403_if_not_authorized(client, django_user_model):
     """Tests for 403 error for Detail delete if inadequate permissions."""
     plan_list = create_plan_list()
@@ -381,7 +365,6 @@ def test_detail_delete_403_if_not_authorized(client, django_user_model):
 
     assert response.status_code == 403
 
-@pytest.mark.django_db
 def test_detail_delete_200_if_authorized(client, django_user_model):
     """Tests for 200 response for Detail delete with adequate permissions."""
     plan_list = create_plan_list()
@@ -405,7 +388,6 @@ def test_detail_delete_200_if_authorized(client, django_user_model):
 
     assert response.status_code == 200
 
-@pytest.mark.django_db
 def test_detail_delete_delete_and_success_message(admin_client):
     """Tests for success message on successful deletion."""
     plan_list = create_plan_list()
@@ -431,7 +413,6 @@ def test_detail_delete_delete_and_success_message(admin_client):
         'Subscription plan successfully removed from plan list'
     )
 
-@pytest.mark.django_db
 def test_detail_delete_creates_proper_url(admin_client):
     """Tests that Detail delete view generates proper success URL."""
     plan = create_plan()
