@@ -597,14 +597,9 @@ class SubscribeList(abstract.TemplateView):
         # Get the appropriate plan list
         plan_list = models.PlanList.objects.filter(active=True).first()
 
-        # Retrieve the plans from plan_list that have a cost
-        plans = models.SubscriptionPlan.objects.filter(
-            plan_lists=plan_list, costs__isnull=False
-        )
-
         # Retrieve the plan details for template display
         details = models.PlanListDetail.objects.filter(
-            plan__in=plans, plan_list=plan_list
+            plan_list=plan_list, plan__costs__isnull=False
         ).order_by('order')
 
         if plan_list:
