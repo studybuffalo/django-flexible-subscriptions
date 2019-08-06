@@ -13,18 +13,17 @@
     <div class="header">{{ plan_list.header|safe }}</div>
 
     <div class="plans">
-      {% for detail in plan_list.planlistdetail_set.all %}
-        {% if detail.plan.costs.all %}
-          <div class="plan">
-            {{ detail.html_content|safe }}
+      {% for detail in details %}
+        <div class="plan">
+          {{ detail.plan }}
+          {{ detail.html_content|safe }}
 
-            <form method="post" action="{% url 'dfs_subscribe_add' %}">
-              {% csrf_token %}
-              <input type="hidden" name="plan_id" value="{{ detail.plan.id }}">
-              <button type="submit">{{ detail.subscribe_button_text|safe }}</button>
-            </form>
-          </div>
-        {% endif %}
+          <form method="post" action="{% url 'dfs_subscribe_add' %}">
+            {% csrf_token %}
+            <input type="hidden" name="plan_id" value="{{ detail.plan.id }}">
+            <button type="submit">{{ detail.subscribe_button_text|safe }}</button>
+          </form>
+        </div>
       {% endfor %}
     </div>
 
