@@ -760,9 +760,7 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
             context['payment_form'] = self.hide_form(payment_form)
 
             # Add the PlanCost instance to context for use in template
-            context['plan_cost'] = models.PlanCost.objects.get(
-                id=plan_cost_form.cleaned_data['plan_cost']
-            )
+            context['plan_cost'] = plan_cost_form.cleaned_data['plan_cost']
 
             return self.render_to_response(context)
 
@@ -790,6 +788,7 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
             )
 
             if payment_transaction:
+                print(plan_cost_form.cleaned_data['plan_cost'])
                 # Payment successful - can handle subscription processing
                 subscription = self.setup_subscription(
                     request.user, plan_cost_form.cleaned_data['plan_cost']
@@ -837,17 +836,16 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
         """
         return True
 
-    def setup_subscription(self, request_user, plan_cost_id):
+    def setup_subscription(self, request_user, plan_cost):
         """Adds subscription to user and adds them to required group.
 
             Parameters:
                 request_user (obj): A Django user instance.
-                plan_cost_id (str): A PlanCost ID.
+                plan_cost (obj): A PlanCost instance.
 
             Returns:
                 obj: The newly created UserSubscription instance.
         """
-        plan_cost = models.PlanCost.objects.get(id=plan_cost_id)
         current_date = timezone.now()
 
         # Add subscription plan to user
