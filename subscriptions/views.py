@@ -722,10 +722,19 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
         context = self.get_context_data(**kwargs)
 
         # Forms to collect subscription details
-        context['plan_cost_form'] = forms.SubscriptionPlanCostForm(
-            request.POST, subscription_plan=self.subscription_plan
-        )
-        context['payment_form'] = self.payment_form(request.POST)
+        if 'error' in kwargs:
+            plan_cost_form = forms.SubscriptionPlanCostForm(
+                request.POST, subscription_plan=self.subscription_plan
+            )
+            payment_form = self.payment_form(request.POST)
+        else:
+            plan_cost_form = forms.SubscriptionPlanCostForm(
+                initial=request.POST, subscription_plan=self.subscription_plan
+            )
+            payment_form = self.payment_form(initial=request.POST)
+
+        context['plan_cost_form'] = plan_cost_form
+        context['payment_form'] = payment_form
 
         return self.render_to_response(context)
 
@@ -758,6 +767,7 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
             return self.render_to_response(context)
 
         # Invalid form submission - render preview again
+        kwargs['error'] = True
         return self.render_preview(request, **kwargs)
 
     def process_subscription(self, request, **kwargs):
@@ -800,8 +810,6 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
 
         # Invalid form submission/payment - render preview again
         return self.render_confirmation(request, **kwargs)
-
-        #return self.render_to_response(context)
 
     def hide_form(self, form):
         """Replaces form widgets with hidden inputs.
