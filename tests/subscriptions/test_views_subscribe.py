@@ -43,7 +43,11 @@ def create_subscription(user):
 
 def create_plan_list(title='test'):
     """Creates and returns a PlanList instance."""
-    return models.PlanList.objects.create(title=title)
+    plan_list = models.PlanList.objects.create(title=title)
+    plan = create_plan()
+    models.PlanListDetail.objects.create(plan=plan, plan_list=plan_list)
+
+    return plan_list
 
 
 # SubscribeList Tests
@@ -120,12 +124,48 @@ def test_subscribe_list_get_404_on_no_plans(admin_client):
 
 @pytest.mark.django_db
 def test_subscribe_list_get_context_data(admin_client):
-    """Tests get_context_data adds plan list to context."""
-    create_plan_list('1')
+    """Tests get_context_data adds plan list and detail to context."""
+    create_plan_list()
 
     response = admin_client.get(reverse('dfs_subscribe_list'))
 
     assert 'plan_list' in response.context
+    assert 'details' in response.context
+
+@pytest.mark.django_db
+def test_subscribe_list_exclude_plan_with_no_cost(admin_client):
+    """Tests that a plan with no cost is excluded."""
+    create_plan_list()
+
+    response = admin_client.get(reverse('dfs_subscribe_list'))
+
+    assert not response.context['details']
+
+@pytest.mark.django_db
+def test_subscribe_list_expected_ordering(admin_client):
+    """Tests that details are listed in order."""
+    plan_list = models.PlanList.objects.create(title='plan list')
+    plan_1 = create_plan()
+    create_cost(plan=plan_1)
+    plan_2 = create_plan()
+    create_cost(plan=plan_2)
+    plan_3 = create_plan()
+    create_cost(plan=plan_3)
+    detail_1 = models.PlanListDetail.objects.create(
+        plan=plan_1, plan_list=plan_list, order=3
+    )
+    detail_2 = models.PlanListDetail.objects.create(
+        plan=plan_2, plan_list=plan_list, order=1
+    )
+    detail_3 = models.PlanListDetail.objects.create(
+        plan=plan_3, plan_list=plan_list, order=2
+    )
+
+    response = admin_client.get(reverse('dfs_subscribe_list'))
+
+    assert response.context['details'][0] == detail_2
+    assert response.context['details'][1] == detail_3
+    assert response.context['details'][2] == detail_1
 
 
 # SubscribeView Tests
