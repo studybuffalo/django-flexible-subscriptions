@@ -13,6 +13,8 @@ from django.utils import timezone
 from subscriptions import models, views, forms
 
 
+pytestmark = pytest.mark.django_db #pylint: disable=invalid-name
+
 def create_plan(plan_name='1', plan_description='2'):
     """Creates and returns SubscriptionPlan instance."""
     return models.SubscriptionPlan.objects.create(
@@ -52,7 +54,6 @@ def create_plan_list(title='test'):
 
 # SubscribeList Tests
 # -----------------------------------------------------------------------------
-@pytest.mark.django_db
 def test_subscribe_list_template(admin_client):
     """Tests for proper subscribe_list template."""
     # Create plan to allow viewing of page
@@ -66,7 +67,6 @@ def test_subscribe_list_template(admin_client):
         ]
     )
 
-@pytest.mark.django_db
 def test_subscribe_list_200_for_anonymous_user(client, django_user_model):
     """Tests for 200 response for anonymous user"""
     # Create plan to allow viewing of page
@@ -81,7 +81,6 @@ def test_subscribe_list_200_for_anonymous_user(client, django_user_model):
 
     assert response.status_code == 200
 
-@pytest.mark.django_db
 def test_subscribe_list_get_plan_list(admin_client):
     """Tests list retrieves a single active list"""
     plan_list = create_plan_list('1')
@@ -90,7 +89,6 @@ def test_subscribe_list_get_plan_list(admin_client):
 
     assert response.context['plan_list'] == plan_list
 
-@pytest.mark.django_db
 def test_subscribe_list_get_plan_list_from_multiple(admin_client):
     """Tests list retrieves a single active list from multiple."""
     plan_list = create_plan_list('1')
@@ -101,7 +99,6 @@ def test_subscribe_list_get_plan_list_from_multiple(admin_client):
 
     assert response.context['plan_list'] == plan_list
 
-@pytest.mark.django_db
 def test_subscribe_list_get_plan_list_with_inactive(admin_client):
     """Tests list retrieves single active list from multiple + inactive."""
     plan_list_1 = create_plan_list('1')
@@ -114,7 +111,6 @@ def test_subscribe_list_get_plan_list_with_inactive(admin_client):
 
     assert response.context['plan_list'] == plan_list_2
 
-@pytest.mark.django_db
 def test_subscribe_list_get_404_on_no_plans(admin_client):
     """Tests that list returns 404 if no plan lists are created."""
     response = admin_client.get(reverse('dfs_subscribe_list'))
@@ -122,7 +118,6 @@ def test_subscribe_list_get_404_on_no_plans(admin_client):
     assert response.status_code == 404
     assert response.content == b'No subscription plans are available'
 
-@pytest.mark.django_db
 def test_subscribe_list_get_context_data(admin_client):
     """Tests get_context_data adds plan list and detail to context."""
     create_plan_list()
@@ -132,7 +127,6 @@ def test_subscribe_list_get_context_data(admin_client):
     assert 'plan_list' in response.context
     assert 'details' in response.context
 
-@pytest.mark.django_db
 def test_subscribe_list_exclude_plan_with_no_cost(admin_client):
     """Tests that a plan with no cost is excluded."""
     create_plan_list()
@@ -141,7 +135,6 @@ def test_subscribe_list_exclude_plan_with_no_cost(admin_client):
 
     assert not response.context['details']
 
-@pytest.mark.django_db
 def test_subscribe_list_expected_ordering(admin_client):
     """Tests that details are listed in order."""
     plan_list = models.PlanList.objects.create(title='plan list')
@@ -194,7 +187,6 @@ def test_subscribe_view_no_redirect_on_login(client, django_user_model):
 
     assert response.status_code == 200
 
-@pytest.mark.django_db
 def test_subscribe_view_get_object_404_without_plan(admin_client):
     """Tests get_object returns 404 when plan is missing."""
     post_data = {
@@ -235,14 +227,12 @@ def test_subscribe_view_get_success_url():
         '/subscribe/thank-you/11111111-1111-4111-a111-111111111111/'
     )
 
-@pytest.mark.django_db
 def test_subscribe_view_get_405_response(admin_client):
     """Tests that GET returns 405 response."""
     response = admin_client.get(reverse('dfs_subscribe_add'))
 
     assert response.status_code == 405
 
-@pytest.mark.django_db
 def test_subscribe_view_post_preview_200_response(admin_client):
     """Tests post returns 200 response on preview request."""
     plan = create_plan()
@@ -262,7 +252,6 @@ def test_subscribe_view_post_preview_200_response(admin_client):
 
     assert response.status_code == 200
 
-@pytest.mark.django_db
 def test_subscribe_view_post_preview_proper_page(admin_client):
     """Tests preview POST returns proper details."""
     plan = create_plan()
@@ -287,7 +276,6 @@ def test_subscribe_view_post_preview_proper_page(admin_client):
         'subscriptions/subscribe_preview.html' in templates
     )
 
-@pytest.mark.django_db
 def test_subscribe_view_post_preview_added_context(admin_client):
     """Tests preview POST adds required forms to context."""
     plan = create_plan()
@@ -312,7 +300,6 @@ def test_subscribe_view_post_preview_added_context(admin_client):
     assert 'payment_form' in response.context
     assert isinstance(response.context['payment_form'], forms.PaymentForm)
 
-@pytest.mark.django_db
 def test_subscribe_view_post_preview_progress_to_confirmation(admin_client):
     """Tests preview POST progresses to confirmation."""
     plan = create_plan()
@@ -346,7 +333,6 @@ def test_subscribe_view_post_preview_progress_to_confirmation(admin_client):
         'subscriptions/subscribe_confirmation.html' in templates
     )
 
-@pytest.mark.django_db
 def test_subscribe_view_post_preview_to_confirm_invalid(admin_client):
     """Tests invalid preview to confirmation POST returns to preview."""
     plan = create_plan()
@@ -377,7 +363,6 @@ def test_subscribe_view_post_preview_to_confirm_invalid(admin_client):
     assert response.context['confirmation'] is False
     assert 'subscriptions/subscribe_preview.html' in templates
 
-@pytest.mark.django_db
 def test_subscribe_view_post_preview_to_confirm_invalid_values(admin_client):
     """Tests invalid preview that form is repopulated correctly."""
     plan = create_plan()
@@ -409,7 +394,6 @@ def test_subscribe_view_post_preview_to_confirm_invalid_values(admin_client):
     assert 'cardholder_name' not in payment_form.data
     assert payment_form.data['card_number'] == '1111222233334444'
 
-@pytest.mark.django_db
 def test_subscribe_view_post_confirmation_200_response(admin_client):
     """Tests post returns 200 response on confirmation request."""
     plan = create_plan()
@@ -429,7 +413,6 @@ def test_subscribe_view_post_confirmation_200_response(admin_client):
 
     assert response.status_code == 200
 
-@pytest.mark.django_db
 def test_subscribe_view_post_confirm_to_process_valid(admin_client):
     """Tests proper confirmation POST moves to success URL page."""
     plan = create_plan()
@@ -460,7 +443,6 @@ def test_subscribe_view_post_confirm_to_process_valid(admin_client):
 
     assert '/subscribe/thank-you' in url
 
-@pytest.mark.django_db
 def test_subscribe_view_post_confirm_to_process_invalid(admin_client):
     """Tests invalid process POST returns to confirmation."""
     plan = create_plan()
@@ -494,7 +476,6 @@ def test_subscribe_view_post_confirm_to_process_invalid(admin_client):
         'subscriptions/subscribe_preview.html' in templates
     )
 
-@pytest.mark.django_db
 def test_subscribe_view_post_confirm_to_process_invalid_values(admin_client):
     """Tests invalid process POST populates proper values in form."""
     plan = create_plan()
@@ -530,7 +511,6 @@ def test_subscribe_view_post_confirm_to_process_invalid_values(admin_client):
     'subscriptions.views.SubscribeView.process_payment',
     lambda self, **kwargs: False
 )
-@pytest.mark.django_db
 def test_subscribe_view_post_confirm_payment_error(admin_client):
     """Tests handling of payment error from confirmation POST."""
     plan = create_plan()
@@ -565,7 +545,6 @@ def test_subscribe_view_post_confirm_payment_error(admin_client):
     assert messages[0].tags == 'error'
     assert messages[0].message == 'Error processing payment'
 
-@pytest.mark.django_db
 def test_subscribe_view_post_process_200_response(admin_client):
     """Tests post returns 200 response on process request."""
     plan = create_plan()
@@ -597,7 +576,6 @@ def test_subscribe_view_hide_form():
 @patch(
     'subscriptions.utils.timezone.now', lambda: datetime(2018, 1, 1, 1, 1, 1)
 )
-@pytest.mark.django_db
 def test_subscribe_view_record_transaction_without_date(django_user_model):
     """Tests handling of record_transaction without providing a date.
 
@@ -616,7 +594,6 @@ def test_subscribe_view_record_transaction_without_date(django_user_model):
     )
     assert transaction.date_transaction == datetime(2018, 1, 1, 1, 1, 1)
 
-@pytest.mark.django_db
 def test_subscribe_view_record_transaction_with_date(django_user_model):
     """Tests handling of record_transaction with date provided."""
     transaction_count = models.SubscriptionTransaction.objects.all().count()
@@ -633,8 +610,6 @@ def test_subscribe_view_record_transaction_with_date(django_user_model):
     )
     assert transaction.date_transaction == transaction_date
 
-
-@pytest.mark.django_db
 def test_subscribe_view_setup_subscription_user_group(django_user_model):
     """Tests that user is properly added to group."""
     user = django_user_model.objects.create_user(username='a', password='b')
@@ -652,7 +627,6 @@ def test_subscribe_view_setup_subscription_user_group(django_user_model):
     assert user in group.user_set.all()
     assert group.user_set.all().count() == user_count + 1
 
-@pytest.mark.django_db
 def test_subscribe_view_setup_subscription_user_subscription(django_user_model):
     """Tests that user subscription entry is setup properly."""
     sub_count = models.UserSubscription.objects.all().count()
@@ -670,7 +644,6 @@ def test_subscribe_view_setup_subscription_user_subscription(django_user_model):
 
     assert models.UserSubscription.objects.all().count() == sub_count + 1
 
-@pytest.mark.django_db
 def test_subscribe_view_setup_subscription_no_group(django_user_model):
     """Tests that setup handles subscriptions with no groups."""
     user = django_user_model.objects.create_user(username='a', password='b')
@@ -690,7 +663,6 @@ def test_subscribe_view_setup_subscription_no_group(django_user_model):
 
 # SubscribeUserListView Tests
 # -----------------------------------------------------------------------------
-@pytest.mark.django_db
 def test_subscribe_user_list_redirect_anonymous(client):
     """Tests that anonymous users are redirected to login page."""
     response = client.get(reverse('dfs_subscribe_user_list'), follow=True)
@@ -699,7 +671,6 @@ def test_subscribe_user_list_redirect_anonymous(client):
     assert redirect_code == 302
     assert redirect_url == ('/accounts/login/?next=/subscriptions/')
 
-@pytest.mark.django_db
 def test_subscribe_user_list_no_redirect_on_login(client, django_user_model):
     """Tests that logged in users are not redirected."""
     django_user_model.objects.create_user(username='a', password='b')
@@ -708,7 +679,6 @@ def test_subscribe_user_list_no_redirect_on_login(client, django_user_model):
 
     assert response.status_code == 200
 
-@pytest.mark.django_db
 def test_subscribe_user_list_requires_user_owner(client, django_user_model):
     """Tests that logged in user has ownership of subscription plans."""
     user_1 = django_user_model.objects.create_user(username='a', password='b')
@@ -762,7 +732,6 @@ def test_thank_you_view_no_redirect_on_login(client, django_user_model):
 
     assert response.status_code == 200
 
-@pytest.mark.django_db
 def test_thank_you_view_returns_object(client, django_user_model):
     """Tests Thank You view properly returns transaction instance."""
     user = django_user_model.objects.create_user(username='a', password='b')
@@ -793,7 +762,6 @@ def test_thank_you_view_adds_context(client, django_user_model):
 
 # SubscribeCancelView Tests
 # -----------------------------------------------------------------------------
-@pytest.mark.django_db
 def test_cancel_view_redirect_anonymous(client):
     """Tests that anonymous users are redirected to login page."""
     sub_id = models.UserSubscription.objects.create().id
@@ -806,7 +774,6 @@ def test_cancel_view_redirect_anonymous(client):
     assert redirect_url == (
         '/accounts/login/?next=/subscribe/cancel/{}/'.format(sub_id))
 
-@pytest.mark.django_db
 def test_cancel_view_no_redirect_on_login(client, django_user_model):
     """Tests that logged in users are not redirected."""
     user = django_user_model.objects.create_user(username='a', password='b')
@@ -823,7 +790,6 @@ def test_cancel_view_get_success_url():
     view = views.SubscribeCancelView()
     assert view.get_success_url() == '/subscriptions/'
 
-@pytest.mark.django_db
 def test_cancel_post_updates_instance(client, django_user_model):
     """Tests that POST request properly updates subscription instance."""
     user = django_user_model.objects.create_user(username='a', password='b')
@@ -851,7 +817,6 @@ def test_cancel_post_updates_instance(client, django_user_model):
     assert messages[0].tags == 'success'
     assert messages[0].message == 'Subscription successfully cancelled'
 
-@pytest.mark.django_db
 def test_cancel_requires_user_owner(client, django_user_model):
     """Tests that logged in user has ownership of subscription plan."""
     django_user_model.objects.create_user(username='a', password='b')

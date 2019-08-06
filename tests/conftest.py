@@ -2,6 +2,10 @@
 import django
 from django.conf import settings
 
+import pytest
+
+from . import factories
+
 
 def pytest_configure():
     """Setups initial testing configuration."""
@@ -39,3 +43,7 @@ def pytest_configure():
 
     # Initiate Django
     django.setup()
+
+@pytest.fixture
+def subscription():
+    return factories.SubscriptionFactory()

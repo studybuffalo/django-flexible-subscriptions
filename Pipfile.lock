@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "024ce157c48fa0d6f6312aef4199493ba6b2cc705f67dcc0b77c6661d7229ce8"
+            "sha256": "ee254ba36f3017fe5f55b01ac0d5f527c54260909a1a037ec71f672b3e0c4eed"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -171,6 +171,21 @@
                 "sha256:a2aeea129088da402665e92e0b25b04b073c04b2dce4ab65caaa38b7ce2e1a99"
             ],
             "version": "==0.15.2"
+        },
+        "factory-boy": {
+            "hashes": [
+                "sha256:728df59b372c9588b83153facf26d3d28947fc750e8e3c95cefa9bed0e6394ee",
+                "sha256:faf48d608a1735f0d0a3c9cbf536d64f9132b547dae7ba452c4d99a79e84a370"
+            ],
+            "index": "pypi",
+            "version": "==2.12.0"
+        },
+        "faker": {
+            "hashes": [
+                "sha256:96ad7902706f2409a2d0c3de5132f69b413555a419bacec99d3f16e657895b47",
+                "sha256:b3bb64aff9571510de6812df45122b633dbc6227e870edae3ed9430f94698521"
+            ],
+            "version": "==2.0.0"
         },
         "filelock": {
             "hashes": [
@@ -380,6 +395,13 @@
             "index": "pypi",
             "version": "==3.5.1"
         },
+        "python-dateutil": {
+            "hashes": [
+                "sha256:7e6584c74aeed623791615e26efd690f29817a27c73085b78e4bad02493df2fb",
+                "sha256:c89805f6f4d64db21ed966fda138f8a5ed7a4fdbc1a8ee329ce1b74e3c74da9e"
+            ],
+            "version": "==2.8.0"
+        },
         "pytz": {
             "hashes": [
                 "sha256:26c0b32e437e54a18161324a2fca3c4b9846b74a8dccddd843113109e1116b32",
@@ -492,6 +514,13 @@
                 "sha256:7c3dca29c022744e95b547e867cee89f4fce4373f3549ccd8797d8eb52cdb873"
             ],
             "version": "==0.3.0"
+        },
+        "text-unidecode": {
+            "hashes": [
+                "sha256:5a1375bb2ba7968740508ae38d92e1f889a0832913cb1c447d5e2046061a396d",
+                "sha256:801e38bd550b943563660a91de8d4b6fa5df60a542be9093f7abf819f86050cc"
+            ],
+            "version": "==1.2"
         },
         "toml": {
             "hashes": [
