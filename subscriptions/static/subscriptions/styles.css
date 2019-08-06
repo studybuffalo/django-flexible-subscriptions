@@ -18,6 +18,23 @@ html, body {
   width: 100%;
 }
 
+  #dfs-container .messages {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+  }
+
+    #dfs-container .messages .debug, #dfs-container .messages .info,
+    #dfs-container .messages .success {
+      color: rgb(50, 160, 175);
+      padding: 0.5rem 0;
+    }
+
+    #dfs-container .messages .warning, #dfs-container .messages .error {
+      color: rgb(150, 10, 10);
+      padding: 0.5rem 0;
+    }
+
   #dfs-container .errorlist {
     color: rgb(150, 10, 10);
     font-size: 1.25rem;
