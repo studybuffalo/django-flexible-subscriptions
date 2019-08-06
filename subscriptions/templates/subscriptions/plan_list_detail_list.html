@@ -38,13 +38,13 @@
     Add plan
   </a>
 
-  {% if plan_list.plans.all %}
+  {% if plan_list.plan_list_details.all %}
     <div class="plan-table">
       <div class="table-header">
         <div>{% trans "Subscription plan" %}</div>
       </div>
 
-      {% for detail in plan_list.planlistdetail_set.all %}
+      {% for detail in plan_list.plan_list_details.all %}
         <div class="table-body">
           <div>
             <span class="table-title">{% trans "Subscription plan" %}</span>
