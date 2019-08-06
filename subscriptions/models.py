@@ -290,12 +290,6 @@ class SubscriptionTransaction(models.Model):
 
 class PlanList(models.Model):
     """Model to record details of a display list of SubscriptionPlans."""
-    plans = models.ManyToManyField(
-        SubscriptionPlan,
-        blank=True,
-        related_name='plan_lists',
-        through='PlanListDetail',
-    )
     title = models.TextField(
         blank=True,
         help_text='title to display on the subscription plan list page',
@@ -326,13 +320,15 @@ class PlanList(models.Model):
 
 class PlanListDetail(models.Model):
     """Model to add additional details to plans when part of PlanList."""
-    plan = models.ForeignKey(
+    plan = models.OneToOneField(
         SubscriptionPlan,
         on_delete=models.CASCADE,
+        related_name='plan_list_detail',
     )
     plan_list = models.ForeignKey(
         PlanList,
         on_delete=models.CASCADE,
+        related_name='plan_list_details',
     )
     html_content = models.TextField(
         blank=True,
