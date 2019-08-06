@@ -21,7 +21,7 @@ def create_plan(plan_name='1', plan_description='2'):
         plan_name=plan_name, plan_description=plan_description
     )
 
-def create_plan_list_detail(plan=None, plan_list=None):
+def create_plan_list_detail(plan=None, plan_list=None, order=1):
     """Creates and returns PlanListDetail instance."""
     if not plan:
         plan = create_plan()
@@ -30,7 +30,7 @@ def create_plan_list_detail(plan=None, plan_list=None):
         plan_list = create_plan_list()
 
     return models.PlanListDetail.objects.create(
-        plan=plan, plan_list=plan_list
+        plan=plan, plan_list=plan_list, order=order
     )
 
 
@@ -161,6 +161,7 @@ def test_detail_create_create_and_success(admin_client):
             'plan': plan.id,
             'plan_list': plan_list.id,
             'title': '1',
+            'order': 1,
         },
         follow=True,
     )
@@ -198,6 +199,7 @@ def test_detail_create_creates_proper_url(admin_client):
             'plan': plan.id,
             'plan_list': plan_list.id,
             'title': '1',
+            'order': 1,
         },
         follow=True,
     )
@@ -281,6 +283,7 @@ def test_detail_update_update_and_success(admin_client):
         {
             'plan': plan.id,
             'plan_list': plan_list.id,
+            'order': 1,
             'html_content': '<b>Test</b>',
         },
         follow=True,
@@ -325,10 +328,12 @@ def test_detail_update_creates_proper_url(admin_client):
         {
             'plan': plan.id,
             'plan_list': plan_list.id,
+            'order': 1,
         },
         follow=True,
     )
     success_url, _ = response.redirect_chain[-1]
+
 
     assert success_url == '/dfs/plan-lists/{}/details/'.format(plan_list.id)
 
