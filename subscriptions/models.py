@@ -320,7 +320,7 @@ class PlanList(models.Model):
 
 class PlanListDetail(models.Model):
     """Model to add additional details to plans when part of PlanList."""
-    plan = models.OneToOneField(
+    plan = models.ForeignKey(
         SubscriptionPlan,
         on_delete=models.CASCADE,
         related_name='plan_list_detail',
