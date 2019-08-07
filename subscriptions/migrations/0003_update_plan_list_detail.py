@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='planlistdetail',
             name='plan',
-            field=models.OneToOneField(
+            field=models.ForeignKey(
                 on_delete=django.db.models.deletion.CASCADE,
                 related_name='plan_list_detail',
                 to='subscriptions.SubscriptionPlan'
