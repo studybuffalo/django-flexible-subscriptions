@@ -4,9 +4,6 @@ from django.conf import settings
 
 import pytest
 
-from . import factories
-
-
 def pytest_configure():
     """Setups initial testing configuration."""
     # Setup the bare minimum Django settings
@@ -45,16 +42,29 @@ def pytest_configure():
     django.setup()
 
 @pytest.fixture
-def plan_list():
-    """Fixture that returns PlanList and all related models."""
+def user():
+    """Returns a user model instance."""
+    from . import factories
+
+    return factories.UserFactory()
+
+@pytest.fixture
+def dfs_details():
+    """Fixture that returns all required models for testing DFS."""
+    from . import factories
+
     plan_list = factories.PlanListFactory()
-    plan_detail = plan_list.plan_details.first()
+    plan_detail = plan_list.plan_list_details.first()
     plan = plan_detail.plan
     cost = plan.costs.first()
+    user_instance = factories.UserFactory()
+    subscription = factories.create_subscription(user_instance, cost)
 
     return {
         'plan_list': plan_list,
-        'plan_detail': plan_detail,
+        'plan_list_detail': plan_detail,
         'plan': plan,
         'cost': cost,
+        'user': user_instance,
+        'subscription': subscription,
     }
