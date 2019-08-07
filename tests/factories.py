@@ -4,5 +4,7 @@ import factory
 from subscriptions import models
 
 
-class SubscriptionFactory(factory.django.DjangoModelFactory):
-    pass
+class PlanListFactory(factory.django.DjangoModelFactory):
+    """Factory to create a PlanList and all related models."""
+    class Meta:
+        model = models.PlanList

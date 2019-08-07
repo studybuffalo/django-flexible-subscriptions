@@ -45,5 +45,16 @@ def pytest_configure():
     django.setup()
 
 @pytest.fixture
-def subscription():
-    return factories.SubscriptionFactory()
+def plan_list():
+    """Fixture that returns PlanList and all related models."""
+    plan_list = factories.PlanListFactory()
+    plan_detail = plan_list.plan_details.first()
+    plan = plan_detail.plan
+    cost = plan.costs.first()
+
+    return {
+        'plan_list': plan_list,
+        'plan_detail': plan_detail,
+        'plan': plan,
+        'cost': cost,
+    }
