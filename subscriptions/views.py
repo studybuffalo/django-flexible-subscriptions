@@ -788,7 +788,6 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
             )
 
             if payment_transaction:
-                print(plan_cost_form.cleaned_data['plan_cost'])
                 # Payment successful - can handle subscription processing
                 subscription = self.setup_subscription(
                     request.user, plan_cost_form.cleaned_data['plan_cost']
