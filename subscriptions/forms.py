@@ -73,8 +73,8 @@ class PaymentForm(forms.Form):
     )
     card_number = forms.CharField(
         label='Card number',
-        max_length=13,
-        min_length=19,
+        max_length=19,
+        min_length=13,
         validators=[validators.RegexValidator(
             r'^\d{13,19}$',
             message='Invalid credit card number',
