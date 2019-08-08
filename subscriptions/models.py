@@ -323,7 +323,7 @@ class PlanListDetail(models.Model):
     plan = models.ForeignKey(
         SubscriptionPlan,
         on_delete=models.CASCADE,
-        related_name='plan_list_detail',
+        related_name='plan_list_details',
     )
     plan_list = models.ForeignKey(
         PlanList,

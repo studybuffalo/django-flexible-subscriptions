@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
             name='plan',
             field=models.ForeignKey(
                 on_delete=django.db.models.deletion.CASCADE,
-                related_name='plan_list_detail',
+                related_name='plan_list_details',
                 to='subscriptions.SubscriptionPlan'
             ),
         ),
