@@ -42,29 +42,8 @@ def pytest_configure():
     django.setup()
 
 @pytest.fixture
-def user():
-    """Returns a user model instance."""
-    from . import factories
-
-    return factories.UserFactory()
-
-@pytest.fixture
-def dfs_details():
+def dfs():
     """Fixture that returns all required models for testing DFS."""
     from . import factories
 
-    plan_list = factories.PlanListFactory()
-    plan_detail = plan_list.plan_list_details.first()
-    plan = plan_detail.plan
-    cost = plan.costs.first()
-    user_instance = factories.UserFactory()
-    subscription = factories.create_subscription(user_instance, cost)
-
-    return {
-        'plan_list': plan_list,
-        'plan_list_detail': plan_detail,
-        'plan': plan,
-        'cost': cost,
-        'user': user_instance,
-        'subscription': subscription,
-    }
+    return factories.DFS()
