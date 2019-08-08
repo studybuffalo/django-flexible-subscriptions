@@ -1,11 +1,23 @@
 """Forms for Django Flexible Subscriptions."""
 # pylint: disable=invalid-name
 from django import forms
+from django.core import validators
 from django.forms import ModelForm, Select
+from django.utils import timezone
 
 from subscriptions.conf import CURRENCY, SETTINGS
 from subscriptions.models import SubscriptionPlan, PlanCost
 
+
+def assemble_cc_years():
+    """Creates a list of the next 60 years."""
+    cc_years = []
+    now = timezone.now()
+
+    for year in range(now.year, now.year + 60):
+        cc_years.append((year, year))
+
+    return cc_years
 
 class SubscriptionPlanForm(ModelForm):
     """Model Form for SubscriptionPlan model."""
@@ -37,6 +49,23 @@ class PlanCostForm(ModelForm):
 
 class PaymentForm(forms.Form):
     """Form to collect details required for payment billing."""
+    CC_MONTHS = (
+        ('1', '01 - January'),
+        ('2', '02 - February'),
+        ('3', '03 - March'),
+        ('4', '04 - April'),
+        ('5', '05 - May'),
+        ('6', '06 - June'),
+        ('7', '07 - July'),
+        ('8', '08 - August'),
+        ('9', '09 - September'),
+        ('10', '10 - October'),
+        ('11', '11 - November'),
+        ('12', '12 - December'),
+    )
+    CC_YEARS = assemble_cc_years()
+
+
     cardholder_name = forms.CharField(
         label='Cardholder name',
         max_length=255,
@@ -44,23 +73,29 @@ class PaymentForm(forms.Form):
     )
     card_number = forms.CharField(
         label='Card number',
-        max_length=16,
-        min_length=16,
+        max_length=13,
+        min_length=19,
+        validators=[validators.RegexValidator(
+            r'^\d{13,19}$',
+            message='Invalid credit card number',
+        )]
     )
-    card_expiry_month = forms.CharField(
+    card_expiry_month = forms.ChoiceField(
+        choices=CC_MONTHS,
         label='Card expiry (month)',
-        max_length=2,
-        min_length=1,
     )
-    card_expiry_year = forms.CharField(
+    card_expiry_year = forms.ChoiceField(
+        choices=CC_YEARS,
         label='Card expiry (year)',
-        max_length=4,
-        min_length=2
     )
     card_cvv = forms.CharField(
         label='Card CVV',
         max_length=4,
         min_length=3,
+        validators=[validators.RegexValidator(
+            r'^\d{3,4}$',
+            message='Invalid CVV2 number',
+        )]
     )
     address_title = forms.CharField(
         label='Title',
