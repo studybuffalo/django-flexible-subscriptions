@@ -6,6 +6,33 @@ Changelog
 Version 0 (Beta)
 ----------------
 
+0.4.2 (2019-Aug-07)
+===================
+
+Bug Fixes
+---------
+
+* Resolving issue where subscription form would generate errors on
+  initial display.
+* Fixed bug where ``PlanList`` would display ``SubscriptionPlan``
+  instances without associated `PlanCost` instances, resulting in
+  errors on subscription order preview.
+
+Feature Updates
+---------------
+
+* Streamlining the ``PlanList`` - ``PlanListDetail`` -
+  ``SubscriptionPlan`` relationship to make relationships more apparent
+  and easier to query.
+* Added ``FactoryBoy`` factories to help streamline future test
+  writing.
+* Added validation of ``PlanCost`` ``UUID`` in the
+  ``SubscriptionPlanCostForm`` to confirm a valid UUID is provided and
+  return the object immediately.
+* Updated ``PaymentForm to include validation of credit card numbers
+  and CVV numbers and switched expiry months and years to
+  ``ChoiceField`` to ensure valid data collected.
+
 0.4.1 (2019-Aug-05)
 ===================
 
