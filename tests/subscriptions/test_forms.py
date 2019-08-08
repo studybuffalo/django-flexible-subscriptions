@@ -1,4 +1,6 @@
 """Tests for the models module."""
+from datetime import datetime
+from unittest.mock import patch, MagicMock
 from uuid import uuid4
 
 import pytest
@@ -19,6 +21,20 @@ def create_cost(plan=None, period=1, unit=6, cost='1.00'):
     return models.PlanCost.objects.create(
         plan=plan, recurrence_period=period, recurrence_unit=unit, cost=cost
     )
+
+# General Functions
+# -----------------------------------------------------------------------------
+@patch(
+    'subscriptions.forms.timezone.now',
+    MagicMock(return_value=datetime(2000, 1, 1))
+)
+def test_assemble_cc_years_correct_output():
+    """Tests that assemble_cc_years returns the expected 60 years of data."""
+    cc_years = forms.assemble_cc_years()
+
+    assert len(cc_years) == 60
+    assert cc_years[0] == (2000, 2000)
+    assert cc_years[-1] == (2059, 2059)
 
 # SubscriptionPlanCostForm
 # -----------------------------------------------------------------------------
