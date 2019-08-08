@@ -241,7 +241,7 @@ def test_subscribe_view_post_preview_added_context(admin_client, dfs):
     assert 'payment_form' in response.context
     assert isinstance(response.context['payment_form'], forms.PaymentForm)
 
-def test_subscribe_view_post_preview_progress_to_confirmation(admin_client, dfs):
+def test_subscribe_view_post_preview_progress_to_confirmation(admin_client, dfs): # pylint: disable=line-too-long
     """Tests preview POST progresses to confirmation."""
     post_data = {
         'action': 'confirm',
@@ -249,8 +249,8 @@ def test_subscribe_view_post_preview_progress_to_confirmation(admin_client, dfs)
         'plan_cost': dfs.cost.id,
         'cardholder_name': 'a',
         'card_number': '1111222233334444',
-        'card_expiry_month': '01',
-        'card_expiry_year': '20',
+        'card_expiry_month': '1',
+        'card_expiry_year': '2050',
         'card_cvv': '100',
         'address_name': 'a',
         'address_line_1': 'b',
@@ -300,7 +300,7 @@ def test_subscribe_view_post_preview_to_confirm_invalid(admin_client, dfs):
     assert response.context['confirmation'] is False
     assert 'subscriptions/subscribe_preview.html' in templates
 
-def test_subscribe_view_post_preview_to_confirm_invalid_values(admin_client, dfs):
+def test_subscribe_view_post_preview_to_confirm_invalid_values(admin_client, dfs): # pylint: disable=line-too-long
     """Tests invalid preview that form is repopulated correctly."""
     post_data = {
         'action': 'confirm',
@@ -353,8 +353,8 @@ def test_subscribe_view_post_confirm_to_process_valid(admin_client, dfs):
         'plan_cost': dfs.cost.id,
         'cardholder_name': 'a',
         'card_number': '1111222233334444',
-        'card_expiry_month': '01',
-        'card_expiry_year': '20',
+        'card_expiry_month': '1',
+        'card_expiry_year': '2050',
         'card_cvv': '100',
         'address_name': 'a',
         'address_line_1': 'b',
@@ -445,8 +445,8 @@ def test_subscribe_view_post_confirm_payment_error(admin_client, dfs):
         'plan_cost': str(dfs.cost.id),
         'cardholder_name': 'a',
         'card_number': '1111222233334444',
-        'card_expiry_month': '01',
-        'card_expiry_year': '20',
+        'card_expiry_month': '1',
+        'card_expiry_year': '2050',
         'card_cvv': '100',
         'address_name': 'a',
         'address_line_1': 'b',
