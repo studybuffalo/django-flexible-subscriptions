@@ -9,6 +9,14 @@ Version 0 (Beta)
 0.5.0 (2019-Aug-08)
 ===================
 
+Bug Fixes
+---------
+
+* Fixed issues where last billing date and end billing date were not
+  diplaying properly when cancelling a subscription.
+* Fixing the ``SubscribeUserList`` view to not show inactive
+  subscriptions.
+
 Feature Updates
 ---------------
 
