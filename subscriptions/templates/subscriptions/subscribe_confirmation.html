@@ -71,7 +71,7 @@
         {{ plan_cost_form.as_p }}
         {{ payment_form.as_p }}
 
-        <button type="submit">Go back</button>
+        <button type="submit" class="button-negative">Go back</button>
       </form>
 
       <form class="subscribe-form" action="{% url 'dfs_subscribe_add' %}" method="POST">
@@ -81,7 +81,7 @@
         {{ plan_cost_form.as_p }}
         {{ payment_form.as_p }}
 
-        <button type="submit">Confirm Subscription</button>
+        <button type="submit" class="button-positive">Confirm Subscription</button>
       </form>
 
     </div>
