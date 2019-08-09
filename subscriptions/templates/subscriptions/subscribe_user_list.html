@@ -67,7 +67,8 @@
           </div>
           <div>
             {% if subscription.cancelled %}
-              {% trans "Subscription ends:" %} {{ subscription.date_billing_end|date:"Y-m-d H:i" }}
+              <strong>{% trans "Subscription ends:" %}</strong><br>
+              {{ subscription.date_billing_end|date:"Y-m-d H:i" }}
             {% else %}
               <a href="{% url 'dfs_subscribe_cancel' subscription.id %}" class="button-negative">
                 Cancel
