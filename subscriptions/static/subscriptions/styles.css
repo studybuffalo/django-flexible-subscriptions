@@ -14,7 +14,7 @@ html, body {
   padding: 0;
   display: flex;
   flex-direction: row;
-  justify-content: left;;
+  justify-content: center;
   width: 100%;
 }
 
@@ -169,10 +169,12 @@ html, body {
         }
 
     #dfs-container .subscribe-container .form-field {
-      padding: 0.5rem 1rem;
+      margin: 0.5rem 0;
+      max-width: 600px;
     }
 
-      #dfs-container .subscribe-container .form-field input {
+      #dfs-container .subscribe-container .form-field input,
+      #dfs-container .subscribe-container .form-field select {
         display: block;
         font-size: 1.5rem;
       }
@@ -180,7 +182,15 @@ html, body {
       #dfs-container .subscribe-container .form-field-label {
         display: block;
         font-size: 1rem;
+        font-weight: 700;
         padding: 0.25rem 0;
+      }
+
+      #dfs-container .subscribe-container .form-field-help-text {
+        display: block;
+        font-size: 1rem;
+        font-style: italic;
+        padding: 0.5rem 0;
       }
 
     #dfs-container .subscribe-container #id_plan_cost {
