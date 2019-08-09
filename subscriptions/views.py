@@ -1,4 +1,6 @@
 """Views for the Flexible Subscriptions app."""
+from copy import copy
+
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import (
@@ -911,7 +913,7 @@ class SubscribeUserList(LoginRequiredMixin, abstract.ListView):
 
     def get_queryset(self):
         """Overrides get_queryset to restrict list to logged in user."""
-        return self.model.objects.filter(user=self.request.user)
+        return self.model.objects.filter(user=self.request.user, active=True)
 
 class SubscribeThankYouView(LoginRequiredMixin, abstract.TemplateView):
     """A thank you page and summary for a new subscription."""
@@ -958,7 +960,8 @@ class SubscribeCancelView(LoginRequiredMixin, abstract.DetailView):
         return get_object_or_404(
             self.model,
             user=self.request.user,
-            id=self.kwargs['subscription_id'])
+            id=self.kwargs['subscription_id'],
+        )
 
     def get_success_url(self):
         """Returns the success URL."""
@@ -967,8 +970,9 @@ class SubscribeCancelView(LoginRequiredMixin, abstract.DetailView):
     def post(self, request, *args, **kwargs):
         """Updates a subscription's details to cancel it."""
         subscription = self.get_object()
-        subscription.date_billing_end = subscription.date_billing_next
+        subscription.date_billing_end = copy(subscription.date_billing_next)
         subscription.date_billing_next = None
+        subscription.cancelled = True
         subscription.save()
 
         messages.success(self.request, self.success_message)

@@ -6,7 +6,7 @@
 {% block subscriptions_styles %}
   <style>
     #dfs-container .subscribe-container .subscribe-table {
-      font-size: 1.3rem;
+      font-size: 1.2rem;
     }
 
     @media screen and (min-width: 64em) {
@@ -33,8 +33,8 @@
       <div class="table-header">
         <div>{% trans "Subscription" %}</div>
         <div>{% trans "Payment details" %}</div>
-        <div>{% trans "Last billing date" %}</div>
         <div>{% trans "Next billing date" %}</div>
+        <div>{% trans "Subscription ends" %}</div>
         <div></div>
       </div>
 
@@ -50,26 +50,23 @@
             {{ subscription.subscription.display_billing_frequency_text }}
           </div>
           <div>
-            <span class="table-title">{% trans "Last billing date" %}</span>
-            {% if subscription.date_billing_last %}
-              {{ subscription.date_billing_last|date:"Y-m-d H:i" }}
-            {% else %}
-              N/A
-            {% endif %}
-          </div>
-          <div>
             <span class="table-title">{% trans "Next billing date" %}</span>
             {% if subscription.date_billing_next %}
               {{ subscription.date_billing_next|date:"Y-m-d H:i" }}
             {% else %}
-              N/A
+              --
             {% endif %}
           </div>
           <div>
-            {% if subscription.cancelled %}
-              <strong>{% trans "Subscription ends:" %}</strong><br>
-              {{ subscription.date_billing_end|date:"Y-m-d H:i" }}
-            {% else %}
+            <span class="table-title">{% trans "Subscription ends" %}</span>
+              {% if subscription.cancelled %}
+                {{ subscription.date_billing_end|date:"Y-m-d H:i" }}
+              {% else %}
+                --
+              {% endif %}
+            </div>
+          <div>
+            {% if not subscription.cancelled %}
               <a href="{% url 'dfs_subscribe_cancel' subscription.id %}" class="button-negative">
                 Cancel
               </a>
