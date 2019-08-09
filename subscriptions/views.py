@@ -913,7 +913,7 @@ class SubscribeUserList(LoginRequiredMixin, abstract.ListView):
 
     def get_queryset(self):
         """Overrides get_queryset to restrict list to logged in user."""
-        return self.model.objects.filter(user=self.request.user)
+        return self.model.objects.filter(user=self.request.user, active=True)
 
 class SubscribeThankYouView(LoginRequiredMixin, abstract.TemplateView):
     """A thank you page and summary for a new subscription."""
