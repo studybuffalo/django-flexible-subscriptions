@@ -958,7 +958,8 @@ class SubscribeCancelView(LoginRequiredMixin, abstract.DetailView):
         return get_object_or_404(
             self.model,
             user=self.request.user,
-            id=self.kwargs['subscription_id'])
+            id=self.kwargs['subscription_id'],
+        )
 
     def get_success_url(self):
         """Returns the success URL."""
@@ -969,6 +970,7 @@ class SubscribeCancelView(LoginRequiredMixin, abstract.DetailView):
         subscription = self.get_object()
         subscription.date_billing_end = subscription.date_billing_next
         subscription.date_billing_next = None
+        subscription.cancelled = True
         subscription.save()
 
         messages.success(self.request, self.success_message)
