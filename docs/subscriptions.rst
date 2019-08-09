@@ -48,10 +48,10 @@ subscriptions.models module
     :undoc-members:
     :show-inheritance:
 
-subscriptions.utils module
---------------------------
+subscriptions.management.commands._manager module
+-------------------------------------------------
 
-.. automodule:: subscriptions.utils
+.. automodule:: subscriptions.management.commands._manager
     :members:
     :undoc-members:
     :show-inheritance:
