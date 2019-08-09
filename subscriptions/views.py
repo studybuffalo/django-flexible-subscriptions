@@ -1,5 +1,5 @@
 """Views for the Flexible Subscriptions app."""
-import copy import copy
+from copy import copy
 
 from django.contrib import messages
 from django.contrib.auth import get_user_model
