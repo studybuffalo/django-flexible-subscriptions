@@ -6,6 +6,14 @@ Changelog
 Version 0 (Beta)
 ----------------
 
+0.5.0 (2019-Aug-08)
+===================
+
+Feature Updates
+---------------
+
+* Improving styling for user-facing views and refactoring style sheet.
+
 0.4.2 (2019-Aug-07)
 ===================
 

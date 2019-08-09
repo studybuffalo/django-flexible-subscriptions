@@ -21,7 +21,7 @@
           <form method="post" action="{% url 'dfs_subscribe_add' %}">
             {% csrf_token %}
             <input type="hidden" name="plan_id" value="{{ detail.plan.id }}">
-            <button type="submit">{{ detail.subscribe_button_text|safe }}</button>
+            <button type="submit" class="button-positive">{{ detail.subscribe_button_text|safe }}</button>
           </form>
         </div>
       {% endfor %}
