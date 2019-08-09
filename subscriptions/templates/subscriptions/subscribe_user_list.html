@@ -54,7 +54,7 @@
             {% if subscription.date_billing_next %}
               {{ subscription.date_billing_next|date:"Y-m-d H:i" }}
             {% else %}
-              N/A
+              --
             {% endif %}
           </div>
           <div>
@@ -62,7 +62,7 @@
               {% if subscription.cancelled %}
                 {{ subscription.date_billing_end|date:"Y-m-d H:i" }}
               {% else %}
-                N/A
+                --
               {% endif %}
             </div>
           <div>
