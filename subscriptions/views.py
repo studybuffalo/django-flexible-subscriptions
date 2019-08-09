@@ -1,4 +1,6 @@
 """Views for the Flexible Subscriptions app."""
+import copy import copy
+
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import (
@@ -968,7 +970,7 @@ class SubscribeCancelView(LoginRequiredMixin, abstract.DetailView):
     def post(self, request, *args, **kwargs):
         """Updates a subscription's details to cancel it."""
         subscription = self.get_object()
-        subscription.date_billing_end = subscription.date_billing_next
+        subscription.date_billing_end = copy(subscription.date_billing_next)
         subscription.date_billing_next = None
         subscription.cancelled = True
         subscription.save()
