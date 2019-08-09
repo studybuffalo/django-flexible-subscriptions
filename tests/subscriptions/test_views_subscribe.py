@@ -583,16 +583,18 @@ def test_subscribe_user_list_no_redirect_on_login(client, django_user_model):
 
     assert response.status_code == 200
 
-def test_subscribe_user_list_requires_user_owner(client, django_user_model):
+def test_subscribe_user_list_requires_user_owner(client, django_user_model, dfs): # pylint: disable=line-too-long
     """Tests that logged in user has ownership of subscription plans."""
-    user_1 = django_user_model.objects.create_user(username='a', password='b')
-    user_2 = django_user_model.objects.create_user(username='c', password='d')
-    subscription_1 = models.UserSubscription.objects.create(user=user_1)
-    models.UserSubscription.objects.create(user=user_2)
-    client.login(username='a', password='b')
+    subscription = dfs.subscription
+    other_user = django_user_model.objects.create_user(
+        username='a', password='b'
+    )
+    models.UserSubscription.objects.create(user=other_user)
+
+    client.force_login(user=dfs.user)
     response = client.get(reverse('dfs_subscribe_user_list'), follow=True)
 
-    assert response.context['subscriptions'][0] == subscription_1
+    assert response.context['subscriptions'][0] == subscription
     assert models.UserSubscription.objects.all().count() == 2
     assert len(response.context['subscriptions']) == 1
 
@@ -678,14 +680,19 @@ def test_cancel_view_redirect_anonymous(client):
     assert redirect_url == (
         '/accounts/login/?next=/subscribe/cancel/{}/'.format(sub_id))
 
-def test_cancel_view_no_redirect_on_login(client, django_user_model):
+def test_cancel_view_no_redirect_on_login(client, dfs):
     """Tests that logged in users are not redirected."""
-    user = django_user_model.objects.create_user(username='a', password='b')
-    sub_id = models.UserSubscription.objects.create(user=user).id
-    client.login(username='a', password='b')
+    subscription = dfs.subscription
+    subscription_id = subscription.id
+
+    client.force_login(dfs.user)
     response = client.get(
-        reverse('dfs_subscribe_cancel', kwargs={'subscription_id': sub_id}),
-        follow=True)
+        reverse(
+            'dfs_subscribe_cancel',
+            kwargs={'subscription_id': subscription_id},
+        ),
+        follow=True,
+    )
 
     assert response.status_code == 200
 
@@ -694,18 +701,12 @@ def test_cancel_view_get_success_url():
     view = views.SubscribeCancelView()
     assert view.get_success_url() == '/subscriptions/'
 
-def test_cancel_post_updates_instance(client, django_user_model):
+def test_cancel_post_updates_instance(client, dfs):
     """Tests that POST request properly updates subscription instance."""
-    user = django_user_model.objects.create_user(username='a', password='b')
-    subscription = models.UserSubscription.objects.create(
-        user=user,
-        date_billing_start=datetime(2018, 1, 1),
-        date_billing_end=None,
-        date_billing_last=datetime(2018, 11, 1),
-        date_billing_next=datetime(2018, 12, 1),
-    )
+    subscription = dfs.subscription
     subscription_id = subscription.id
-    client.login(username='a', password='b')
+
+    client.force_login(dfs.user)
     response = client.post(
         reverse(
             'dfs_subscribe_cancel', kwargs={'subscription_id': subscription_id}
@@ -716,7 +717,7 @@ def test_cancel_post_updates_instance(client, django_user_model):
     subscription = models.UserSubscription.objects.get(id=subscription_id)
     messages = [message for message in get_messages(response.wsgi_request)]
 
-    assert subscription.date_billing_end == datetime(2018, 12, 1)
+    assert subscription.date_billing_end == datetime(2018, 2, 1, 1, 1, 1)
     assert subscription.date_billing_next is None
     assert messages[0].tags == 'success'
     assert messages[0].message == 'Subscription successfully cancelled'

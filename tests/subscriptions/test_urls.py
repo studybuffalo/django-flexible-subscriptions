@@ -59,21 +59,21 @@ def test_thank_you_exists_at_desired_url(admin_client, django_user_model):
 
     assert response.status_code == 200
 
-def test_cancel_exists_at_desired_location(client, django_user_model):
+def test_cancel_exists_at_desired_location(client, dfs):
     """Tests that subscription cancel URL name works."""
-    user = django_user_model.objects.create_user(username='a', password='b')
-    subscription = models.UserSubscription.objects.create(user=user)
-    client.login(username='a', password='b')
+    subscription = dfs.subscription
+
+    client.force_login(user=dfs.user)
     response = client.get(reverse(
         'dfs_subscribe_cancel', kwargs={'subscription_id': subscription.id}))
 
     assert response.status_code == 200
 
-def test_cancel_exists_at_desired_url(client, django_user_model):
+def test_cancel_exists_at_desired_url(client, dfs):
     """Tests that subscription cancel URL works."""
-    user = django_user_model.objects.create_user(username='a', password='b')
-    subscription = models.UserSubscription.objects.create(user=user)
-    client.login(username='a', password='b')
+    subscription = dfs.subscription
+
+    client.force_login(user=dfs.user)
     response = client.get('/subscribe/cancel/{}/'.format(subscription.id))
 
     assert response.status_code == 200
