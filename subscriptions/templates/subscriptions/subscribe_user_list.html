@@ -12,13 +12,13 @@
     @media screen and (min-width: 64em) {
       #dfs-container .subscribe-container .table-header {
         display: grid;
-        grid-template-columns: 2fr 3fr 2fr 2fr 1fr;
+        grid-template-columns: 2fr 3fr 2fr 2fr 8rem;
         grid-template-rows: auto;
       }
 
       #dfs-container .subscribe-container .table-body {
         display: grid;
-        grid-template-columns: 2fr 3fr 2fr 2fr 1fr;
+        grid-template-columns: 2fr 3fr 2fr 2fr 8rem;
         grid-template-rows: auto;
       }
     }
@@ -66,9 +66,13 @@
             {% endif %}
           </div>
           <div>
-            <a href="{% url 'dfs_subscribe_cancel' subscription.id %}" class="button-negative">
-              Cancel
-            </a>
+            {% if subscription.cancelled %}
+              {% trans "Subscription ends:" %} { subscription.date_billing_end|date:"Y-m-d H:i" }}
+            {% else %}
+              <a href="{% url 'dfs_subscribe_cancel' subscription.id %}" class="button-negative">
+                Cancel
+              </a>
+            {% endif %}
           </div>
         </div>
       {% endfor %}
