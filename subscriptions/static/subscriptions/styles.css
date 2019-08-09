@@ -232,6 +232,41 @@ html, body {
       display: block;
     }
 
+  #dfs-container .subscribe-container .plan-table {
+    margin: 1rem 0;
+  }
+
+  #dfs-container .subscribe-container .table-header {
+    display: none;
+    font-weight: 700;
+    padding: 0.5rem 1rem;
+  }
+
+    #dfs-container .subscribe-container .table-header > div {
+      padding: 0 0.5rem;
+    }
+
+  #dfs-container .subscribe-container .table-body {
+    padding: 0.5rem 1rem;
+  }
+
+    #dfs-container .subscribe-container .table-body > div {
+      margin: 1rem 0;
+      padding: 0 0.5rem;
+    }
+
+    #dfs-container .subscribe-container .table-body:nth-child(even) {
+      background-color: rgb(245, 245, 245);
+    }
+
+  #dfs-container .subscribe-container .table-title {
+    display: block;
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0.25rem 0;
+  }
+
+
   /* Styles for Developer Dashboard Page Templates */
   #dfs-container .dashboard-container {
     display: grid;
@@ -459,6 +494,10 @@ html, body {
 
   #dfs-container .subscribe-container .plan {
     margin: 1rem 0.5rem;
+  }
+
+  #dfs-container .subscribe-container .table-title {
+    display: none;
   }
 
   /* Developer Dashboard Template Styles */
