@@ -18,6 +18,16 @@ html, body {
   width: 100%;
 }
 
+  #dfs-container main a {
+    color: rgb(50, 160, 175);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  #dfs-container main a:hover {
+    color: rgb(10, 90, 100);
+  }
+
   #dfs-container .messages {
       list-style: none;
       margin: 0;
@@ -42,6 +52,49 @@ html, body {
     margin: 0;
     padding: 0;
   }
+
+  #dfs-container .button-positive {
+    background-color: transparent;
+    border: 1px solid  rgb(50, 160, 175);
+    box-sizing: border-box;
+    border-radius: 5px;
+    color:  rgb(50, 160, 175);
+    cursor: pointer;
+    display: inline-block;
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin: 0.25rem 0;
+    min-width: 120px;
+    padding: 0.25rem 0.5rem;
+    text-align: center;
+  }
+
+    #dfs-container .button-positive:hover {
+      border-color: rgb(10, 90, 100);
+      color: rgb(10, 90, 100);
+    }
+
+  #dfs-container .button-negative {
+    background-color: transparent;
+    border: 1px solid rgb(150, 10, 10);
+    box-sizing: border-box;
+    border-radius: 5px;
+    color: rgb(150, 10, 10);
+    cursor: pointer;
+    display: inline-block;
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin: 0.25rem 0;
+    min-width: 120px;
+    padding: 0.25rem 0.5rem;
+    text-align: center;
+  }
+
+    #dfs-container .button-negative:hover {
+      border-color: rgb(80, 10, 10);
+      color: rgb(80, 10, 10);
+    }
+
 
 /* Styles for Subscribe Page Templates */
   #dfs-container .subscribe-container {
@@ -98,40 +151,6 @@ html, body {
       width: 100%;
     }
 
-      #dfs-container .subscribe-container .plan button {
-        background: none;
-        background-color: transparent;
-        border: 1px solid rgb(50, 160, 175);
-        box-shadow: none;
-        color: rgb(50, 160, 175);
-        cursor: pointer;
-        font-size: 1.5rem;
-        font-weight: 500;
-        margin: 1rem 0;
-        padding: 0.5rem 1rem;
-      }
-
-      #dfs-container .subscribe-container .plan button:hover {
-        border: 1px solid rgb(10, 90, 100);
-        color: rgb(10, 90, 100);
-      }
-
-    #dfs-container .subscribe-container .button {
-      border: 1px solid rgb(50, 160, 175);
-      box-shadow: none;
-      color: rgb(50, 160, 175);
-      cursor: pointer;
-      font-size: 1.5rem;
-      margin: 1rem 0;
-      padding: 0.5rem 1rem;
-      text-decoration: none;
-    }
-
-      #dfs-container .subscribe-container .button:hover {
-        border: 1px solid rgb(10, 90, 100);
-        color: rgb(10, 90, 100);
-      }
-
     #dfs-container .subscribe-container .footer {
       padding: 0.5rem 0;
     }
@@ -149,24 +168,6 @@ html, body {
     #dfs-container .subscribe-container .subscribe-form {
       padding: 1rem 0;
     }
-
-      #dfs-container .subscribe-container .subscribe-form button {
-        background: none;
-        background-color: transparent;
-        border: 1px solid rgb(50, 160, 175);
-        box-shadow: none;
-        color: rgb(50, 160, 175);
-        cursor: pointer;
-        font-size: 1.5rem;
-        font-weight: 500;
-        margin: 1rem 0;
-        padding: 0.5rem 1rem;
-      }
-
-        #dfs-container .subscribe-container .subscribe-form button:hover {
-          border: 1px solid rgb(10, 90, 100);
-          color: rgb(10, 90, 100);
-        }
 
     #dfs-container .subscribe-container .form-field {
       margin: 0.5rem 0;
@@ -376,57 +377,9 @@ html, body {
       grid-area: main;
     }
 
-      #dfs-container .dashboard-container main a {
-        color: rgb(50, 160, 175);
-        font-weight: 700;
-        text-decoration: none;
-      }
-
-        #dfs-container .dashboard-container main a:hover {
-          color: rgb(10, 90, 100);
-        }
-
     #dfs-container .dashboard-container .breadcrumb {
       font-size: 1rem;
     }
-
-    #dfs-container .dashboard-container .button-positive {
-      border: 1px solid  rgb(50, 160, 175);
-      box-sizing: border-box;
-      border-radius: 5px;
-      color:  rgb(50, 160, 175);
-      display: inline-block;
-      font-size: 1rem;
-      font-weight: 500;
-      margin: 0.25rem 0;
-      min-width: 120px;
-      padding: 0.5rem;
-      text-align: center;
-    }
-
-      #dfs-container .dashboard-container .button-positive:hover {
-        border-color: rgb(10, 90, 100);
-        color: rgb(10, 90, 100);
-      }
-
-    #dfs-container .dashboard-container .button-negative {
-      border: 1px solid rgb(150, 10, 10);
-      box-sizing: border-box;
-      border-radius: 5px;
-      color: rgb(150, 10, 10);
-      display: inline-block;
-      font-size: 1rem;
-      font-weight: 500;
-      margin: 0.25rem 0;
-      min-width: 120px;
-      padding: 0.5rem;
-      text-align: center;
-    }
-
-      #dfs-container .dashboard-container .button-negative:hover {
-        border-color: rgb(80, 10, 10);
-        color: rgb(80, 10, 10);
-      }
 
     #dfs-container .dashboard-container .pagination {
       margin: 0.5rem 0;
