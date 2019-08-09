@@ -1,12 +1,73 @@
 {% extends template_extends %}
 
 {% load i18n %}
+{% load currency_filters %}
+
+{% block subscriptions_styles %}
+  <style>
+    #dfs-container .subscribe-container .subscribe-table {
+      font-size: 1.3rem;
+    }
+
+    @media screen and (min-width: 64em) {
+      #dfs-container .subscribe-container .table-header {
+        display: grid;
+        grid-template-columns: 2fr 3fr 2fr 2fr;
+        grid-template-rows: auto;
+      }
+
+      #dfs-container .subscribe-container .table-body {
+        display: grid;
+        grid-template-columns: 2fr 3fr 2fr 2fr;
+        grid-template-rows: auto;
+      }
+    }
+  </style>
+{% endblock %}
 
 {% block content %}
-  <h1>Cancel subscription?</h1>
+  <main class="subscribe-container">
+    <h1>Cancel subscription?</h1>
 
-  <form method="post" action="{% url 'dfs_subscribe_cancel' subscription.id %}">
-    {% csrf_token %}
-    <button type="submit">Cancel</button>
-  </form>
+    <div class="subscribe-table">
+      <div class="table-header">
+        <div>{% trans "Subscription" %}</div>
+        <div>{% trans "Payment details" %}</div>
+        <div>{% trans "Last billing date" %}</div>
+        <div>{% trans "Next billing date" %}</div>
+      </div>
+
+      <div class="table-body">
+        <div>
+          <span class="table-title">{% trans "Subscription" %}</span>
+          {{ subscription.subscription.plan }}
+        </div>
+        <div>
+          <span class="table-title">{% trans "Payment details" %}</span>
+          {{ subscription.subscription.cost|currency }}
+          {{ subscription.subscription.display_billing_frequency_text }}
+        </div>
+        <div>
+          <span class="table-title">{% trans "Last billing date" %}</span>
+          {% if subscription.date_billing_last %}
+            {{ subscription.date_billing_last|date:"Y-m-d H:i" }}
+          {% else %}
+            N/A
+          {% endif %}
+        </div>
+        <div>
+          <span class="table-title">{% trans "Next billing date" %}</span>
+          {% if subscription.date_billing_next %}
+            {{ subscription.date_billing_next|date:"Y-m-d H:i" }}
+          {% else %}
+            N/A
+          {% endif %}
+        </div>
+      </div>
+
+    <form method="post" action="{% url 'dfs_subscribe_cancel' subscription.id %}">
+      {% csrf_token %}
+      <button type="submit" class="button-negative">Cancel</button>
+    </form>
+  </main>
 {% endblock %}
