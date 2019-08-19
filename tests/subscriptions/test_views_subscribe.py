@@ -495,7 +495,7 @@ def test_subscribe_view_hide_form():
         assert isinstance(field.widget, HiddenInput)
 
 @patch(
-    'subscriptions.utils.timezone.now', lambda: datetime(2018, 1, 1, 1, 1, 1)
+    'subscriptions.views.timezone.now', lambda: datetime(2018, 1, 1, 1, 1, 1)
 )
 def test_subscribe_view_record_transaction_without_date(dfs):
     """Tests handling of record_transaction without providing a date.

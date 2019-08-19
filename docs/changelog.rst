@@ -6,6 +6,16 @@ Changelog
 Version 0 (Beta)
 ----------------
 
+0.6.0 (2019-Aug-19)
+===================
+
+Feature Updates
+---------------
+
+* Integrating subscription management utility functions into Django
+  management commands. Documentation has been updated to explain this
+  functionality.
+
 0.5.0 (2019-Aug-18)
 ===================
 

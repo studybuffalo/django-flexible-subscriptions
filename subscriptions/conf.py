@@ -162,6 +162,17 @@ class Currency():
 
         return formatted_currency
 
+def string_to_module_and_class(string):
+    """Breaks a string to a module and class name component."""
+    components = string.split('.')
+    component_class = components.pop()
+    component_module = '.'.join(components)
+
+    return {
+        'module': component_module,
+        'class': component_class,
+    }
+
 def compile_settings():
     """Compiles and validates all package settings and defaults.
 
@@ -187,20 +198,28 @@ def compile_settings():
         settings, 'DFS_BASE_TEMPLATE', 'subscriptions/base.html'
     )
 
-    # Breaks view string into module & class components for dynamic importing
+    # Get module and class for SubscribeView
     subscribe_view_path = getattr(
         settings, 'DFS_SUBSCRIBE_VIEW', 'subscriptions.views.SubscribeView'
     )
-    subscribe_view_components = subscribe_view_path.split('.')
-    subscribe_view_class = subscribe_view_components.pop()
-    subscribe_view_module = '.'.join(subscribe_view_components)
+    subscribe_view = string_to_module_and_class(subscribe_view_path)
+
+    # MANAGEMENT COMMANDS SETTINGS
+    # ------------------------------------------------------------------------
+    # Get module and class for the Management Command Manager class
+    manager_object = getattr(
+        settings,
+        'DFS_MANAGER_CLASS',
+        'subscriptions.management.commands._manager.Manager',
+    )
+    management_manager = string_to_module_and_class(manager_object)
 
     return {
         'enable_admin': enable_admin,
         'currency_locale': currency_locale,
         'base_template': base_template,
-        'subscribe_view_module': subscribe_view_module,
-        'subscribe_view_class': subscribe_view_class
+        'subscribe_view': subscribe_view,
+        'management_manager': management_manager,
     }
 
 

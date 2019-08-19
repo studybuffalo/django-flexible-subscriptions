@@ -74,3 +74,21 @@ The path to the SubscribeView to use with
 ``django-flexible-subscriptions``. This will generally be set to a
 class view the inherits from ``SubscribeView`` to allow customization
 of payment and subscription processing.
+
+------------------------
+View & Template Settings
+------------------------
+
+These control various aspects of the management commands.
+
+``DFS_MANAGER_CLASS``
+======================
+
+**Required:** ``False``
+
+**Default (string):** ``subscriptions.management.commands._manager.Manager``
+
+The path to the ``Manager`` object to use with the management commands.
+This will generally be set to a class that inherits from the
+``django-flexible-subscriptions`` ``Manager`` class to allow
+customization of renewal billings and user notifications.

@@ -9,8 +9,8 @@ from subscriptions.conf import SETTINGS
 
 # Retrieve the proper subscribe view
 SubscribeView = getattr( # pylint: disable=invalid-name
-    importlib.import_module(SETTINGS['subscribe_view_module']),
-    SETTINGS['subscribe_view_class']
+    importlib.import_module(SETTINGS['subscribe_view']['module']),
+    SETTINGS['subscribe_view']['class']
 )
 
 urlpatterns = [

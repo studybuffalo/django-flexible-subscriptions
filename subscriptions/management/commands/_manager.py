@@ -133,11 +133,8 @@ class Manager():
                 self.retrieve_transaction_date(payment_transaction)
             )
 
-    def process_payment(self, *args, **kwargs): # pylint: disable=unused-argument
+    def process_payment(self, *args, **kwargs): # pylint: disable=unused-argument, no-self-use
         """Processes payment and confirms if payment is accepted.
-
-            This method needs to be overriden in a project to handle
-            payment processing with the appropriate payment provider.
 
             This method needs to be overriden in a project to handle
             payment processing with the appropriate payment provider.
@@ -148,7 +145,7 @@ class Manager():
         """
         return True
 
-    def retrieve_transaction_date(self, payment): # pylint: disable=unused-argument
+    def retrieve_transaction_date(self, payment): # pylint: disable=unused-argument, no-self-use
         """Returns the transaction date from provided payment details.
 
             Method should be overriden to accomodate the implemented
@@ -160,7 +157,8 @@ class Manager():
         """
         return timezone.now()
 
-    def record_transaction(self, subscription, transaction_date=None):
+    @staticmethod
+    def record_transaction(subscription, transaction_date=None):
         """Records transaction details in SubscriptionTransaction.
 
             Parameters:
