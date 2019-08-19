@@ -6,7 +6,7 @@ Changelog
 Version 0 (Beta)
 ----------------
 
-0.5.0 (2019-Aug-08)
+0.5.0 (2019-Aug-18)
 ===================
 
 Bug Fixes
@@ -21,6 +21,7 @@ Feature Updates
 ---------------
 
 * Improving styling for user-facing views and refactoring style sheet.
+* Adding support for German (Germany) locale (``de_de``).
 
 0.4.2 (2019-Aug-07)
 ===================
