@@ -170,4 +170,63 @@ documentation.
 Subscription renewals and expiries
 ----------------------------------
 
-TBD
+The management of subscription renewals and expiries must be handled by
+a task manager. Below will demonstrate this using ``cron``, but any
+application with similar functionality should work.
+
+Extending the subscription manager
+==================================
+
+First, you will likely need to customize the subscription manager. This
+is necessary to accomodate payment processing with the subscription
+renewal process. You can do this by extending the supplied
+``Manager`` class. For example:
+
+1. Create a custom ``Manager`` class:
+
+.. code-block:: python
+
+    # custom/manager.py
+    from subscriptions.management.commands import _manager
+
+    CustomManager(_manager.Manager):
+        process_payment(self, *args, **kwargs):
+            # Implement your payment processing here
+
+2. Update your settings to point to your custom manager:
+
+.. code-block:: python
+
+    ...
+    # settings.py
+    DFS_MANAGER_CLASS = 'custom.manager.CustomManager'
+    ...
+
+Running the subscription manager
+================================
+
+Once the subscription manager is setup, you will simply need to call
+the management command at a regular interval of your choosing. This
+command can be called via:
+
+.. code-block:: shell
+
+    $ pipenv run python manage.py process_subscriptions
+    > Processing subscriptions... Complete!
+
+If you wanted to renew and expire subscriptions daily, you could use
+the following ``cron`` command:
+
+.. code-block:: cron
+
+    # ┌ Minute (0-59)
+    # | ┌ Hour (0-23)
+    # | | ┌ Day of Month (1-31)
+    # | | | ┌ Month (1-12)
+    # | | | | ┌ Day of week (0-6)
+    # | | | | | ┌ cron command
+    # | | | | | |
+      0 0 * * * /path/to/pipenv/python manage.py process_subscriptions
+
+This could be implemented in other task runners in a similar fashion
+(e.g. Windows Task Scheduler, Celery).
