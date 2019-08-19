@@ -81,7 +81,7 @@ View & Template Settings
 
 These control various aspects of the management commands.
 
-``DFS_MANAGER_OBJECT``
+``DFS_MANAGER_CLASS``
 ======================
 
 **Required:** ``False``

@@ -209,7 +209,7 @@ def compile_settings():
     # Get module and class for the Management Command Manager class
     manager_object = getattr(
         settings,
-        'DFS_MANAGER_OBJECT',
+        'DFS_MANAGER_CLASS',
         'subscriptions.management.commands._manager.Manager',
     )
     management_manager = string_to_module_and_class(manager_object)

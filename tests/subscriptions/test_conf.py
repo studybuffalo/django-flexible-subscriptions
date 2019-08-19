@@ -12,7 +12,7 @@ from subscriptions import conf
     DFS_CURRENCY_LOCALE=2,
     DFS_BASE_TEMPLATE='3',
     DFS_SUBSCRIBE_VIEW='a.b',
-    DFS_MANAGER_OBJECT='a.b',
+    DFS_MANAGER_CLASS='a.b',
 )
 def test_all_settings_populate_from_settings_properly():
     """Tests that Django settings all proper populate SETTINGS."""
@@ -35,7 +35,7 @@ def test_settings_defaults():
     del settings.DFS_CURRENCY_LOCALE
     del settings.DFS_BASE_TEMPLATE
     del settings.DFS_SUBSCRIBE_VIEW
-    del settings.DFS_MANAGER_OBJECT
+    del settings.DFS_MANAGER_CLASS
 
     subscription_settings = conf.compile_settings()
 
