@@ -18,4 +18,6 @@ class Command(BaseCommand):
         )
         manager = Manager()
 
+        self.stdout.write('Processing subscriptions... ', ending='')
         manager.process_subscriptions()
+        self.stdout.write('Complete!')
