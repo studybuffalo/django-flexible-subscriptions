@@ -37,7 +37,7 @@ setup(
     ],
     tests_require=[
         'pytest==5.2.2',
-        'pytest-cov==2.6.0',
+        'pytest-cov==2.8.1',
     ],
     # See http://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
