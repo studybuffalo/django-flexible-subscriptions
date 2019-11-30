@@ -4,10 +4,32 @@ from uuid import uuid4
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+
+# Convenience references for units for plan recurrence billing
+# ----------------------------------------------------------------------------
+ONCE = '0'
+SECOND = '1'
+MINUTE = '2'
+HOUR = '3'
+DAY = '4'
+WEEK = '5'
+MONTH = '6'
+YEAR = '7'
+RECURRENCE_UNIT_CHOICES = (
+    (ONCE, 'once'),
+    (SECOND, 'second'),
+    (MINUTE, 'minute'),
+    (HOUR, 'hour'),
+    (DAY, 'day'),
+    (WEEK, 'week'),
+    (MONTH, 'month'),
+    (YEAR, 'year'),
+)
+# ----------------------------------------------------------------------------
 
 class PlanTag(models.Model):
     """A tag for a subscription plan."""
@@ -100,10 +122,10 @@ class PlanCost(models.Model):
         help_text=_('how often the plan is billed (per recurrence unit)'),
         validators=[MinValueValidator(1)],
     )
-    recurrence_unit = models.PositiveIntegerField(
-        default=6,
-        help_text=_('the unit of measurement for the recurrence period'),
-        validators=[MaxValueValidator(7)],
+    recurrence_unit = models.CharField(
+        choices=RECURRENCE_UNIT_CHOICES,
+        default=MONTH,
+        max_length=1,
     )
     cost = models.DecimalField(
         blank=True,
@@ -119,29 +141,35 @@ class PlanCost(models.Model):
     @property
     def display_recurrent_unit_text(self):
         """Converts recurrence_unit integer to text."""
-        conversion = [
-            'one-time', 'per second', 'per minute', 'per hour',
-            'per day', 'per week', 'per month', 'per year',
-        ]
+        conversion = {
+            ONCE: 'one-time',
+            SECOND: 'per second',
+            MINUTE: 'per minute',
+            HOUR: 'per hour',
+            DAY: 'per day',
+            WEEK: 'per week',
+            MONTH: 'per month',
+            YEAR: 'per year',
+        }
 
         return conversion[self.recurrence_unit]
 
     @property
     def display_billing_frequency_text(self):
         """Generates human-readable billing frequency."""
-        conversion = [
-            'one-time',
-            {'singular': 'per second', 'plural': 'seconds'},
-            {'singular': 'per minute', 'plural': 'minutes'},
-            {'singular': 'per hour', 'plural': 'hours'},
-            {'singular': 'per day', 'plural': 'days'},
-            {'singular': 'per week', 'plural': 'weeks'},
-            {'singular': 'per month', 'plural': 'months'},
-            {'singular': 'per year', 'plural': 'years'},
-        ]
+        conversion = {
+            ONCE: 'one-time',
+            SECOND: {'singular': 'per second', 'plural': 'seconds'},
+            MINUTE: {'singular': 'per minute', 'plural': 'minutes'},
+            HOUR: {'singular': 'per hour', 'plural': 'hours'},
+            DAY: {'singular': 'per day', 'plural': 'days'},
+            WEEK: {'singular': 'per week', 'plural': 'weeks'},
+            MONTH: {'singular': 'per month', 'plural': 'months'},
+            YEAR: {'singular': 'per year', 'plural': 'years'},
+        }
 
-        if self.recurrence_unit == 0:
-            return conversion[0]
+        if self.recurrence_unit == ONCE:
+            return conversion[ONCE]
 
         if self.recurrence_period == 1:
             return conversion[self.recurrence_unit]['singular']
@@ -160,22 +188,22 @@ class PlanCost(models.Model):
             Returns:
                 datetime: The next time billing will be due.
         """
-        if self.recurrence_unit == 1:
+        if self.recurrence_unit == SECOND:
             return current + timedelta(seconds=self.recurrence_period)
 
-        if self.recurrence_unit == 2:
+        if self.recurrence_unit == MINUTE:
             return current + timedelta(minutes=self.recurrence_period)
 
-        if self.recurrence_unit == 3:
+        if self.recurrence_unit == HOUR:
             return current + timedelta(hours=self.recurrence_period)
 
-        if self.recurrence_unit == 4:
+        if self.recurrence_unit == DAY:
             return current + timedelta(days=self.recurrence_period)
 
-        if self.recurrence_unit == 5:
+        if self.recurrence_unit == WEEK:
             return current + timedelta(weeks=self.recurrence_period)
 
-        if self.recurrence_unit == 6:
+        if self.recurrence_unit == MONTH:
             # Adds the average number of days per month as per:
             # http://en.wikipedia.org/wiki/Month#Julian_and_Gregorian_calendars
             # This handle any issues with months < 31 days and leap years
@@ -183,7 +211,7 @@ class PlanCost(models.Model):
                 days=30.4368 * self.recurrence_period
             )
 
-        if self.recurrence_unit == 7:
+        if self.recurrence_unit == YEAR:
             # Adds the average number of days per year as per:
             # http://en.wikipedia.org/wiki/Year#Calendar_year
             # This handle any issues with leap years
@@ -350,13 +378,3 @@ class PlanListDetail(models.Model):
         return 'Plan List {} - {}'.format(
             self.plan_list, self.plan.plan_name
         )
-
-# Convenience references for units for plan recurrence billing
-ONCE = 0
-SECOND = 1
-MINUTE = 2
-HOUR = 3
-DAY = 4
-WEEK = 5
-MONTH = 6
-YEAR = 7

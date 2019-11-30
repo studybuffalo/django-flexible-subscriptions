@@ -12,7 +12,7 @@ from subscriptions import models
 class PlanCostFactory(factory.django.DjangoModelFactory):
     """Factory to create PlanCost model instance."""
     recurrence_period = factory.Sequence(lambda n: int(n))
-    recurrence_unit = 4
+    recurrence_unit = models.DAY
     cost = factory.Sequence(lambda n: int(n))
 
     class Meta:

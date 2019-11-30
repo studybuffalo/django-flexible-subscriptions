@@ -19,7 +19,7 @@ def create_plan(plan_name='1', plan_description='2'):
         plan_name=plan_name, plan_description=plan_description
     )
 
-def create_plan_cost(plan, rec_period=1, rec_unit=6, cost='1.00'):
+def create_plan_cost(plan, rec_period=1, rec_unit=models.MONTH, cost='1.00'):
     """Creates and returns a PlanCost instance."""
     return models.PlanCost.objects.create(
         plan=plan,
@@ -162,10 +162,10 @@ def test_plan_create_with_costs(admin_client):
         'costs-MIN_NUM_FORMS': '0',
         'costs-MAX_NUM_FORMS': '1000',
         'costs-0-recurrence_period': '1',
-        'costs-0-recurrence_unit': '1',
+        'costs-0-recurrence_unit': str(models.SECOND),
         'costs-0-cost': '1',
         'costs-1-recurrence_period': '2',
-        'costs-1-recurrence_unit': '2',
+        'costs-1-recurrence_unit': str(models.HOUR),
         'costs-1-cost': '2',
     }
 
@@ -436,7 +436,7 @@ def test_plan_upate_with_additional_costs(admin_client):
         'costs-1-id': '',
         'costs-1-plan': '',
         'costs-1-recurrence_period': '2',
-        'costs-1-recurrence_unit': '2',
+        'costs-1-recurrence_unit': str(models.HOUR),
         'costs-1-cost': '2.00',
         'costs-1-DELETE': False,
     }

@@ -5,24 +5,35 @@ from subscriptions import models
 from subscriptions.conf import SETTINGS
 
 
+class PlanCostInline(admin.TabularInline):
+    """Inline admin class for the PlanCost model."""
+    model = models.PlanCost
+    fields = (
+        'recurrence_period',
+        'recurrence_unit',
+        'cost',
+    )
+    extra = 0
+
 class SubscriptionPlanAdmin(admin.ModelAdmin):
     """Admin class for the SubscriptionPlan model."""
-    fields = [
+    fields = (
         'plan_name',
         'plan_description',
         'group',
         'tags',
         'grace_period',
-    ]
-    list_display = [
+    )
+    inlines = [PlanCostInline]
+    list_display = (
         'plan_name',
         'group',
         'display_tags',
-    ]
+    )
 
 class UserSubscriptionAdmin(admin.ModelAdmin):
     """Admin class for the UserSubscription model."""
-    fields = [
+    fields = (
         'user',
         'date_billing_start',
         'date_billing_end',
@@ -30,14 +41,14 @@ class UserSubscriptionAdmin(admin.ModelAdmin):
         'date_billing_next',
         'active',
         'cancelled',
-    ]
-    list_display = [
+    )
+    list_display = (
         'user',
         'date_billing_last',
         'date_billing_next',
         'active',
         'cancelled',
-    ]
+    )
 
 class TransactionAdmin(admin.ModelAdmin):
     """Admin class for the SubscriptionTransaction model."""
