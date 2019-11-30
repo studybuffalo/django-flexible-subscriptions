@@ -17,10 +17,10 @@ django-flexible-subscriptions
 .. |DjangoVersions| image:: https://img.shields.io/pypi/djversions/django-flexible-subscriptions.svg
    :alt: PyPI - Django Version
 
-.. |BuildStatus| image:: https://travis-ci.org/studybuffalo/django-flexible-subscriptions.svg?branch=master
+.. |BuildStatus| image:: https://travis-ci.com/studybuffalo/django-flexible-subscriptions.svg?branch=master
    :alt: Travis-CI build status
 
-.. _BuildStatus: https://travis-ci.org/studybuffalo/django-flexible-subscriptions
+.. _BuildStatus: https://travis-ci.com/studybuffalo/django-flexible-subscriptions
 
 .. |Coverage| image:: https://codecov.io/gh/studybuffalo/django-flexible-subscriptions/branch/master/graph/badge.svg
    :alt: Codecov code coverage
