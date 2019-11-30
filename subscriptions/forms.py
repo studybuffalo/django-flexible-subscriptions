@@ -2,7 +2,7 @@
 # pylint: disable=invalid-name
 from django import forms
 from django.core import validators
-from django.forms import ModelForm, Select
+from django.forms import ModelForm
 from django.utils import timezone
 
 from subscriptions.conf import CURRENCY, SETTINGS
