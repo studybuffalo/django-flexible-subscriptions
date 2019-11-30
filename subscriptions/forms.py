@@ -30,22 +30,8 @@ class SubscriptionPlanForm(ModelForm):
 class PlanCostForm(ModelForm):
     """Form to use with inlineformset_factory and SubscriptionPlanForm."""
     class Meta:
-        RECURRENCE_UNIT_CHOICES = (
-            (0, 'one-time'),
-            (1, 'second'),
-            (2, 'minute'),
-            (3, 'hour'),
-            (4, 'day'),
-            (5, 'week'),
-            (6, 'month'),
-            (7, 'year'),
-        )
-
         model = PlanCost
         fields = ['recurrence_period', 'recurrence_unit', 'cost']
-        widgets = {
-            'recurrence_unit': Select(choices=RECURRENCE_UNIT_CHOICES),
-        }
 
 class PaymentForm(forms.Form):
     """Form to collect details required for payment billing."""
