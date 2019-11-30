@@ -11,14 +11,14 @@ from django.utils.translation import ugettext_lazy as _
 
 # Convenience references for units for plan recurrence billing
 # ----------------------------------------------------------------------------
-ONCE = 'o'
-SECOND = 's'
-MINUTE = 'n'
-HOUR = 'h'
-DAY = 'd'
-WEEK = 'w'
-MONTH = 'm'
-YEAR = 'y'
+ONCE = '0'
+SECOND = '1'
+MINUTE = '2'
+HOUR = '3'
+DAY = '4'
+WEEK = '5'
+MONTH = '6'
+YEAR = '7'
 RECURRENCE_UNIT_CHOICES = (
     (ONCE, 'once'),
     (SECOND, 'second'),
@@ -124,7 +124,7 @@ class PlanCost(models.Model):
     )
     recurrence_unit = models.CharField(
         choices=RECURRENCE_UNIT_CHOICES,
-        default='m',
+        default=MONTH,
         max_length=1,
     )
     cost = models.DecimalField(
@@ -141,10 +141,16 @@ class PlanCost(models.Model):
     @property
     def display_recurrent_unit_text(self):
         """Converts recurrence_unit integer to text."""
-        conversion = [
-            'one-time', 'per second', 'per minute', 'per hour',
-            'per day', 'per week', 'per month', 'per year',
-        ]
+        conversion = {
+            ONCE: 'one-time',
+            SECOND: 'per second',
+            MINUTE: 'per minute',
+            HOUR: 'per hour',
+            DAY: 'per day',
+            WEEK: 'per week',
+            MONTH: 'per month',
+            YEAR: 'per year',
+        }
 
         return conversion[self.recurrence_unit]
 
@@ -152,18 +158,18 @@ class PlanCost(models.Model):
     def display_billing_frequency_text(self):
         """Generates human-readable billing frequency."""
         conversion = {
-            'o': 'one-time',
-            's': {'singular': 'per second', 'plural': 'seconds'},
-            'n': {'singular': 'per minute', 'plural': 'minutes'},
-            'h': {'singular': 'per hour', 'plural': 'hours'},
-            'd': {'singular': 'per day', 'plural': 'days'},
-            'w': {'singular': 'per week', 'plural': 'weeks'},
-            'm': {'singular': 'per month', 'plural': 'months'},
-            'y': {'singular': 'per year', 'plural': 'years'},
+            ONCE: 'one-time',
+            SECOND: {'singular': 'per second', 'plural': 'seconds'},
+            MINUTE: {'singular': 'per minute', 'plural': 'minutes'},
+            HOUR: {'singular': 'per hour', 'plural': 'hours'},
+            DAY: {'singular': 'per day', 'plural': 'days'},
+            WEEK: {'singular': 'per week', 'plural': 'weeks'},
+            MONTH: {'singular': 'per month', 'plural': 'months'},
+            YEAR: {'singular': 'per year', 'plural': 'years'},
         }
 
         if self.recurrence_unit == ONCE:
-            return conversion[0]
+            return conversion[ONCE]
 
         if self.recurrence_period == 1:
             return conversion[self.recurrence_unit]['singular']
