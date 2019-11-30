@@ -6,6 +6,16 @@ Changelog
 Version 0 (Beta)
 ----------------
 
+0.7.0 (2019-Dec-01)
+===================
+
+Feature Updates
+---------------
+
+* Switching ``PlanCost`` ``recurrence_unit`` to a CharField to make
+  it more clear what the values represent.
+* Adding ``PlanCost`` as an InlineAdmin field of ``SubscriptionPlan``.
+
 0.6.0 (2019-Aug-19)
 ===================
 
