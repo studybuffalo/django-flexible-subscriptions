@@ -122,18 +122,18 @@ def test_subscription_plan_transaction_display_tags_4():
 
     assert plan.display_tags() == 'tag 1, tag 2, tag 3, ...'
 
-# PlanTag Model
+# PlanCost Model
 # -----------------------------------------------------------------------------
 def test_plan_cost_convenience_unit_reference():
     """Confirms convenience unit references are correct."""
-    assert models.ONCE == 0
-    assert models.SECOND == 1
-    assert models.MINUTE == 2
-    assert models.HOUR == 3
-    assert models.DAY == 4
-    assert models.WEEK == 5
-    assert models.MONTH == 6
-    assert models.YEAR == 7
+    assert models.ONCE == '0'
+    assert models.SECOND == '1'
+    assert models.MINUTE == '2'
+    assert models.HOUR == '3'
+    assert models.DAY == '4'
+    assert models.WEEK == '5'
+    assert models.MONTH == '6'
+    assert models.YEAR == '7'
 
 @pytest.mark.django_db
 def test_plan_cost_minimal_model_creation():

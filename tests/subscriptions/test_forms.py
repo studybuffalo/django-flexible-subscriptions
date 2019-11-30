@@ -16,7 +16,7 @@ def create_plan(plan_name='1', plan_description='2'):
         plan_name=plan_name, plan_description=plan_description
     )
 
-def create_cost(plan=None, period=1, unit=6, cost='1.00'):
+def create_cost(plan=None, period=1, unit=models.MONTH, cost='1.00'):
     """Creates and returns PlanCost instance."""
     return models.PlanCost.objects.create(
         plan=plan, recurrence_period=period, recurrence_unit=unit, cost=cost
@@ -62,9 +62,9 @@ def test_subscription_plan_cost_form_without_plan():
 def test_subscription_plan_cost_form_proper_widget_values():
     """Tests that widget values are properly added."""
     plan = create_plan()
-    create_cost(plan, period=3, unit=3, cost='3.00')
-    create_cost(plan, period=1, unit=1, cost='1.00')
-    create_cost(plan, period=2, unit=2, cost='2.00')
+    create_cost(plan, period=3, unit=models.HOUR, cost='3.00')
+    create_cost(plan, period=1, unit=models.SECOND, cost='1.00')
+    create_cost(plan, period=2, unit=models.MINUTE, cost='2.00')
 
     form = forms.SubscriptionPlanCostForm(subscription_plan=plan)
     choices = form.fields['plan_cost'].widget.choices

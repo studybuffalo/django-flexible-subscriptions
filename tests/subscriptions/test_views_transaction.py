@@ -16,7 +16,7 @@ def create_plan(plan_name='1', plan_description='2'):
         plan_name=plan_name, plan_description=plan_description
     )
 
-def create_cost(plan=None, period=1, unit=6, cost='1.00'):
+def create_cost(plan=None, period=1, unit=models.MONTH, cost='1.00'):
     """Creates and returns PlanCost instance."""
     return models.PlanCost.objects.create(
         plan=plan, recurrence_period=period, recurrence_unit=unit, cost=cost

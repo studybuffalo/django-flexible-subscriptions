@@ -21,7 +21,7 @@ def create_cost(group):
     )
 
     return models.PlanCost.objects.create(
-        plan=plan, recurrence_period=1, recurrence_unit=6, cost='1.00'
+        plan=plan, recurrence_period=1, recurrence_unit=models.MONTH, cost='1.00'
     )
 
 def create_due_subscription(user, group=None):
