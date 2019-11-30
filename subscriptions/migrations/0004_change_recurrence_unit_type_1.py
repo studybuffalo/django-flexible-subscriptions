@@ -18,14 +18,14 @@ class Migration(migrations.Migration):
             name='recurrence_unit',
             field=models.CharField(
                 choices=[
-                    ('o', 'once'),
-                    ('s', 'second'),
-                    ('n', 'minute'),
-                    ('h', 'hour'),
-                    ('d', 'day'),
-                    ('w', 'week'),
-                    ('m', 'month'),
-                    ('y', 'year')
+                    ('0', 'once'),
+                    ('1', 'second'),
+                    ('2', 'minute'),
+                    ('3', 'hour'),
+                    ('4', 'day'),
+                    ('5', 'week'),
+                    ('6', 'month'),
+                    ('7', 'year')
                 ],
                 default='m',
                 max_length=1
