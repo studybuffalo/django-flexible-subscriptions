@@ -39,5 +39,5 @@ install:
   - pipenv install codecov --dev
   - pipenv install $DJANGO
 script:
-  - pipenv run pytest --cov=helcim
+  - pipenv run pytest --cov=subscriptions
   - codecov
