@@ -12,7 +12,6 @@ _templates/
 
 # Testing files and reports
 .coverage
-.tox
 .pytest_cache
 /reports/*
 !reports/.gitkeep

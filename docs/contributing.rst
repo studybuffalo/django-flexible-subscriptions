@@ -80,28 +80,6 @@ To check test coverage, you can use the following::
 You may specify the output of the coverage report by changing the
 ``--cov-report`` option to ``html`` or ``xml``.
 
-Testing with tox
-================
-
-To ensure compatibility with as wide variety of Python and Django
-versions, this package uses tox_. You can tests via ``tox`` with the
-following command::
-
-    $ pipenv run tox
-
-.. _tox: https://tox.readthedocs.io/en/latest/
-
-You will need to have all versions of Python installed locally for
-tox to run tests. Any versions you are missing will be skipped. The
-Continuous Integration (CI) server will run tests against all  versions
-on any pull requests or commits.
-
-.. note::
-
-     **Note:** The CI testing may take a while to complete as there are
-     multiple combinations of Python and Django versions that must be
-     tested against.
-
 ----------------------
 Updating documentation
 ----------------------

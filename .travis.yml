@@ -1,15 +1,43 @@
 language: python
 sudo: required
 dist: xenial
-python:
-  - 3.5
-  - 3.6
-  - 3.7
-  - 3.8
+jobs:
+  include:
+    # Test all actively developed Python and Django combinations
+    # https://devguide.python.org/#status-of-python-branches
+    # https://www.djangoproject.com/download/#supported-versions
+    # https://docs.djangoproject.com/en/dev/faq/install/#what-python-version-can-i-use-with-django
+    # Python 3.5 and Django 1.11, 2.2
+    - python: 3.5
+      env: DJANGO="django>=1.11,<2.0"
+    - python: 3.5
+      env: DJANGO="django>=2.2,<3.0"
+    # Python 3.6 and Django 1.11, 2.2, 3.0
+    - python: 3.6
+      env: DJANGO="django>=1.11,<2.0"
+    - python: 3.6
+      env: DJANGO="django>=2.2,<3.0"
+    - python: 3.6
+      env: DJANGO="django>=3.0,<3.1"
+    # Python 3.7 and Django 1.11, 2.2, 3.0
+    - python: 3.7
+      env: DJANGO="django>=1.11,<2.0"
+    - python: 3.7
+      env: DJANGO="django>=2.2,<3.0"
+    - python: 3.7
+      env: DJANGO="django>=3.0,<3.1"
+    # Python 3.8 and Django 2.2, 3.0
+    - python: 3.8
+      env: DJANGO="django>=2.2,<3.0"
+    - python: 3.8
+      env: DJANGO="django>=3.0,<3.1"
 install:
-  - pip install pipenv
-  - pipenv run python -m pip install -U pip
-  # Fixes issue where package versions may not exist on python version
+  # Need to run update because different python versions may have
+  # different dependencies. Once pipenv supports arrayed versions this
+  # could be removed.
   - pipenv update --dev
+  - pipenv install codecov --dev
+  - pipenv install $DJANGO
 script:
-  - pipenv run tox
+  - pipenv run pytest --cov=subscriptions
+  - codecov
