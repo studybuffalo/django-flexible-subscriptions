@@ -55,7 +55,7 @@ Add django-flexible-subscriptions to your project
 
     urlpatterns = [
         ...
-        url(r'^subscriptions/', include('subscriptions_urls')),
+        url(r'^subscriptions/', include('subscriptions.urls')),
         url(r'^admin/', include(admin.site.urls), # Optional, but recommended
         ...
     ]
