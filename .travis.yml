@@ -3,6 +3,9 @@ sudo: required
 dist: xenial
 jobs:
   include:
+    # Test all actively developed Python and Django combinations
+    # https://devguide.python.org/#status-of-python-branches
+    # https://www.djangoproject.com/download/#supported-versions
     # Python 3.5 and Django 1.11, 2.1, 2.2
     - python: 3.5
       env: DJANGO="django>=1.11,<2.0"
@@ -20,7 +23,7 @@ jobs:
     - python: 3.6
       env: DJANGO="django>=3.0,<3.1"
     - python: 3.7
-      env: DJANGO="django>=1.11,<2.0" # django 1.11
+      env: DJANGO="django>=1.11,<2.0"
     # Python 3.7 and Django 1.11, 2.1, 2.2, 3.0
     - python: 3.7
       env: DJANGO="django>=2.1,<2.2"
