@@ -23,6 +23,7 @@ class Migration(migrations.Migration):
                     ('7', 'year'),
                 ],
                 default='6',
-                max_length=1),
+                max_length=1
+            ),
         ),
     ]
