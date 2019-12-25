@@ -1,12 +1,9 @@
 """Django settings file to get basic Django instance running."""
-import environ
+from pathlib import Path
 
 # SETTINGS FILE
 # Add all environment variables to config.env in root directory
-ROOT_DIR = environ.Path(__file__) - 1
-PACKAGE_DIR = environ.Path(__file__) - 2
-ENV = environ.Env()
-ENV.read_env(env_file=ROOT_DIR.file('config.env'))
+ROOT_DIR = Path(__file__).parent.absolute()
 
 # DEBUG SETTINGS
 # Used for sandbox - DO NOT USE IN PRODUCTION
@@ -15,7 +12,7 @@ TEMPLATE_DEBUG = True
 SQL_DEBUG = True
 
 # BASE DJANGO SETTINGS
-SECRET_KEY = ENV('DJANGO_SECRET_KEY', default='214dfsdf7ughfgdasd3446@FDF46#')
+SECRET_KEY = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
 SITE_ID = 1
 INTERNAL_IPS = ('127.0.0.1',)
 ROOT_URLCONF = 'urls'
@@ -34,6 +31,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 USE_TZ = True
 TIME_ZONE = 'UTC'
 LANGUAGE_CODE = 'en-ca'
+LANGUAGES = [
+    ('en-ca', 'English')
+]
 USE_I18N = True
 USE_L10N = True
 
@@ -68,7 +68,7 @@ MIDDLEWARE = (
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': str(ROOT_DIR.path('db.sqlite3')),
+        'NAME': str(ROOT_DIR.joinpath('db.sqlite3')),
     }
 }
 ATOMIC_REQUESTS = True
@@ -84,7 +84,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            ROOT_DIR.path('templates'),
+            ROOT_DIR.joinpath('templates'),
         ],
         'OPTIONS': {
             'loaders': [
@@ -113,7 +113,7 @@ LOGOUT_REDIRECT_URL = '/'
 
 # STATIC SETTINGS
 STATIC_URL = '/static/'
-STATIC_ROOT = ROOT_DIR.path('static')
+STATIC_ROOT = ROOT_DIR.joinpath('static')
 
 # django-flexible-subscriptions settings
 # -----------------------------------------------------------------------------

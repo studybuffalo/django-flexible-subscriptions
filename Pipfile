@@ -3,7 +3,6 @@ name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
 
-
 [packages]
 django = "*"  # https://github.com/django/django
 
@@ -11,7 +10,6 @@ django = "*"  # https://github.com/django/django
 [dev-packages]
 # Django (for testing)
 # ------------------------------------------------------------------------------
-django-environ = "*"  # https://github.com/joke2k/django-environ
 django-debug-toolbar = "*"  # https://github.com/jazzband/django-debug-toolbar
 
 # Code quality

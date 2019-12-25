@@ -6,6 +6,21 @@ Changelog
 Version 0 (Beta)
 ----------------
 
+0.8.1 (2019-Dec-25)
+===================
+
+Feature Updates
+---------------
+
+* Removes ``django-environ`` from development dependencies and switches
+  functionality over to ``pathlib``.
+
+Bug Fixes
+---------
+
+* Fixing bug with sandbox settings and Django 3.0 involving declaration
+  of languages.
+
 0.8.0 (2019-Dec-15)
 ===================
 
