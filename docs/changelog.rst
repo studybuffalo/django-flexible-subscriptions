@@ -20,6 +20,9 @@ Bug Fixes
 
 * Fixing bug with sandbox settings and Django 3.0 involving declaration
   of languages.
+* Fixed issue where the ``RecurrenceUnit`` of the ``PlanCost`` model
+  was trying to generate migration due to a change in the default
+  value.
 
 0.8.0 (2019-Dec-15)
 ===================
