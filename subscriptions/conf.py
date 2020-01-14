@@ -91,7 +91,10 @@ class Currency():
         )
 
         # Split decimal into whole and fractions
-        num_whole, num_frac = str(decimal_str).split('.')
+        try:
+            num_whole, num_frac = str(decimal_str).split('.')
+        except ValueError:
+            num_whole, num_frac = str(decimal_str), ''
 
         # Apply any grouping to the whole number component
         group_sep = self.mon_thousands_sep
@@ -109,7 +112,7 @@ class Currency():
         # Rejoin number parts with decimal separator
         decimal_point = self.mon_decimal_point
         formatted_number = '{}{}{}'.format(
-            grouped_num_whole, decimal_point, num_frac
+            grouped_num_whole, decimal_point if digits > 0 else '', num_frac
         )
 
         # '<' and '>' are used as markers of number start and end
