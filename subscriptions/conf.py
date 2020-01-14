@@ -24,9 +24,10 @@ class Currency():
             n_sep_by_space (bool): Whether the currency symbol is
                 separated from negative values by a space.
             mon_decimal_point (str): The character used for decimal
-                points.
+                points. Use 0 if the currency doesn't need fraction.
             mon_thousands_sep (str): The character used for separating
-                groups of numbers.
+                groups of numbers. Use 0 if the currency doesn't need
+                fraction.
             mon_grouping (int): The number of digits per groups.
             frac_digits (int): The number of digits following the
                 decimal place.
