@@ -29,9 +29,10 @@ class Currency():
                 groups of numbers.
             mon_grouping (int): The number of digits per groups.
             frac_digits (int): The number of digits following the
-                decimal place.
+                decimal place. Use 0 if this is a non-decimal currency.
             int_frac_digits (int): The number of digits following the
                 decimal place for international formatting.
+                Use 0 if this is a non-decimal currency.
             positive_sign (str): The symbol to use for the positive
                 sign.
             negative_sign (str): The symbol to use for the negative
@@ -91,7 +92,10 @@ class Currency():
         )
 
         # Split decimal into whole and fractions
-        num_whole, num_frac = str(decimal_str).split('.')
+        try:
+            num_whole, num_frac = str(decimal_str).split('.')
+        except ValueError:
+            num_whole, num_frac = str(decimal_str), ''
 
         # Apply any grouping to the whole number component
         group_sep = self.mon_thousands_sep
@@ -109,7 +113,7 @@ class Currency():
         # Rejoin number parts with decimal separator
         decimal_point = self.mon_decimal_point
         formatted_number = '{}{}{}'.format(
-            grouped_num_whole, decimal_point, num_frac
+            grouped_num_whole, decimal_point if digits > 0 else '', num_frac
         )
 
         # '<' and '>' are used as markers of number start and end
@@ -317,5 +321,22 @@ CURRENCY = {
         negative_sign='-',
         p_sign_posn=SIGN_PRECEDE_VALUE_SYMBOL,
         n_sign_posn=SIGN_PARANTHESES,
+    ),
+    'fa_ir': Currency(
+        currency_symbol='﷼',
+        int_curr_symbol='IRR',
+        p_cs_precedes=False,
+        n_cs_precedes=False,
+        p_sep_by_space=True,
+        n_sep_by_space=True,
+        mon_decimal_point='.',
+        mon_thousands_sep=',',
+        mon_grouping=3,
+        frac_digits=0,
+        int_frac_digits=0,
+        positive_sign='',
+        negative_sign='-',
+        p_sign_posn=SIGN_PRECEDE_VALUE_SYMBOL,
+        n_sign_posn=SIGN_PRECEDE_VALUE_SYMBOL
     ),
 }
