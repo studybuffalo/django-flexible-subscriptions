@@ -6,6 +6,20 @@ Changelog
 Version 0 (Beta)
 ----------------
 
+0.9.0 (2020-Jan-15)
+===================
+
+Feature Updates
+---------------
+
+* Adding currency support for (the Islamic Republic of) Iran.
+
+Bug Fixes
+---------
+
+* Fixed issues where currency display could not handle non-decimal
+  currencies.
+
 0.8.1 (2019-Dec-25)
 ===================
 

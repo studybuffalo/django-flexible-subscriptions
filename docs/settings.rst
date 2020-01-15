@@ -36,9 +36,11 @@ These are the settings to control aspects of currency repsentation.
 The currency locale to use for currency formatting. The following
 formats are currently available:
 
+* ``de_de`` (Germany, German)
 * ``en_au`` (Australia, English)
 * ``en_ca`` (Canada, English)
 * ``en_us`` (United States of America, English)
+* ``fa_ir`` (Iran, Persian)
 * ``fr_ca`` (Canada, French)
 
 Additional currencies can be easily added by adding to the ``CURRENCY``
