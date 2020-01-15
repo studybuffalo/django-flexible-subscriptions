@@ -92,9 +92,8 @@ def test_non_decimal_currency_format():
 
     assert test_currency.format_currency(10) == '10'
     assert test_currency.format_currency('10') == '10'
-    assert test_currency.format_currency('-10') == '-10'
-    assert test_currency.format_currency(-10) == '-10'
-
+    assert test_currency.format_currency('-100') == '100'
+    assert test_currency.format_currency(-100) == '100'
 
 def test_non_decimal_currency_format_rounding():
     """Tests that truncating the decimal part works as expected with decimal values."""
@@ -104,8 +103,8 @@ def test_non_decimal_currency_format_rounding():
     assert test_currency.format_currency(Decimal('0.5')) == '1'
     assert test_currency.format_currency(Decimal('0.49')) == '0'
     assert test_currency.format_currency(Decimal('-0.49')) == '0'
-    assert test_currency.format_currency(Decimal('-1.005')) == '-1'
-    assert test_currency.format_currency(Decimal('-1.5')) == '-2'
+    assert test_currency.format_currency(Decimal('-1.005')) == '1'
+    assert test_currency.format_currency(Decimal('-1.5')) == '2'
 
 def test_currency_format_grouping_by_1():
     """Tests that grouping works properly for groups of 1."""
