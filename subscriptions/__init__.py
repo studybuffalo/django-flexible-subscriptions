@@ -4,7 +4,7 @@ import re
 import warnings
 import django
 
-__version__ = '0.9.0'
+__version__ = '0.9.1'
 
 # Provide DepreciationWarning for older Python versions
 # Have to use sys.version while supporting Python 3.5 to enable testing

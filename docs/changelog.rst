@@ -6,6 +6,15 @@ Changelog
 Version 0 (Beta)
 ----------------
 
+0.9.1 (2020-xxx-##)
+===================
+
+Feature Updates
+---------------
+
+* Switching ``ugettext_lazy`` to ``gettext_lazy`` (this function is
+  being depreciated in Django 4.0).
+
 0.9.0 (2020-Jan-15)
 ===================
 
