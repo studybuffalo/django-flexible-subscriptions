@@ -5,8 +5,8 @@ from unittest.mock import patch
 import subscriptions
 
 
-@patch('subscriptions.sys.version_info', (3, 5, 1))
-@patch('subscriptions.django.__version__', '3.0.0')
+@patch('subscriptions.__init__.sys.version_info', (3, 5, 1))
+@patch('subscriptions.__init__.django.__version__', '3.0.0')
 def test_python_35_depreciation_warning(recwarn):
     """Tests that depreciation warning fires for Python 3.5.x"""
     reload(subscriptions)
@@ -24,16 +24,16 @@ def test_python_35_depreciation_warning(recwarn):
 
     assert str(django_111_warning.message) == warning_text
 
-@patch('subscriptions.sys.version_info', (3, 6, 0))
-@patch('subscriptions.django.__version__', '3.0.0')
+@patch('subscriptions.__init__.sys.version_info', (3, 6, 0))
+@patch('subscriptions.__init__.django.__version__', '3.0.0')
 def test_other_python_versions_depreciation_warning(recwarn):
     """Tests that warning doesn't fire for other Python versions."""
     reload(subscriptions)
 
     assert len(recwarn) is 0
 
-@patch('subscriptions.sys.version_info', (3, 8, 0))
-@patch('subscriptions.django.__version__', '1.11.0')
+@patch('subscriptions.__init__.sys.version_info', (3, 8, 0))
+@patch('subscriptions.__init__.django.__version__', '1.11.0')
 def test_django_111_depreciation_warning(recwarn):
     """Tests that the depreciation warning fires for Django 1.11."""
     reload(subscriptions)
@@ -51,8 +51,8 @@ def test_django_111_depreciation_warning(recwarn):
 
     assert str(django_111_warning.message) == warning_text
 
-@patch('subscriptions.sys.version_info', (3, 8, 0))
-@patch('subscriptions.django.__version__', '2.0.0')
+@patch('subscriptions.__init__.sys.version_info', (3, 8, 0))
+@patch('subscriptions.__init__.django.__version__', '2.0.0')
 def test_other_django_versions_depreciation_warning(recwarn):
     """Tests that warning doesn't fire for other Django versions."""
     reload(subscriptions)
