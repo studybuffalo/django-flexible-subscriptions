@@ -1,12 +1,15 @@
 # pylint: disable=missing-docstring, invalid-name
 import sys
+import re
 import warnings
 import django
 
 __version__ = '0.9.0'
 
 # Provide DepreciationWarning for older Python versions
-if sys.version_info[:2] == (3, 5):
+# Have to use sys.version while supporting Python 3.5 to enable testing
+# Once Python 3.5 is dropped can switch to version_info & compare tuples
+if re.match(r'^3\.5', sys.version):
     warnings.warn(
         (
             'django-flexible-subscription will stop supporting Python 3.5 '
