@@ -9,6 +9,7 @@ class PlanCostInline(admin.TabularInline):
     """Inline admin class for the PlanCost model."""
     model = models.PlanCost
     fields = (
+        'slug',
         'recurrence_period',
         'recurrence_unit',
         'cost',
@@ -19,6 +20,7 @@ class SubscriptionPlanAdmin(admin.ModelAdmin):
     """Admin class for the SubscriptionPlan model."""
     fields = (
         'plan_name',
+        'slug',
         'plan_description',
         'group',
         'tags',
@@ -30,6 +32,7 @@ class SubscriptionPlanAdmin(admin.ModelAdmin):
         'group',
         'display_tags',
     )
+    prepopulated_fields = {'slug': ('plan_name',)}
 
 class UserSubscriptionAdmin(admin.ModelAdmin):
     """Admin class for the UserSubscription model."""
