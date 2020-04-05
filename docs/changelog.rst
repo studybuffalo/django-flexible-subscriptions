@@ -6,6 +6,14 @@ Changelog
 Version 0 (Beta)
 ----------------
 
+0.11.0 (2020-Apr-04)
+====================
+
+Feature Updates
+---------------
+
+* Adding currency support for Poland.
+
 0.10.0 (2020-Feb-16)
 ====================
 
