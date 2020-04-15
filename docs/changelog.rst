@@ -6,6 +6,15 @@ Changelog
 Version 0 (Beta)
 ----------------
 
+0.11.1 (2020-Apr-15)
+====================
+
+Bug Fixes
+---------
+
+* Fixed issue where management command files were not included in
+  PyPI release.
+
 0.11.0 (2020-Apr-04)
 ====================
 
