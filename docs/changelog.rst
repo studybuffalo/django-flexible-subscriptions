@@ -6,6 +6,16 @@ Changelog
 Version 0 (Beta)
 ----------------
 
+0.12.0 (2020-Apr-29)
+====================
+
+Feature Updates
+---------------
+
+* Adding currency support for France (EUR)
+* Adding currency support for Italy (EUR)
+* Adding currency support for Swiss Franc (CHF)
+
 0.11.1 (2020-Apr-15)
 ====================
 
