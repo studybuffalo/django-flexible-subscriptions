@@ -6,6 +6,16 @@ Changelog
 Version 0 (Beta)
 ----------------
 
+0.12.1 (2020-May-07)
+====================
+
+Bug Fixes
+---------
+
+* Fixing issue with TransactionDetailView and TransactionListView where
+  templates were referencing ``SubscriptionTransaction.plan`` rather
+  than ``SubscriptionTransaction.subscription.plan``.
+
 0.12.0 (2020-Apr-29)
 ====================
 

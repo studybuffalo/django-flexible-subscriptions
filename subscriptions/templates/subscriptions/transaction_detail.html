@@ -21,7 +21,7 @@
 
   <div>
     <strong>{% trans "Plan" %}:</strong>
-    {% if transaction.plan %}{{ transaction.plan }}{% else %}No plan{% endif %}
+    {% if transaction.subscription %}{{ transaction.subscription.plan }}{% else %}No subscription plan{% endif %}
   </div>
 
   <div>
