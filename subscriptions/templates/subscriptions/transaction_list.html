@@ -54,7 +54,7 @@
           </div>
           <div>
             <span class="table-title">{% trans "Plan" %}</span>
-            {% if transaction.plan %}{{ transaction.plan }}{% else %}No subscription plan{% endif %}
+            {% if transaction.subscription %}{{ transaction.subscription.plan }}{% else %}No subscription plan{% endif %}
           </div>
           <div>
             <span class="table-title">{% trans "Transaction date" %}</span>
