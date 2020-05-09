@@ -37,7 +37,7 @@ setup(
         'django>=1.11',
     ],
     tests_require=[
-        'pytest==5.4.1',
+        'pytest==5.4.2',
         'pytest-cov==2.8.1',
     ],
     # See http://pypi.python.org/pypi?%3Aaction=list_classifiers
