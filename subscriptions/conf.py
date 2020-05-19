@@ -51,6 +51,7 @@ class Currency():
             3: The sign should immediately precede the value.
             4: The sign should immediately follow the value.
     """
+
     def __init__(self, **kwargs):
         self.currency_symbol = kwargs.get('currency_symbol', '')
         self.int_curr_symbol = kwargs.get('int_curr_symbol', '')
@@ -166,6 +167,7 @@ class Currency():
 
         return formatted_currency
 
+
 def string_to_module_and_class(string):
     """Breaks a string to a module and class name component."""
     components = string.split('.')
@@ -176,6 +178,7 @@ def string_to_module_and_class(string):
         'module': component_module,
         'class': component_class,
     }
+
 
 def compile_settings():
     """Compiles and validates all package settings and defaults.
@@ -393,6 +396,23 @@ CURRENCY = {
     'it_it': Currency(
         currency_symbol='€',
         int_curr_symbol='EUR',
+        p_cs_precedes=False,
+        n_cs_precedes=False,
+        p_sep_by_space=True,
+        n_sep_by_space=True,
+        mon_decimal_point=',',
+        mon_thousands_sep=".",
+        mon_grouping=3,
+        frac_digits=2,
+        int_frac_digits=2,
+        positive_sign='',
+        negative_sign='-',
+        p_sign_posn=SIGN_PRECEDE_VALUE,
+        n_sign_posn=SIGN_PRECEDE_VALUE,
+    ),
+    'pt_br': Currency(
+        currency_symbol='R$',
+        int_curr_symbol='BRL',
         p_cs_precedes=False,
         n_cs_precedes=False,
         p_sep_by_space=True,
