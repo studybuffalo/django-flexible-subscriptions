@@ -24,3 +24,6 @@ build/
 # Sandbox files
 sandbox/*.env
 sandbox/*.sqlite3
+
+# Emacs files
+.dir-locals.el
