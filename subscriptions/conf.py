@@ -1,6 +1,6 @@
 """Functions for general package configuration."""
 from decimal import Decimal, ROUND_HALF_UP
-
+ 
 from django.conf import settings
 
 
@@ -51,6 +51,7 @@ class Currency():
             3: The sign should immediately precede the value.
             4: The sign should immediately follow the value.
     """
+
     def __init__(self, **kwargs):
         self.currency_symbol = kwargs.get('currency_symbol', '')
         self.int_curr_symbol = kwargs.get('int_curr_symbol', '')
@@ -226,7 +227,6 @@ def compile_settings():
         'management_manager': management_manager,
     }
 
-
 SETTINGS = compile_settings()
 
 # Convenience values for sign positions
@@ -393,6 +393,23 @@ CURRENCY = {
     'it_it': Currency(
         currency_symbol='€',
         int_curr_symbol='EUR',
+        p_cs_precedes=False,
+        n_cs_precedes=False,
+        p_sep_by_space=True,
+        n_sep_by_space=True,
+        mon_decimal_point=',',
+        mon_thousands_sep=".",
+        mon_grouping=3,
+        frac_digits=2,
+        int_frac_digits=2,
+        positive_sign='',
+        negative_sign='-',
+        p_sign_posn=SIGN_PRECEDE_VALUE,
+        n_sign_posn=SIGN_PRECEDE_VALUE,
+    ),
+    'pt_br': Currency(
+        currency_symbol='R$',
+        int_curr_symbol='BRL',
         p_cs_precedes=False,
         n_cs_precedes=False,
         p_sep_by_space=True,
