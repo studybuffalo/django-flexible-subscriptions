@@ -6,6 +6,14 @@ Changelog
 Version 0 (Beta)
 ----------------
 
+0.13.0 (2020-May-23)
+====================
+
+Feature Updates
+---------------
+
+* Adding currency support for Brazil (BRL)
+
 0.12.1 (2020-May-07)
 ====================
 
@@ -41,7 +49,7 @@ Bug Fixes
 Feature Updates
 ---------------
 
-* Adding currency support for Poland.
+* Adding currency support for Poland (PLN).
 
 0.10.0 (2020-Feb-16)
 ====================
