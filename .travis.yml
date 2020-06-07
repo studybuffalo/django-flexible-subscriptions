@@ -39,6 +39,10 @@ install:
   - pipenv install codecov --dev
   - pipenv install $DJANGO
 script:
+  # Run Tests
   - pipenv run pytest --cov=subscriptions
   - codecov
-  - pipenv run pycodestyle subscriptions/ sandbox/ tests/
+  # Run Linters
+  - pipenv run pylint --show-source subscriptions/ sandbox/ tests/
+  - pipenv run pycodestyle subscriptions/ sandbox/
+  - pipenv run pylint tests/ --min-similarity-lines=12
