@@ -77,7 +77,7 @@ urlpatterns = [
         name='dfs_plan_update',
     ),
     path(
-        'dfs/plans/<uuid:plan_id>/',
+        'dfs/plans/<uuid:plan_id>/delete/',
         views.PlanDeleteView.as_view(),
         name='dfs_plan_delete',
     ),
