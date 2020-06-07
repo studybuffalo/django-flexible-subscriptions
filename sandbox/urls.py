@@ -1,9 +1,9 @@
 """URLs for the sandbox demo."""
 
 from django.conf import settings
-from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
+from django.urls import path, include
 from django.views.generic import TemplateView
 
 from subscriptions import models, urls as subscriptions_urls
@@ -12,10 +12,10 @@ from subscriptions import models, urls as subscriptions_urls
 admin.autodiscover()
 
 urlpatterns = [
-    url(r'^i18n/', include('django.conf.urls.i18n')),
-    url(r'^admin/', admin.site.urls),
-    url(
-        r'^login/$',
+    path('i18n/', include('django.conf.urls.i18n')),
+    path('admin/', admin.site.urls),
+    path(
+        'login/',
         LoginView.as_view(
             template_name='admin/login.html',
             extra_context={
@@ -26,8 +26,8 @@ urlpatterns = [
         ),
         name='login',
     ),
-    url(
-        r'^logout/$',
+    path(
+        'logout/',
         LogoutView.as_view(
             extra_context={
                 'title': 'django-flexible-subscriptions',
@@ -37,9 +37,9 @@ urlpatterns = [
         ),
         name='logout',
     ),
-    url(r'^subscriptions/', include(subscriptions_urls)),
-    url(
-        r'^$',
+    path('subscriptions/', include(subscriptions_urls)),
+    path(
+        '',
         TemplateView.as_view(
             extra_context={
                 'plans': models.SubscriptionPlan.objects.all()
@@ -52,5 +52,5 @@ urlpatterns = [
 if settings.DEBUG:
     import debug_toolbar
     urlpatterns = [
-        url(r'^__debug__/', include(debug_toolbar.urls)),
+        path('__debug__/', include(debug_toolbar.urls)),
     ] + urlpatterns

@@ -33,7 +33,7 @@ setup(
     },
     python_requires='>=3.5',
     install_requires=[
-        'django>=1.11',
+        'django>=2.2',
     ],
     tests_require=[
         'pytest==5.4.3',
@@ -43,7 +43,6 @@ setup(
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
-        'Framework :: Django :: 1.11',
         'Framework :: Django :: 2.2',
         'Framework :: Django :: 3.0',
         'Intended Audience :: Developers',

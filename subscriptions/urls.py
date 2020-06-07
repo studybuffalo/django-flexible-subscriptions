@@ -1,8 +1,8 @@
-"""URLs for the Flexible Subscriptions app."""
+"""paths for the Flexible Subscriptions app."""
 # pylint: disable=line-too-long
 import importlib
 
-from django.conf.urls import url
+from django.urls import path
 
 from subscriptions import views
 from subscriptions.conf import SETTINGS
@@ -16,143 +16,143 @@ SubscribeView = getattr(  # pylint: disable=invalid-name
 
 
 urlpatterns = [
-    url(
-        r'^subscribe/$',
+    path(
+        'subscribe/',
         views.SubscribeList.as_view(),
         name='dfs_subscribe_list',
     ),
-    url(
-        r'^subscribe/add/$',
+    path(
+        'subscribe/add/',
         SubscribeView.as_view(),
         name='dfs_subscribe_add',
     ),
-    url(
-        r'^subscribe/thank-you/(?P<transaction_id>[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12})/$',  # noqa
+    path(
+        'subscribe/thank-you/<uuid:transaction_id>/',
         views.SubscribeThankYouView.as_view(),
         name='dfs_subscribe_thank_you',
     ),
-    url(
-        r'^subscribe/cancel/(?P<subscription_id>[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12})/$',  # noqa
+    path(
+        'subscribe/cancel/<uuid:subscription_id>/',
         views.SubscribeCancelView.as_view(),
         name='dfs_subscribe_cancel',
     ),
-    url(
-        r'^subscriptions/$',
+    path(
+        'subscriptions/',
         views.SubscribeUserList.as_view(),
         name='dfs_subscribe_user_list',
     ),
-    url(
-        r'^dfs/tags/$',
+    path(
+        'dfs/tags/',
         views.TagListView.as_view(),
         name='dfs_tag_list',
     ),
-    url(
-        r'^dfs/tags/create/$',
+    path(
+        'dfs/tags/create/',
         views.TagCreateView.as_view(),
         name='dfs_tag_create',
     ),
-    url(
-        r'^dfs/tags/(?P<tag_id>[0-9]+)/$',
+    path(
+        'dfs/tags/<int:tag_id>/',
         views.TagUpdateView.as_view(),
         name='dfs_tag_update',
     ),
-    url(
-        r'^dfs/tags/(?P<tag_id>[0-9]+)/delete/$',
+    path(
+        'dfs/tags/<int:tag_id>/delete/',
         views.TagDeleteView.as_view(),
         name='dfs_tag_delete',
     ),
-    url(
-        r'^dfs/plans/$',
+    path(
+        'dfs/plans/',
         views.PlanListView.as_view(),
         name='dfs_plan_list',
     ),
-    url(
-        r'^dfs/plans/create/$',
+    path(
+        'dfs/plans/create/',
         views.PlanCreateView.as_view(),
         name='dfs_plan_create',
     ),
-    url(
-        r'^dfs/plans/(?P<plan_id>[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12})/$',
+    path(
+        'dfs/plans/<uuid:plan_id>/',
         views.PlanUpdateView.as_view(),
         name='dfs_plan_update',
     ),
-    url(
-        r'^dfs/plans/(?P<plan_id>[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12})/delete/$',
+    path(
+        'dfs/plans/<uuid:plan_id>/delete/',
         views.PlanDeleteView.as_view(),
         name='dfs_plan_delete',
     ),
-    url(
-        r'^dfs/plan-lists/$',
+    path(
+        'dfs/plan-lists/',
         views.PlanListListView.as_view(),
         name='dfs_plan_list_list',
     ),
-    url(
-        r'^dfs/plan-lists/create/$',
+    path(
+        'dfs/plan-lists/create/',
         views.PlanListCreateView.as_view(),
         name='dfs_plan_list_create',
     ),
-    url(
-        r'^dfs/plan-lists/(?P<plan_list_id>[0-9]+)/$',
+    path(
+        'dfs/plan-lists/<int:plan_list_id>/',
         views.PlanListUpdateView.as_view(),
         name='dfs_plan_list_update',
     ),
-    url(
-        r'^dfs/plan-lists/(?P<plan_list_id>[0-9]+)/delete/$',
+    path(
+        'dfs/plan-lists/<int:plan_list_id>/delete/',
         views.PlanListDeleteView.as_view(),
         name='dfs_plan_list_delete',
     ),
-    url(
-        r'^dfs/plan-lists/(?P<plan_list_id>[0-9]+)/details/$',
+    path(
+        'dfs/plan-lists/<int:plan_list_id>/details/',
         views.PlanListDetailListView.as_view(),
         name='dfs_plan_list_detail_list',
     ),
-    url(
-        r'^dfs/plan-lists/(?P<plan_list_id>[0-9]+)/details/create/$',
+    path(
+        'dfs/plan-lists/<int:plan_list_id>/details/create/',
         views.PlanListDetailCreateView.as_view(),
         name='dfs_plan_list_detail_create',
     ),
-    url(
-        r'^dfs/plan-lists/(?P<plan_list_id>[0-9]+)/details/(?P<plan_list_detail_id>[0-9]+)/$',
+    path(
+        'dfs/plan-lists/<int:plan_list_id>/details/<int:plan_list_detail_id>/',
         views.PlanListDetailUpdateView.as_view(),
         name='dfs_plan_list_detail_update',
     ),
-    url(
-        r'^dfs/plan-lists/(?P<plan_list_id>[0-9]+)/details/(?P<plan_list_detail_id>[0-9]+)/delete/$',
+    path(
+        'dfs/plan-lists/<int:plan_list_id>/details/<int:plan_list_detail_id>/delete/',
         views.PlanListDetailDeleteView.as_view(),
         name='dfs_plan_list_detail_delete',
     ),
-    url(
-        r'^dfs/subscriptions/$',
+    path(
+        'dfs/subscriptions/',
         views.SubscriptionListView.as_view(),
         name='dfs_subscription_list',
     ),
-    url(
-        r'^dfs/subscriptions/create/$',
+    path(
+        'dfs/subscriptions/create/',
         views.SubscriptionCreateView.as_view(),
         name='dfs_subscription_create',
     ),
-    url(
-        r'^dfs/subscriptions/(?P<subscription_id>[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12})/$',  # noqa
+    path(
+        'dfs/subscriptions/<uuid:subscription_id>/',
         views.SubscriptionUpdateView.as_view(),
         name='dfs_subscription_update',
     ),
-    url(
-        r'^dfs/subscriptions/(?P<subscription_id>[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12})/delete/$',  # noqa
+    path(
+        'dfs/subscriptions/<uuid:subscription_id>/delete/',
         views.SubscriptionDeleteView.as_view(),
         name='dfs_subscription_delete',
     ),
-    url(
-        r'^dfs/transactions/$',
+    path(
+        'dfs/transactions/',
         views.TransactionListView.as_view(),
         name='dfs_transaction_list',
     ),
-    url(
-        r'^dfs/transactions/(?P<transaction_id>[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12})/$',  # noqa
+    path(
+        'dfs/transactions/<uuid:transaction_id>/',
         views.TransactionDetailView.as_view(),
         name='dfs_transaction_detail',
     ),
-    url(
-        r'^dfs/$',
+    path(
+        'dfs/',
         views.DashboardView.as_view(),
         name='dfs_dashboard',
     ),

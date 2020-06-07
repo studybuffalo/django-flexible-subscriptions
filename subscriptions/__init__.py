@@ -4,7 +4,7 @@ import re
 import warnings
 import django
 
-__version__ = '0.13.0'
+__version__ = '0.14.0'
 
 # Provide DeprecationWarning for older Python versions
 # Have to use sys.version while supporting Python 3.5 to enable testing
@@ -19,15 +19,15 @@ if re.match(r'^3\.5', sys.version):
         DeprecationWarning
     )
 # Provide DeprecationWarning for older Django versions
-if '1.11' in django.__version__:
-    warnings.warn(
-        (
-            'django-flexible-subscription will stop supporting Django 1.11 LTS '
-            'once it reaches end-of-life (approximately April 2020). '
-            'Ensure you have updated your Django version by then.'
-        ),
-        DeprecationWarning
-    )
+# if '3.0' in django.__version__:
+#     warnings.warn(
+#         (
+#             'django-flexible-subscription will stop supporting Django 3.0 LTS '
+#             'once it reaches end-of-life (approximately April 2021). '
+#             'Ensure you have updated your Django version by then.'
+#         ),
+#         DeprecationWarning
+#     )
 
 # Django configuration details
 default_app_config = 'subscriptions.apps.FlexibleSubscriptionsConfig'

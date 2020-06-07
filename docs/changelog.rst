@@ -6,6 +6,16 @@ Changelog
 Version 0 (Beta)
 ----------------
 
+0.14.0 (2020-Jun-07)
+====================
+
+Feature Updates
+---------------
+
+* Dropping support for Django 1.11. Various aspects of the package have
+  been updated to leverage Django 2.2 features now (e.g. ``path`` for
+  URLs).
+
 0.13.0 (2020-May-23)
 ====================
 

@@ -51,12 +51,15 @@ Add django-flexible-subscriptions to your project
 .. code-block:: python
 
     import subscriptions
+
     from django.contrib import admin # Optional, but recommended
+    from django.urls import include, urls
+
 
     urlpatterns = [
         ...
-        url(r'^subscriptions/', include('subscriptions.urls')),
-        url(r'^admin/', include(admin.site.urls), # Optional, but recommended
+        path('subscriptions/', include('subscriptions.urls')),
+        path('admin/', include(admin.site.urls), # Optional, but recommended
         ...
     ]
 
