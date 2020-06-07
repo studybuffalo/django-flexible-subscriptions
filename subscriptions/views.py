@@ -1,6 +1,5 @@
 """Views for the Flexible Subscriptions app."""
 # pylint: disable=too-many-lines, no-self-use
-# TODO: review and fix no-self-use issues
 from copy import copy
 
 from django.contrib import messages

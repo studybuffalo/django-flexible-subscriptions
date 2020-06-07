@@ -205,7 +205,6 @@ class PlanCost(models.Model):
                 datetime: The next time billing will be due.
         """
         # pylint: disable=too-many-return-statements
-        # TODO: simplify this to better resolve pylint issues
         if self.recurrence_unit == SECOND:
             return current + timedelta(seconds=self.recurrence_period)
 
