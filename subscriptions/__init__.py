@@ -6,7 +6,7 @@ import django
 
 __version__ = '0.13.0'
 
-# Provide DepreciationWarning for older Python versions
+# Provide DeprecationWarning for older Python versions
 # Have to use sys.version while supporting Python 3.5 to enable testing
 # Once Python 3.5 is dropped can switch to version_info & compare tuples
 if re.match(r'^3\.5', sys.version):
@@ -18,7 +18,7 @@ if re.match(r'^3\.5', sys.version):
         ),
         DeprecationWarning
     )
-# Provide DepreciationWarning for older Django versions
+# Provide DeprecationWarning for older Django versions
 if '1.11' in django.__version__:
     warnings.warn(
         (
