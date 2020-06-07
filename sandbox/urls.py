@@ -1,10 +1,9 @@
 """URLs for the sandbox demo."""
 
 from django.conf import settings
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
-from django.urls import include
 from django.views.generic import TemplateView
 
 from subscriptions import models, urls as subscriptions_urls
