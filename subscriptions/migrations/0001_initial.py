@@ -1,5 +1,5 @@
 """Initial model creation."""
-# pylint: disable=missing-docstring, line-too-long, invalid-name
+# pylint: disable=missing-docstring, invalid-name
 
 import uuid
 

@@ -709,7 +709,7 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
         """Returns 404 error as this method is not implemented."""
         return HttpResponseNotAllowed(['POST'])
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):  # pylint: disable=unused-argument
         """Handles all POST requests to the SubscribeView.
 
             The 'action' POST argument is used to determine which
@@ -989,7 +989,7 @@ class SubscribeCancelView(LoginRequiredMixin, abstract.DetailView):
         """Returns the success URL."""
         return reverse_lazy(self.success_url)
 
-    def post(self, request, *args, **kwargs):  # pylint: disable=unused-arguments
+    def post(self, request, *args, **kwargs):  # pylint: disable=unused-argument
         """Updates a subscription's details to cancel it."""
         subscription = self.get_object()
         subscription.date_billing_end = copy(subscription.date_billing_next)

@@ -260,7 +260,7 @@ def test_subscribe_view_post_preview_added_context(admin_client, dfs):
     assert isinstance(response.context['payment_form'], forms.PaymentForm)
 
 
-def test_subscribe_view_post_preview_progress_to_confirmation(admin_client, dfs):  # pylint: disable=line-too-long
+def test_subscribe_view_post_preview_progress_to_confirmation(admin_client, dfs):
     """Tests preview POST progresses to confirmation."""
     post_data = {
         'action': 'confirm',
@@ -321,7 +321,7 @@ def test_subscribe_view_post_preview_to_confirm_invalid(admin_client, dfs):
     assert 'subscriptions/subscribe_preview.html' in templates
 
 
-def test_subscribe_view_post_preview_to_confirm_invalid_values(admin_client, dfs):  # pylint: disable=line-too-long
+def test_subscribe_view_post_preview_to_confirm_invalid_values(admin_client, dfs):
     """Tests invalid preview that form is repopulated correctly."""
     post_data = {
         'action': 'confirm',
@@ -429,7 +429,7 @@ def test_subscribe_view_post_confirm_to_process_invalid(admin_client, dfs):
     )
 
 
-def test_subscribe_view_post_confirm_to_process_invalid_values(admin_client, dfs):  # pylint: disable=line-too-long
+def test_subscribe_view_post_confirm_to_process_invalid_values(admin_client, dfs):
     """Tests invalid process POST populates proper values in form."""
     post_data = {
         'action': 'process',
@@ -618,7 +618,7 @@ def test_subscribe_user_list_no_redirect_on_login(client, django_user_model):
     assert response.status_code == 200
 
 
-def test_subscribe_user_list_requires_user_owner(client, django_user_model, dfs):  # pylint: disable=line-too-long
+def test_subscribe_user_list_requires_user_owner(client, django_user_model, dfs):
     """Tests that logged in user has ownership of subscription plans."""
     subscription = dfs.subscription
     other_user = django_user_model.objects.create_user(
