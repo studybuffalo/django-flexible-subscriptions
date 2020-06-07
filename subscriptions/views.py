@@ -1,5 +1,6 @@
 """Views for the Flexible Subscriptions app."""
-# pylint: disable=too-many-lines
+# pylint: disable=too-many-lines, no-self-use
+# TODO: review and fix no-self-use issues
 from copy import copy
 
 from django.contrib import messages
@@ -162,8 +163,8 @@ class PlanCreateView(PermissionRequiredMixin, abstract.CreateView):
 
         if form.is_valid() and cost_forms.is_valid():
             return self.form_valid(form, cost_forms)
-        else:
-            return self.form_invalid(form, cost_forms)
+
+        return self.form_invalid(form, cost_forms)
 
     def form_valid(self, form, cost_forms):
         """Handles processing of valid forms.
@@ -264,8 +265,8 @@ class PlanUpdateView(PermissionRequiredMixin, abstract.UpdateView):
 
         if form.is_valid() and cost_forms.is_valid():
             return self.form_valid(form, cost_forms)
-        else:
-            return self.form_invalid(form, cost_forms)
+
+        return self.form_invalid(form, cost_forms)
 
     def form_valid(self, form, cost_forms):
         """Handles processing of valid forms.
