@@ -27,3 +27,6 @@ sandbox/*.sqlite3
 
 # Emacs files
 .dir-locals.el
+
+# Node Modules
+/node_modules/*
