@@ -756,7 +756,7 @@ def test_cancel_post_updates_instance(client, dfs):
     )
 
     subscription = models.UserSubscription.objects.get(id=subscription_id)
-    messages = [message for message in get_messages(response.wsgi_request)]
+    messages = list(get_messages(response.wsgi_request))
 
     assert subscription.date_billing_end == datetime(2018, 2, 1, 1, 1, 1)
     assert subscription.date_billing_next is None

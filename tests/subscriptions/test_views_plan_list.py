@@ -129,7 +129,7 @@ def test_plan_list_create_create_and_success(admin_client):
         follow=True,
     )
 
-    messages = [message for message in get_messages(response.wsgi_request)]
+    messages = list(get_messages(response.wsgi_request))
 
     assert models.PlanList.objects.all().count() == plan_list_count + 1
     assert messages[0].tags == 'success'
@@ -205,7 +205,7 @@ def test_plan_list_update_update_and_success(admin_client):
         follow=True,
     )
 
-    messages = [message for message in get_messages(response.wsgi_request)]
+    messages = list(get_messages(response.wsgi_request))
 
     assert models.PlanList.objects.all().count() == plan_list_count
     assert models.PlanList.objects.get(id=plan_list.id).title == '2'
@@ -280,7 +280,7 @@ def test_plan_list_delete_delete_and_success_message(admin_client):
         follow=True,
     )
 
-    messages = [message for message in get_messages(response.wsgi_request)]
+    messages = list(get_messages(response.wsgi_request))
 
     assert models.PlanList.objects.all().count() == plan_list_count - 1
     assert messages[0].tags == 'success'

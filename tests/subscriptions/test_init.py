@@ -31,7 +31,7 @@ def test_other_python_versions_depreciation_warning(recwarn):
     """Tests that warning doesn't fire for other Python versions."""
     reload(subscriptions)
 
-    assert len(recwarn) is 0
+    assert len(recwarn) == 0
 
 
 @patch('subscriptions.sys.version', '3.6.0')
@@ -60,4 +60,4 @@ def test_other_django_versions_depreciation_warning(recwarn):
     """Tests that warning doesn't fire for other Django versions."""
     reload(subscriptions)
 
-    assert len(recwarn) is 0
+    assert len(recwarn) == 0

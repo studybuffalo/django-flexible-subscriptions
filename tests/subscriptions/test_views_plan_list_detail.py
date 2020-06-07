@@ -175,7 +175,7 @@ def test_detail_create_create_and_success(admin_client):
         follow=True,
     )
 
-    messages = [message for message in get_messages(response.wsgi_request)]
+    messages = list(get_messages(response.wsgi_request))
 
     assert models.PlanListDetail.objects.all().count() == detail_count + 1
     assert messages[0].tags == 'success'
@@ -304,7 +304,7 @@ def test_detail_update_update_and_success(admin_client):
         follow=True,
     )
 
-    messages = [message for message in get_messages(response.wsgi_request)]
+    messages = list(get_messages(response.wsgi_request))
 
     assert models.PlanListDetail.objects.all().count() == detail_count
     assert models.PlanListDetail.objects.get(id=plan_list.id).html_content == (
@@ -430,7 +430,7 @@ def test_detail_delete_delete_and_success_message(admin_client):
         follow=True,
     )
 
-    messages = [message for message in get_messages(response.wsgi_request)]
+    messages = list(get_messages(response.wsgi_request))
 
     assert models.PlanListDetail.objects.all().count() == detail_count - 1
     assert messages[0].tags == 'success'

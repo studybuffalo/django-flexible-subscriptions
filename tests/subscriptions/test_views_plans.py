@@ -151,7 +151,7 @@ def test_plan_create_create_and_success(admin_client):
         follow=True,
     )
 
-    messages = [message for message in get_messages(response.wsgi_request)]
+    messages = list(get_messages(response.wsgi_request))
 
     assert models.SubscriptionPlan.objects.all().count() == plan_count + 1
     assert messages[0].tags == 'success'
@@ -383,7 +383,7 @@ def test_plan_update_update_and_success(admin_client):
         follow=True,
     )
 
-    messages = [message for message in get_messages(response.wsgi_request)]
+    messages = list(get_messages(response.wsgi_request))
 
     assert models.SubscriptionPlan.objects.all().count() == plan_count
     assert messages[0].tags == 'success'
@@ -422,7 +422,7 @@ def test_plan_upate_with_same_costs(admin_client):
         follow=True,
     )
 
-    messages = [message for message in get_messages(response.wsgi_request)]
+    messages = list(get_messages(response.wsgi_request))
 
     assert messages[0].message == 'Subscription plan successfully updated'
     assert models.SubscriptionPlan.objects.all().count() == plan_count
@@ -467,7 +467,7 @@ def test_plan_upate_with_additional_costs(admin_client):
         follow=True,
     )
 
-    messages = [message for message in get_messages(response.wsgi_request)]
+    messages = list(get_messages(response.wsgi_request))
 
     assert messages[0].message == 'Subscription plan successfully updated'
     assert models.SubscriptionPlan.objects.all().count() == plan_count
@@ -506,7 +506,7 @@ def test_plan_upate_with_delete_costs(admin_client):
         follow=True,
     )
 
-    messages = [message for message in get_messages(response.wsgi_request)]
+    messages = list(get_messages(response.wsgi_request))
 
     assert messages[0].message == 'Subscription plan successfully updated'
     assert models.SubscriptionPlan.objects.all().count() == plan_count
@@ -708,7 +708,7 @@ def test_plan_delete_delete_and_success_message(admin_client):
         follow=True,
     )
 
-    messages = [message for message in get_messages(response.wsgi_request)]
+    messages = list(get_messages(response.wsgi_request))
 
     assert models.SubscriptionPlan.objects.all().count() == plan_count - 1
     assert messages[0].tags == 'success'

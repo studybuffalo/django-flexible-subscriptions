@@ -159,7 +159,7 @@ def test_subscription_create_and_success(admin_client, django_user_model):
         follow=True,
     )
 
-    messages = [message for message in get_messages(response.wsgi_request)]
+    messages = list(get_messages(response.wsgi_request))
 
     assert models.UserSubscription.objects.all().count() == (
         subscription_count + 1
@@ -260,7 +260,7 @@ def test_subscription_update_and_success(admin_client, django_user_model):
         post_data,
         follow=True,
     )
-    messages = [message for message in get_messages(response.wsgi_request)]
+    messages = list(get_messages(response.wsgi_request))
 
     assert messages[0].tags == 'success'
     assert messages[0].message == 'User subscription successfully updated'
@@ -355,7 +355,7 @@ def test_subscription_delete_and_success(admin_client, django_user_model):
         follow=True,
     )
 
-    messages = [message for message in get_messages(response.wsgi_request)]
+    messages = list(get_messages(response.wsgi_request))
 
     assert models.UserSubscription.objects.all().count() == (
         subscription_count - 1
