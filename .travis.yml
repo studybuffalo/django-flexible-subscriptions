@@ -45,4 +45,4 @@ script:
   # Run Linters
   - pipenv run pylint subscriptions/ sandbox/ tests/
   - pipenv run pylint tests/ --min-similarity-lines=12
-  - pipenv run pycodestyle --show-source subscriptions/ sandbox/
+  - pipenv run pycodestyle --show-source subscriptions/ sandbox/ tests/
