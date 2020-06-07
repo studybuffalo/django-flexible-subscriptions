@@ -12,7 +12,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         """Runs Manager methods required to process subscriptions."""
-        Manager = getattr( # pylint: disable=invalid-name
+        Manager = getattr(  # pylint: disable=invalid-name
             importlib.import_module(SETTINGS['management_manager']['module']),
             SETTINGS['management_manager']['class']
         )

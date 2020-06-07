@@ -1,5 +1,4 @@
 """PyPI setup script for the django-flexible-subscriptions package."""
-# pylint: disable=line-too-long
 from setuptools import find_packages, setup
 
 from subscriptions import __version__

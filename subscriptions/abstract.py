@@ -5,6 +5,7 @@ from subscriptions.conf import SETTINGS
 
 BASE_TEMPLATE = SETTINGS['base_template']
 
+
 class TemplateView(generic.TemplateView):
     """Extends TemplateView to specify of extensible HTML template.
 
@@ -23,6 +24,7 @@ class TemplateView(generic.TemplateView):
 
         return context
 
+
 class ListView(generic.ListView):
     """Extends ListView to specify of extensible HTML template
 
@@ -32,7 +34,7 @@ class ListView(generic.ListView):
     """
     template_extends = BASE_TEMPLATE
 
-    def get_context_data(self, *, object_list=None, **kwargs): # pylint: disable=unused-argument
+    def get_context_data(self, *, object_list=None, **kwargs):  # pylint: disable=unused-argument, arguments-differ
         """Overriding get_context_data to add additional context."""
         context = super(ListView, self).get_context_data(**kwargs)
 
@@ -40,6 +42,7 @@ class ListView(generic.ListView):
         context['template_extends'] = self.template_extends
 
         return context
+
 
 class DetailView(generic.DetailView):
     """Extends DetailView to specify of extensible HTML template
@@ -59,6 +62,7 @@ class DetailView(generic.DetailView):
 
         return context
 
+
 class CreateView(generic.CreateView):
     """Extends CreateView to specify of extensible HTML template
 
@@ -77,6 +81,7 @@ class CreateView(generic.CreateView):
 
         return context
 
+
 class UpdateView(generic.UpdateView):
     """Extends UpdateView to specify of extensible HTML template
 
@@ -94,6 +99,7 @@ class UpdateView(generic.UpdateView):
         context['template_extends'] = self.template_extends
 
         return context
+
 
 class DeleteView(generic.DeleteView):
     """Extends DeleteView to specify of extensible HTML template

@@ -2,4 +2,13 @@
 load-plugins=pylint_django
 
 [FORMAT]
-max-line-length=80
+max-line-length=119
+
+[DESIGN]
+max-parents=12
+
+[SIMILARITIES]
+min-similarity-lines=4
+ignore-comments=yes
+ignore-docstrings=yes
+ignore-imports=yes

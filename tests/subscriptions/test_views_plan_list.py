@@ -13,6 +13,7 @@ def create_plan_list(title='test'):
     """Creates and returns a PlanList instance."""
     return models.PlanList.objects.create(title=title)
 
+
 # PlanListListView
 # -----------------------------------------------------------------------------
 @pytest.mark.django_db
@@ -26,6 +27,7 @@ def test_plan_list_list_template(admin_client):
         ]
     )
 
+
 @pytest.mark.django_db
 def test_plan_list_list_403_if_not_authorized(client, django_user_model):
     """Tests for 403 error for PlanList list if inadequate permissions."""
@@ -35,6 +37,7 @@ def test_plan_list_list_403_if_not_authorized(client, django_user_model):
     response = client.get(reverse('dfs_plan_list_list'))
 
     assert response.status_code == 403
+
 
 @pytest.mark.django_db
 def test_plan_list_list_200_if_authorized(client, django_user_model):
@@ -54,6 +57,7 @@ def test_plan_list_list_200_if_authorized(client, django_user_model):
 
     assert response.status_code == 200
 
+
 @pytest.mark.django_db
 def test_plan_list_list_retrieves_all_plan_lists(admin_client):
     """Tests that the list view retrieves all the plan lists."""
@@ -69,6 +73,7 @@ def test_plan_list_list_retrieves_all_plan_lists(admin_client):
     assert response.context['plan_lists'][1].title == '1'
     assert response.context['plan_lists'][2].title == '2'
 
+
 # PlanListCreateView
 # -----------------------------------------------------------------------------
 @pytest.mark.django_db
@@ -82,6 +87,7 @@ def test_plan_list_create_template(admin_client):
         ]
     )
 
+
 @pytest.mark.django_db
 def test_plan_list_create_403_if_not_authorized(client, django_user_model):
     """Tests for 403 error for PlanListCreate if inadequate permissions."""
@@ -91,6 +97,7 @@ def test_plan_list_create_403_if_not_authorized(client, django_user_model):
     response = client.get(reverse('dfs_plan_list_create'))
 
     assert response.status_code == 403
+
 
 @pytest.mark.django_db
 def test_plan_list_create_200_if_authorized(client, django_user_model):
@@ -110,6 +117,7 @@ def test_plan_list_create_200_if_authorized(client, django_user_model):
 
     assert response.status_code == 200
 
+
 @pytest.mark.django_db
 def test_plan_list_create_create_and_success(admin_client):
     """Tests that plan list creation and success message works as expected."""
@@ -121,11 +129,12 @@ def test_plan_list_create_create_and_success(admin_client):
         follow=True,
     )
 
-    messages = [message for message in get_messages(response.wsgi_request)]
+    messages = list(get_messages(response.wsgi_request))
 
     assert models.PlanList.objects.all().count() == plan_list_count + 1
     assert messages[0].tags == 'success'
     assert messages[0].message == 'Plan list successfully added'
+
 
 # PlanListUpdateView
 # -----------------------------------------------------------------------------
@@ -144,6 +153,7 @@ def test_plan_list_update_template(admin_client):
         ]
     )
 
+
 @pytest.mark.django_db
 def test_plan_list_update_403_if_not_authorized(client, django_user_model):
     """Tests for 403 error for PlanListUpdate if inadequate permissions."""
@@ -157,6 +167,7 @@ def test_plan_list_update_403_if_not_authorized(client, django_user_model):
     ))
 
     assert response.status_code == 403
+
 
 @pytest.mark.django_db
 def test_plan_list_update_200_if_authorized(client, django_user_model):
@@ -180,6 +191,7 @@ def test_plan_list_update_200_if_authorized(client, django_user_model):
 
     assert response.status_code == 200
 
+
 @pytest.mark.django_db
 def test_plan_list_update_update_and_success(admin_client):
     """Tests that plan list update and success message works as expected."""
@@ -193,12 +205,13 @@ def test_plan_list_update_update_and_success(admin_client):
         follow=True,
     )
 
-    messages = [message for message in get_messages(response.wsgi_request)]
+    messages = list(get_messages(response.wsgi_request))
 
     assert models.PlanList.objects.all().count() == plan_list_count
     assert models.PlanList.objects.get(id=plan_list.id).title == '2'
     assert messages[0].tags == 'success'
     assert messages[0].message == 'Plan list successfully updated'
+
 
 # PlanListDeleteView
 # -----------------------------------------------------------------------------
@@ -217,6 +230,7 @@ def test_plan_list_delete_template(admin_client):
         ]
     )
 
+
 @pytest.mark.django_db
 def test_plan_list_delete_403_if_not_authorized(client, django_user_model):
     """Tests for 403 error for PlanListDelete if inadequate permissions."""
@@ -230,6 +244,7 @@ def test_plan_list_delete_403_if_not_authorized(client, django_user_model):
     ))
 
     assert response.status_code == 403
+
 
 @pytest.mark.django_db
 def test_plan_list_delete_200_if_authorized(client, django_user_model):
@@ -253,6 +268,7 @@ def test_plan_list_delete_200_if_authorized(client, django_user_model):
 
     assert response.status_code == 200
 
+
 @pytest.mark.django_db
 def test_plan_list_delete_delete_and_success_message(admin_client):
     """Tests for success message on successful deletion."""
@@ -264,7 +280,7 @@ def test_plan_list_delete_delete_and_success_message(admin_client):
         follow=True,
     )
 
-    messages = [message for message in get_messages(response.wsgi_request)]
+    messages = list(get_messages(response.wsgi_request))
 
     assert models.PlanList.objects.all().count() == plan_list_count - 1
     assert messages[0].tags == 'success'

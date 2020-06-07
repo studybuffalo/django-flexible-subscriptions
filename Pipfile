@@ -15,6 +15,7 @@ django-debug-toolbar = "*"  # https://github.com/jazzband/django-debug-toolbar
 # Code quality
 # ------------------------------------------------------------------------------
 coverage = "*"  # https://github.com/nedbat/coveragepy
+pycodestyle = "*"  # https://github.com/PyCQA/pycodestyle
 pylint = "*"  # https://github.com/PyCQA/pylint/
 pylint-django = "*"  # https://github.com/PyCQA/pylint-django
 restructuredtext-lint = "*"  # https://github.com/twolfson/restructuredtext-lint

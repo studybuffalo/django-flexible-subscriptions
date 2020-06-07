@@ -29,7 +29,7 @@ RECURRENCE_UNIT_CHOICES = (
     (MONTH, 'month'),
     (YEAR, 'year'),
 )
-# ----------------------------------------------------------------------------
+
 
 class PlanTag(models.Model):
     """A tag for a subscription plan."""
@@ -44,6 +44,7 @@ class PlanTag(models.Model):
 
     def __str__(self):
         return self.tag
+
 
 class SubscriptionPlan(models.Model):
     """Details for a subscription plan."""
@@ -109,6 +110,7 @@ class SubscriptionPlan(models.Model):
             )
 
         return ', '.join(tag.tag for tag in self.tags.all()[:3])
+
 
 class PlanCost(models.Model):
     """Cost and frequency of billing for a plan."""
@@ -202,6 +204,7 @@ class PlanCost(models.Model):
             Returns:
                 datetime: The next time billing will be due.
         """
+        # pylint: disable=too-many-return-statements
         if self.recurrence_unit == SECOND:
             return current + timedelta(seconds=self.recurrence_period)
 
@@ -234,6 +237,7 @@ class PlanCost(models.Model):
             )
 
         return None
+
 
 class UserSubscription(models.Model):
     """Details of a user's specific subscription."""
@@ -293,6 +297,7 @@ class UserSubscription(models.Model):
     class Meta:
         ordering = ('user', 'date_billing_start',)
 
+
 class SubscriptionTransaction(models.Model):
     """Details for a subscription plan billing."""
     id = models.UUIDField(
@@ -330,6 +335,7 @@ class SubscriptionTransaction(models.Model):
     class Meta:
         ordering = ('date_transaction', 'user',)
 
+
 class PlanList(models.Model):
     """Model to record details of a display list of SubscriptionPlans."""
     title = models.TextField(
@@ -366,6 +372,7 @@ class PlanList(models.Model):
 
     def __str__(self):
         return self.title
+
 
 class PlanListDetail(models.Model):
     """Model to add additional details to plans when part of PlanList."""

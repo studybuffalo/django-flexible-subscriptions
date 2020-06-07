@@ -12,6 +12,7 @@ from subscriptions.management.commands import _manager
 
 pytestmark = pytest.mark.django_db  # pylint: disable=invalid-name
 
+
 def create_cost(group):
     """Creates and returns a PlanCost instance."""
     plan = models.SubscriptionPlan.objects.create(
@@ -23,6 +24,7 @@ def create_cost(group):
     return models.PlanCost.objects.create(
         plan=plan, recurrence_period=1, recurrence_unit=models.MONTH, cost='1.00'
     )
+
 
 def create_due_subscription(user, group=None):
     """Creates a standard UserSubscription object due for billing."""
@@ -38,6 +40,7 @@ def create_due_subscription(user, group=None):
         active=True,
         cancelled=False,
     )
+
 
 def test_manager_process_expired_single_group(django_user_model):
     """Tests handling expiry with user with single group."""
@@ -67,6 +70,7 @@ def test_manager_process_expired_single_group(django_user_model):
     assert group.user_set.all().count() == user_count - 1
     assert subscription.active is False
     assert subscription.cancelled is True
+
 
 def test_manager_process_expired_multiple_different_groups(django_user_model):
     """Tests handling expiry with user with multiple different groups."""
@@ -117,6 +121,7 @@ def test_manager_process_expired_multiple_different_groups(django_user_model):
     assert subscription_2.active is True
     assert subscription_2.cancelled is False
 
+
 def test_manager_process_expired_multiple_same_groups(django_user_model):
     """Tests handling expiry with user with multiple same groups."""
     user = django_user_model.objects.create_user(username='a', password='b')
@@ -161,6 +166,7 @@ def test_manager_process_expired_multiple_same_groups(django_user_model):
     assert subscription_2.active is True
     assert subscription_2.cancelled is False
 
+
 def test_manager_process_new_with_group(django_user_model):
     """Tests processing of new subscription with group."""
     user = django_user_model.objects.create_user(username='a', password='b')
@@ -189,6 +195,7 @@ def test_manager_process_new_with_group(django_user_model):
     assert subscription.active is True
     assert subscription.cancelled is False
 
+
 def test_manager_process_new_without_group(django_user_model):
     """Tests processing of new subscription without group."""
     user = django_user_model.objects.create_user(username='a', password='b')
@@ -212,6 +219,7 @@ def test_manager_process_new_without_group(django_user_model):
 
     assert subscription.active is True
     assert subscription.cancelled is False
+
 
 def test_manager_process_new_next_date(django_user_model):
     """Tests that next billing date uses billing start date."""
@@ -237,6 +245,7 @@ def test_manager_process_new_next_date(django_user_model):
     next_date = datetime(2018, 1, 31, 11, 30, 0, 520000)
 
     assert subscription.date_billing_next == next_date
+
 
 @patch(
     'subscriptions.management.commands._manager.Manager.process_payment',
@@ -267,6 +276,7 @@ def test_manager_process_new_payment_error(django_user_model):
     assert subscription.active is False
     assert subscription.cancelled is False
 
+
 @patch(
     'subscriptions.management.commands._manager.timezone.now',
     lambda: datetime(2018, 2, 1, 2, 2, 2)
@@ -289,6 +299,7 @@ def test_manager_process_due_billing_dates(django_user_model):
     assert subscription.date_billing_next == next_date
     assert subscription.date_billing_last == datetime(2018, 2, 1, 2, 2, 2)
 
+
 @patch(
     'subscriptions.management.commands._manager.Manager.process_payment',
     lambda self, **kwargs: False
@@ -306,6 +317,7 @@ def test_manager_process_due_payment_error(django_user_model):
 
     assert subscription.date_billing_last == datetime(2018, 1, 1, 1, 1, 1)
     assert subscription.date_billing_next == datetime(2018, 2, 1, 1, 1, 1)
+
 
 @patch(
     'subscriptions.management.commands._manager.timezone.now',
@@ -340,6 +352,7 @@ def test_manager_process_subsriptions_with_expired(django_user_model):
     assert subscription.active is False
     assert subscription.cancelled is True
 
+
 @patch(
     'subscriptions.management.commands._manager.timezone.now',
     lambda: datetime(2018, 1, 2)
@@ -372,6 +385,7 @@ def test_manager_process_subscriptions_with_new(django_user_model):
     assert subscription.active is True
     assert subscription.cancelled is False
 
+
 @patch(
     'subscriptions.management.commands._manager.timezone.now',
     lambda: datetime(2018, 12, 2)
@@ -394,6 +408,7 @@ def test_manager_process_subscriptions_with_due(django_user_model):
     assert subscription.active is True
     assert subscription.cancelled is False
 
+
 @patch(
     'subscriptions.management.commands._manager.timezone.now',
     lambda: datetime(2018, 1, 1, 1, 1, 1)
@@ -415,6 +430,7 @@ def test_manager_record_transaction_without_date(django_user_model):
         transaction_count + 1
     )
     assert transaction.date_transaction == datetime(2018, 1, 1, 1, 1, 1)
+
 
 def test_manager_record_transaction_with_date(django_user_model):
     """Tests handling of record_transaction with date provided."""

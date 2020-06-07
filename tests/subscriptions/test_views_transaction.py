@@ -16,11 +16,13 @@ def create_plan(plan_name='1', plan_description='2'):
         plan_name=plan_name, plan_description=plan_description
     )
 
+
 def create_cost(plan=None, period=1, unit=models.MONTH, cost='1.00'):
     """Creates and returns PlanCost instance."""
     return models.PlanCost.objects.create(
         plan=plan, recurrence_period=period, recurrence_unit=unit, cost=cost
     )
+
 
 def create_transaction(user, cost, amount='1.00'):
     """Creates and returns a PlanTag instance."""
@@ -30,6 +32,7 @@ def create_transaction(user, cost, amount='1.00'):
         date_transaction=timezone.now(),
         amount=amount,
     )
+
 
 # TransactionListView
 # -----------------------------------------------------------------------------
@@ -42,6 +45,7 @@ def test_transaction_list_template(admin_client):
         t.name for t in response.templates
     ]
 
+
 @pytest.mark.django_db
 def test_transaction_list_403_if_not_authorized(client, django_user_model):
     """Tests for 403 error for tag list if inadequate permissions."""
@@ -51,6 +55,7 @@ def test_transaction_list_403_if_not_authorized(client, django_user_model):
     response = client.get(reverse('dfs_tag_list'))
 
     assert response.status_code == 403
+
 
 @pytest.mark.django_db
 def test_transaction_list_200_if_authorized(client, django_user_model):
@@ -70,6 +75,7 @@ def test_transaction_list_200_if_authorized(client, django_user_model):
 
     assert response.status_code == 200
 
+
 @pytest.mark.django_db
 def test_transaction_list_retrives_all(admin_client, django_user_model):
     """Tests that the list view retrieves all the transactions."""
@@ -86,6 +92,7 @@ def test_transaction_list_retrives_all(admin_client, django_user_model):
     assert response.context['transactions'][0].amount == Decimal('1.0000')
     assert response.context['transactions'][1].amount == Decimal('2.0000')
     assert response.context['transactions'][2].amount == Decimal('3.0000')
+
 
 # TransactionDetailView
 # -----------------------------------------------------------------------------
@@ -107,6 +114,7 @@ def test_transaction_detail_template(admin_client, django_user_model):
         t.name for t in response.templates
     ]
 
+
 @pytest.mark.django_db
 def test_transaction_detail_403_if_not_authorized(client, django_user_model):
     """Tests  403 error for transaction detail if inadequate permissions."""
@@ -125,6 +133,7 @@ def test_transaction_detail_403_if_not_authorized(client, django_user_model):
     )
 
     assert response.status_code == 403
+
 
 @pytest.mark.django_db
 def test_transaction_detail_200_if_authorized(client, django_user_model):

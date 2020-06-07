@@ -15,15 +15,18 @@ def create_plan(plan_name='1', plan_description='2'):
         plan_name=plan_name, plan_description=plan_description
     )
 
+
 def create_cost(plan=None, period=1, unit=models.MONTH, cost='1.00'):
     """Creates and returns PlanCost instance."""
     return models.PlanCost.objects.create(
         plan=plan, recurrence_period=period, recurrence_unit=unit, cost=cost
     )
 
+
 def create_subscription(user, cost):
     """Creates and returns a UserSubscription instance."""
     return models.UserSubscription.objects.create(user=user, subscription=cost)
+
 
 # SubscriptionListView
 # -----------------------------------------------------------------------------
@@ -38,6 +41,7 @@ def test_subscription_list_template(admin_client):
         ]
     )
 
+
 @pytest.mark.django_db
 def test_subscription_list_403_if_not_authorized(client, django_user_model):
     """Tests for 403 error for subscription list if inadequate permissions."""
@@ -47,6 +51,7 @@ def test_subscription_list_403_if_not_authorized(client, django_user_model):
     response = client.get(reverse('dfs_subscription_list'))
 
     assert response.status_code == 403
+
 
 @pytest.mark.django_db
 def test_subscription_list_200_if_authorized(client, django_user_model):
@@ -65,6 +70,7 @@ def test_subscription_list_200_if_authorized(client, django_user_model):
     response = client.get(reverse('dfs_subscription_list'))
 
     assert response.status_code == 200
+
 
 @pytest.mark.django_db
 def test_subscription_list_retrives_all_users(admin_client, django_user_model):
@@ -91,6 +97,7 @@ def test_subscription_list_retrives_all_users(admin_client, django_user_model):
     assert response.context['users'][1].username == 'user_2'
     assert response.context['users'][2].username == 'user_3'
 
+
 # SubscriptionCreateView
 # -----------------------------------------------------------------------------
 @pytest.mark.django_db
@@ -104,6 +111,7 @@ def test_subscription_create_template(admin_client):
         ]
     )
 
+
 @pytest.mark.django_db
 def test_subscription_create_403_if_not_authorized(client, django_user_model):
     """Tests 403 error for subscription create if inadequate permissions."""
@@ -113,6 +121,7 @@ def test_subscription_create_403_if_not_authorized(client, django_user_model):
     response = client.get(reverse('dfs_subscription_create'))
 
     assert response.status_code == 403
+
 
 @pytest.mark.django_db
 def test_subscription_create_200_if_authorized(client, django_user_model):
@@ -132,6 +141,7 @@ def test_subscription_create_200_if_authorized(client, django_user_model):
 
     assert response.status_code == 200
 
+
 @pytest.mark.django_db
 def test_subscription_create_and_success(admin_client, django_user_model):
     """Tests subscription creation and success message works as expected."""
@@ -149,13 +159,14 @@ def test_subscription_create_and_success(admin_client, django_user_model):
         follow=True,
     )
 
-    messages = [message for message in get_messages(response.wsgi_request)]
+    messages = list(get_messages(response.wsgi_request))
 
     assert models.UserSubscription.objects.all().count() == (
         subscription_count + 1
     )
     assert messages[0].tags == 'success'
     assert messages[0].message == 'User subscription successfully added'
+
 
 # SubscriptionUpdateView
 # -----------------------------------------------------------------------------
@@ -179,6 +190,7 @@ def test_subscription_update_template(admin_client, django_user_model):
         ]
     )
 
+
 @pytest.mark.django_db
 def test_subscription_update_403_if_not_authorized(client, django_user_model):
     """Tests 403 error for subscription update if inadequate permissions."""
@@ -197,6 +209,7 @@ def test_subscription_update_403_if_not_authorized(client, django_user_model):
     )
 
     assert response.status_code == 403
+
 
 @pytest.mark.django_db
 def test_subscription_update_200_if_authorized(client, django_user_model):
@@ -225,6 +238,7 @@ def test_subscription_update_200_if_authorized(client, django_user_model):
 
     assert response.status_code == 200
 
+
 @pytest.mark.django_db
 def test_subscription_update_and_success(admin_client, django_user_model):
     """Tests that subscription update and success message works as expected."""
@@ -246,12 +260,13 @@ def test_subscription_update_and_success(admin_client, django_user_model):
         post_data,
         follow=True,
     )
-    messages = [message for message in get_messages(response.wsgi_request)]
+    messages = list(get_messages(response.wsgi_request))
 
     assert messages[0].tags == 'success'
     assert messages[0].message == 'User subscription successfully updated'
     assert models.UserSubscription.objects.all().count() == subscription_count
     assert models.UserSubscription.objects.last().active is False
+
 
 # SubscriptionDeleteView
 # -----------------------------------------------------------------------------
@@ -275,6 +290,7 @@ def test_subscription_delete_template(admin_client, django_user_model):
         ]
     )
 
+
 @pytest.mark.django_db
 def test_subscription_delete_403_if_not_authorized(client, django_user_model):
     """Tests 403 error for subscription delete if inadequate permissions."""
@@ -293,6 +309,7 @@ def test_subscription_delete_403_if_not_authorized(client, django_user_model):
     )
 
     assert response.status_code == 403
+
 
 @pytest.mark.django_db
 def test_subscription_delete_200_if_authorized(client, django_user_model):
@@ -321,6 +338,7 @@ def test_subscription_delete_200_if_authorized(client, django_user_model):
 
     assert response.status_code == 200
 
+
 @pytest.mark.django_db
 def test_subscription_delete_and_success(admin_client, django_user_model):
     """Tests for success message on successful deletion."""
@@ -337,7 +355,7 @@ def test_subscription_delete_and_success(admin_client, django_user_model):
         follow=True,
     )
 
-    messages = [message for message in get_messages(response.wsgi_request)]
+    messages = list(get_messages(response.wsgi_request))
 
     assert models.UserSubscription.objects.all().count() == (
         subscription_count - 1

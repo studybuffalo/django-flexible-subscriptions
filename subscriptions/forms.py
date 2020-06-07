@@ -19,6 +19,7 @@ def assemble_cc_years():
 
     return cc_years
 
+
 class SubscriptionPlanForm(ModelForm):
     """Model Form for SubscriptionPlan model."""
     class Meta:
@@ -27,11 +28,13 @@ class SubscriptionPlanForm(ModelForm):
             'plan_name', 'plan_description', 'group', 'tags', 'grace_period',
         ]
 
+
 class PlanCostForm(ModelForm):
     """Form to use with inlineformset_factory and SubscriptionPlanForm."""
     class Meta:
         model = PlanCost
         fields = ['recurrence_period', 'recurrence_unit', 'cost']
+
 
 class PaymentForm(forms.Form):
     """Form to collect details required for payment billing."""
@@ -50,7 +53,6 @@ class PaymentForm(forms.Form):
         ('12', '12 - December'),
     )
     CC_YEARS = assemble_cc_years()
-
 
     cardholder_name = forms.CharField(
         label='Cardholder name',
@@ -126,6 +128,7 @@ class PaymentForm(forms.Form):
         max_length=128,
         min_length=1,
     )
+
 
 class SubscriptionPlanCostForm(forms.Form):
     """Form to handle choosing a subscription plan for payment."""

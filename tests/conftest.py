@@ -4,6 +4,7 @@ from django.conf import settings
 
 import pytest
 
+
 def pytest_configure():
     """Setups initial testing configuration."""
     # Setup the bare minimum Django settings
@@ -41,9 +42,10 @@ def pytest_configure():
     # Initiate Django
     django.setup()
 
+
 @pytest.fixture
 def dfs():
     """Fixture that returns all required models for testing DFS."""
-    from . import factories
+    from . import factories  # pylint: disable=import-outside-toplevel
 
     return factories.DFS()

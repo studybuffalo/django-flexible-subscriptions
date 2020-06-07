@@ -7,11 +7,13 @@ from django.conf.urls import url
 from subscriptions import views
 from subscriptions.conf import SETTINGS
 
+
 # Retrieve the proper subscribe view
-SubscribeView = getattr( # pylint: disable=invalid-name
+SubscribeView = getattr(  # pylint: disable=invalid-name
     importlib.import_module(SETTINGS['subscribe_view']['module']),
     SETTINGS['subscribe_view']['class']
 )
+
 
 urlpatterns = [
     url(
@@ -25,12 +27,12 @@ urlpatterns = [
         name='dfs_subscribe_add',
     ),
     url(
-        r'^subscribe/thank-you/(?P<transaction_id>[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12})/$',
+        r'^subscribe/thank-you/(?P<transaction_id>[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12})/$',  # noqa
         views.SubscribeThankYouView.as_view(),
         name='dfs_subscribe_thank_you',
     ),
     url(
-        r'^subscribe/cancel/(?P<subscription_id>[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12})/$',
+        r'^subscribe/cancel/(?P<subscription_id>[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12})/$',  # noqa
         views.SubscribeCancelView.as_view(),
         name='dfs_subscribe_cancel',
     ),
@@ -130,12 +132,12 @@ urlpatterns = [
         name='dfs_subscription_create',
     ),
     url(
-        r'^dfs/subscriptions/(?P<subscription_id>[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12})/$',
+        r'^dfs/subscriptions/(?P<subscription_id>[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12})/$',  # noqa
         views.SubscriptionUpdateView.as_view(),
         name='dfs_subscription_update',
     ),
     url(
-        r'^dfs/subscriptions/(?P<subscription_id>[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12})/delete/$',
+        r'^dfs/subscriptions/(?P<subscription_id>[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12})/delete/$',  # noqa
         views.SubscriptionDeleteView.as_view(),
         name='dfs_subscription_delete',
     ),
@@ -145,7 +147,7 @@ urlpatterns = [
         name='dfs_transaction_list',
     ),
     url(
-        r'^dfs/transactions/(?P<transaction_id>[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12})/$',
+        r'^dfs/transactions/(?P<transaction_id>[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12})/$',  # noqa
         views.TransactionDetailView.as_view(),
         name='dfs_transaction_detail',
     ),

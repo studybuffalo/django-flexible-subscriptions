@@ -1,4 +1,5 @@
 """Part 1 of migration to switch recurrence_unit to CharField."""
+# pylint: disable=missing-docstring, invalid-name
 from django.db import migrations, models
 
 

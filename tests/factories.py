@@ -18,6 +18,7 @@ class PlanCostFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = models.PlanCost
 
+
 class SubscriptionPlanFactory(factory.django.DjangoModelFactory):
     """Factory to create SubscriptionPlan and PlanCost models."""
     plan_name = factory.Sequence(lambda n: 'Plan {}'.format(n))
@@ -28,6 +29,7 @@ class SubscriptionPlanFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = models.SubscriptionPlan
 
+
 class PlanListDetailFactory(factory.django.DjangoModelFactory):
     """Factory to create a PlanListDetail and related SubscriptionPlan."""
     html_content = factory.Sequence(lambda n: '<b>{}</b>'.format(n))
@@ -36,6 +38,7 @@ class PlanListDetailFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = models.PlanListDetail
+
 
 class PlanListFactory(factory.django.DjangoModelFactory):
     """Factory to create a PlanList and all related models."""
@@ -47,6 +50,7 @@ class PlanListFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = models.PlanList
+
 
 class UserFactory(factory.django.DjangoModelFactory):
     """Creates a user model instance."""
@@ -63,6 +67,7 @@ class UserFactory(factory.django.DjangoModelFactory):
         manager = cls._get_manager(model_class)
 
         return manager.create_user(*args, **kwargs)
+
 
 class DFS:
     """Object to manage various model instances as needed."""
@@ -141,7 +146,7 @@ class DFS:
             return self._cost
 
         # Create a plan instance to retrieve the cost from
-        self._plan # pylint: disable=pointless-statement
+        self._plan  # pylint: disable=pointless-statement
         self._cost = self._plan.costs.first()
 
         return self._cost
@@ -162,11 +167,11 @@ class DFS:
 
         # Create user if needed
         if not self._user:
-            self.user # pylint: disable=pointless-statement
+            self.user  # pylint: disable=pointless-statement
 
         # Create PlanCost if needed
         if not self._cost:
-            self.plan # pylint: disable=pointless-statement
+            self.plan  # pylint: disable=pointless-statement
 
         self._subscription = models.UserSubscription.objects.create(
             user=self._user,

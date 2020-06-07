@@ -13,11 +13,13 @@ def create_tag(tag_text='test'):
     """Creates and returns a PlanTag instance."""
     return models.PlanTag.objects.create(tag=tag_text)
 
+
 def create_plan(plan_name='1', plan_description='2'):
     """Creates and returns SubscriptionPlan instance."""
     return models.SubscriptionPlan.objects.create(
         plan_name=plan_name, plan_description=plan_description
     )
+
 
 def create_plan_cost(plan, rec_period=1, rec_unit=models.MONTH, cost='1.00'):
     """Creates and returns a PlanCost instance."""
@@ -27,6 +29,7 @@ def create_plan_cost(plan, rec_period=1, rec_unit=models.MONTH, cost='1.00'):
         recurrence_unit=rec_unit,
         cost=cost,
     )
+
 
 # PlanListView
 # -----------------------------------------------------------------------------
@@ -38,6 +41,7 @@ def test_plan_list_template(admin_client):
         'subscriptions/plan_list.html' in [t.name for t in response.templates]
     )
 
+
 @pytest.mark.django_db
 def test_plan_list_403_if_not_authorized(client, django_user_model):
     """Tests for 403 error for plan list if inadequate permissions."""
@@ -47,6 +51,7 @@ def test_plan_list_403_if_not_authorized(client, django_user_model):
     response = client.get(reverse('dfs_plan_list'))
 
     assert response.status_code == 403
+
 
 @pytest.mark.django_db
 def test_plan_list_200_if_authorized(client, django_user_model):
@@ -66,6 +71,7 @@ def test_plan_list_200_if_authorized(client, django_user_model):
 
     assert response.status_code == 200
 
+
 @pytest.mark.django_db
 def test_plan_list_retrives_all_plans(admin_client):
     """Tests that the plan list view retrieves all the plans."""
@@ -81,6 +87,7 @@ def test_plan_list_retrives_all_plans(admin_client):
     assert response.context['plans'][1].plan_name == '2'
     assert response.context['plans'][2].plan_name == '3'
 
+
 # PlanCreateView
 # -----------------------------------------------------------------------------
 @pytest.mark.django_db
@@ -92,6 +99,7 @@ def test_plan_create_template(admin_client):
         'subscriptions/plan_create.html' in [t.name for t in response.templates]
     )
 
+
 @pytest.mark.django_db
 def test_plan_create_403_if_not_authorized(client, django_user_model):
     """Tests for 403 error for plan create if inadequate permissions."""
@@ -101,6 +109,7 @@ def test_plan_create_403_if_not_authorized(client, django_user_model):
     response = client.get(reverse('dfs_plan_create'))
 
     assert response.status_code == 403
+
 
 @pytest.mark.django_db
 def test_plan_create_200_if_authorized(client, django_user_model):
@@ -119,6 +128,7 @@ def test_plan_create_200_if_authorized(client, django_user_model):
     response = client.get(reverse('dfs_plan_create'))
 
     assert response.status_code == 200
+
 
 @pytest.mark.django_db
 def test_plan_create_create_and_success(admin_client):
@@ -141,11 +151,12 @@ def test_plan_create_create_and_success(admin_client):
         follow=True,
     )
 
-    messages = [message for message in get_messages(response.wsgi_request)]
+    messages = list(get_messages(response.wsgi_request))
 
     assert models.SubscriptionPlan.objects.all().count() == plan_count + 1
     assert messages[0].tags == 'success'
     assert messages[0].message == 'Subscription plan successfully added'
+
 
 @pytest.mark.django_db
 def test_plan_create_with_costs(admin_client):
@@ -181,6 +192,7 @@ def test_plan_create_with_costs(admin_client):
         models.PlanCost.objects.last().plan
     )
 
+
 @pytest.mark.django_db
 def test_plan_create_with_tags(admin_client):
     """Tests handling of POST request with tags."""
@@ -208,6 +220,7 @@ def test_plan_create_with_tags(admin_client):
     assert tag_2.plans.all().count() == 1
     assert tag_1.plans.first() == tag_2.plans.first()
 
+
 @pytest.mark.django_db
 def test_plan_create_with_groups(admin_client):
     """Tests handling of POST request with groups."""
@@ -233,6 +246,7 @@ def test_plan_create_with_groups(admin_client):
     assert group_1.plans.all().count() == 1
     assert models.SubscriptionPlan.objects.last() == group_1.plans.last()
 
+
 @pytest.mark.django_db
 def test_plan_create_invalid_form(admin_client):
     """Tests handling of invalid form submission."""
@@ -256,6 +270,7 @@ def test_plan_create_invalid_form(admin_client):
 
     assert models.SubscriptionPlan.objects.all().count() == plan_count
     assert response.context['form'].is_valid() is False
+
 
 @pytest.mark.django_db
 def test_plan_create_invalid_cost_forms(admin_client):
@@ -290,6 +305,7 @@ def test_plan_create_invalid_cost_forms(admin_client):
     assert response.context['form'].is_valid() is True
     assert response.context['cost_forms'].is_valid() is False
 
+
 # PlanUpdateView
 # -----------------------------------------------------------------------------
 @pytest.mark.django_db
@@ -305,6 +321,7 @@ def test_plan_update_template(admin_client):
         'subscriptions/plan_update.html' in [t.name for t in response.templates]
     )
 
+
 @pytest.mark.django_db
 def test_plan_update_403_if_not_authorized(client, django_user_model):
     """Tests for 403 error for plan update if inadequate permissions."""
@@ -318,6 +335,7 @@ def test_plan_update_403_if_not_authorized(client, django_user_model):
     )
 
     assert response.status_code == 403
+
 
 @pytest.mark.django_db
 def test_plan_update_200_if_authorized(client, django_user_model):
@@ -340,6 +358,7 @@ def test_plan_update_200_if_authorized(client, django_user_model):
     )
 
     assert response.status_code == 200
+
 
 @pytest.mark.django_db
 def test_plan_update_update_and_success(admin_client):
@@ -364,11 +383,12 @@ def test_plan_update_update_and_success(admin_client):
         follow=True,
     )
 
-    messages = [message for message in get_messages(response.wsgi_request)]
+    messages = list(get_messages(response.wsgi_request))
 
     assert models.SubscriptionPlan.objects.all().count() == plan_count
     assert messages[0].tags == 'success'
     assert messages[0].message == 'Subscription plan successfully updated'
+
 
 @pytest.mark.django_db
 def test_plan_upate_with_same_costs(admin_client):
@@ -396,18 +416,18 @@ def test_plan_upate_with_same_costs(admin_client):
         'costs-0-DELETE': False,
     }
 
-
     response = admin_client.post(
         reverse('dfs_plan_update', kwargs={'plan_id': plan.id}),
         post_data,
         follow=True,
     )
 
-    messages = [message for message in get_messages(response.wsgi_request)]
+    messages = list(get_messages(response.wsgi_request))
 
     assert messages[0].message == 'Subscription plan successfully updated'
     assert models.SubscriptionPlan.objects.all().count() == plan_count
     assert models.PlanCost.objects.all().count() == cost_count
+
 
 @pytest.mark.django_db
 def test_plan_upate_with_additional_costs(admin_client):
@@ -447,11 +467,12 @@ def test_plan_upate_with_additional_costs(admin_client):
         follow=True,
     )
 
-    messages = [message for message in get_messages(response.wsgi_request)]
+    messages = list(get_messages(response.wsgi_request))
 
     assert messages[0].message == 'Subscription plan successfully updated'
     assert models.SubscriptionPlan.objects.all().count() == plan_count
     assert models.PlanCost.objects.all().count() == cost_count + 1
+
 
 @pytest.mark.django_db
 def test_plan_upate_with_delete_costs(admin_client):
@@ -479,18 +500,18 @@ def test_plan_upate_with_delete_costs(admin_client):
         'costs-0-DELETE': True,
     }
 
-
     response = admin_client.post(
         reverse('dfs_plan_update', kwargs={'plan_id': plan.id}),
         post_data,
         follow=True,
     )
 
-    messages = [message for message in get_messages(response.wsgi_request)]
+    messages = list(get_messages(response.wsgi_request))
 
     assert messages[0].message == 'Subscription plan successfully updated'
     assert models.SubscriptionPlan.objects.all().count() == plan_count
     assert models.PlanCost.objects.all().count() == cost_count - 1
+
 
 @pytest.mark.django_db
 def test_plan_update_with_tags(admin_client):
@@ -524,6 +545,7 @@ def test_plan_update_with_tags(admin_client):
     assert tag_1.plans.all().count() == 1
     assert tag_2.plans.all().count() == 0
 
+
 @pytest.mark.django_db
 def test_plan_update_with_groups(admin_client):
     """Tests handling of plan update POST request with groups."""
@@ -555,6 +577,7 @@ def test_plan_update_with_groups(admin_client):
     assert group_1.plans.all().count() == group_1_plan_count - 1
     assert group_2.plans.all().count() == group_2_plan_count + 1
 
+
 @pytest.mark.django_db
 def test_plan_update_invalid_form(admin_client):
     """Tests handling of invalid form submission for updates."""
@@ -580,6 +603,7 @@ def test_plan_update_invalid_form(admin_client):
 
     assert models.SubscriptionPlan.objects.all().count() == plan_count
     assert response.context['form'].is_valid() is False
+
 
 @pytest.mark.django_db
 def test_plan_update_invalid_cost_forms(admin_client):
@@ -618,6 +642,7 @@ def test_plan_update_invalid_cost_forms(admin_client):
     assert response.context['form'].is_valid() is True
     assert response.context['cost_forms'].is_valid() is False
 
+
 # TagDeleteView
 # -----------------------------------------------------------------------------
 @pytest.mark.django_db
@@ -633,6 +658,7 @@ def test_plan_delete_template(admin_client):
         'subscriptions/plan_delete.html' in [t.name for t in response.templates]
     )
 
+
 @pytest.mark.django_db
 def test_plan_delete_403_if_not_authorized(client, django_user_model):
     """Tests for 403 error for plan delete if inadequate permissions."""
@@ -646,6 +672,7 @@ def test_plan_delete_403_if_not_authorized(client, django_user_model):
     )
 
     assert response.status_code == 403
+
 
 @pytest.mark.django_db
 def test_plan_delete_200_if_authorized(client, django_user_model):
@@ -669,6 +696,7 @@ def test_plan_delete_200_if_authorized(client, django_user_model):
 
     assert response.status_code == 200
 
+
 @pytest.mark.django_db
 def test_plan_delete_delete_and_success_message(admin_client):
     """Tests for success message on successful plan deletion."""
@@ -680,7 +708,7 @@ def test_plan_delete_delete_and_success_message(admin_client):
         follow=True,
     )
 
-    messages = [message for message in get_messages(response.wsgi_request)]
+    messages = list(get_messages(response.wsgi_request))
 
     assert models.SubscriptionPlan.objects.all().count() == plan_count - 1
     assert messages[0].tags == 'success'
