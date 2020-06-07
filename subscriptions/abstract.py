@@ -34,7 +34,7 @@ class ListView(generic.ListView):
     """
     template_extends = BASE_TEMPLATE
 
-    def get_context_data(self, *, object_list=None, **kwargs):  # pylint: disable=unused-argument, arguments-differ
+    def get_context_data(self, *, object_list=None, **kwargs): # pylint: disable=unused-argument
         """Overriding get_context_data to add additional context."""
         context = super(ListView, self).get_context_data(**kwargs)
 
