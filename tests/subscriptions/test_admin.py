@@ -40,6 +40,7 @@ def test_admin_included_when_true_in_settings():
         admin.site._registry.pop(models.SubscriptionTransaction)
         assert True
 
+
 @patch.dict('subscriptions.conf.SETTINGS', {'enable_admin': False})
 def test_admin_excluded_when_false_in_settings():
     """Tests that admin views are not loaded when disabled in settings."""

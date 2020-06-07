@@ -6,6 +6,7 @@ from subscriptions.conf import CURRENCY, SETTINGS
 
 register = template.Library()
 
+
 @register.filter(name='currency')
 def currency(value):
     """Displays value as a currency based on the provided settings."""

@@ -16,6 +16,7 @@ class PlanCostInline(admin.TabularInline):
     )
     extra = 0
 
+
 class SubscriptionPlanAdmin(admin.ModelAdmin):
     """Admin class for the SubscriptionPlan model."""
     fields = (
@@ -33,6 +34,7 @@ class SubscriptionPlanAdmin(admin.ModelAdmin):
         'display_tags',
     )
     prepopulated_fields = {'slug': ('plan_name',)}
+
 
 class UserSubscriptionAdmin(admin.ModelAdmin):
     """Admin class for the UserSubscription model."""
@@ -53,8 +55,10 @@ class UserSubscriptionAdmin(admin.ModelAdmin):
         'cancelled',
     )
 
+
 class TransactionAdmin(admin.ModelAdmin):
     """Admin class for the SubscriptionTransaction model."""
+
 
 if SETTINGS['enable_admin']:
     admin.site.register(models.SubscriptionPlan, SubscriptionPlanAdmin)

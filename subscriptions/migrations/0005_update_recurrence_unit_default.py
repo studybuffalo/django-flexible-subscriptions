@@ -1,8 +1,10 @@
 """Migration to fix incorrect default for recurrence unit."""
+# pylint: disable=invalid-name
 from django.db import migrations, models
 
+
 class Migration(migrations.Migration):
-    """Updates plancost recurrentunit to '6' instead of 'm'."""
+    """Updates plancost recurrence_unit default to '6' instead of 'm'."""
     dependencies = [
         ('subscriptions', '0004_change_recurrence_unit_type_2'),
     ]

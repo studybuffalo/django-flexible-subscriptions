@@ -1,8 +1,9 @@
 """Part 2 of migration to switch recurrence_unit to CharField."""
-from django.db import migrations, models
+# pylint: disable=invalid-name, missing-docstring
+from django.db import migrations
 
 
-def convert_recurrence_unit_forward(apps, schema_editor):
+def convert_recurrence_unit_forward(apps, schema_editor):  # pylint: disable=unused-argument
     """Copy integer-based unit to char-based."""
     PlanCost = apps.get_model('subscriptions', 'PlanCost')
 
@@ -13,7 +14,8 @@ def convert_recurrence_unit_forward(apps, schema_editor):
         cost.recurrence_unit = new_unit
         cost.save()
 
-def convert_recurrence_unit_reverse(apps, schema_editor):
+
+def convert_recurrence_unit_reverse(apps, schema_editor):  # pylint: disable=unused-argument
     """Copy char-based unit to integer-based."""
     PlanCost = apps.get_model('subscriptions', 'PlanCost')
 
@@ -23,6 +25,7 @@ def convert_recurrence_unit_reverse(apps, schema_editor):
         old_unit = int(new_unit)
         cost.old_recurrence_unit = old_unit
         cost.save()
+
 
 class Migration(migrations.Migration):
     dependencies = [

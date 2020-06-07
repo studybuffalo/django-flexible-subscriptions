@@ -133,7 +133,7 @@ class Manager():
                 self.retrieve_transaction_date(payment_transaction)
             )
 
-    def process_payment(self, *args, **kwargs): # pylint: disable=unused-argument, no-self-use
+    def process_payment(self, *args, **kwargs):  # pylint: disable=unused-argument, no-self-use
         """Processes payment and confirms if payment is accepted.
 
             This method needs to be overriden in a project to handle
@@ -145,7 +145,7 @@ class Manager():
         """
         return True
 
-    def retrieve_transaction_date(self, payment): # pylint: disable=unused-argument, no-self-use
+    def retrieve_transaction_date(self, payment):  # pylint: disable=unused-argument, no-self-use
         """Returns the transaction date from provided payment details.
 
             Method should be overriden to accomodate the implemented

@@ -13,6 +13,7 @@ def create_tag(tag_text='test'):
     """Creates and returns a PlanTag instance."""
     return models.PlanTag.objects.create(tag=tag_text)
 
+
 # TagListView
 # -----------------------------------------------------------------------------
 @pytest.mark.django_db
@@ -24,6 +25,7 @@ def test_tag_list_template(admin_client):
         'subscriptions/tag_list.html' in [t.name for t in response.templates]
     )
 
+
 @pytest.mark.django_db
 def test_tag_list_403_if_not_authorized(client, django_user_model):
     """Tests for 403 error for tag list if inadequate permissions."""
@@ -33,6 +35,7 @@ def test_tag_list_403_if_not_authorized(client, django_user_model):
     response = client.get(reverse('dfs_tag_list'))
 
     assert response.status_code == 403
+
 
 @pytest.mark.django_db
 def test_tag_list_200_if_authorized(client, django_user_model):
@@ -52,6 +55,7 @@ def test_tag_list_200_if_authorized(client, django_user_model):
 
     assert response.status_code == 200
 
+
 @pytest.mark.django_db
 def test_tag_list_retrives_all_tags(admin_client):
     """Tests that the list view retrieves all the tags."""
@@ -67,6 +71,7 @@ def test_tag_list_retrives_all_tags(admin_client):
     assert response.context['tags'][1].tag == '2'
     assert response.context['tags'][2].tag == '3'
 
+
 # TagCreateView
 # -----------------------------------------------------------------------------
 @pytest.mark.django_db
@@ -78,6 +83,7 @@ def test_tag_create_template(admin_client):
         'subscriptions/tag_create.html' in [t.name for t in response.templates]
     )
 
+
 @pytest.mark.django_db
 def test_tag_create_403_if_not_authorized(client, django_user_model):
     """Tests for 403 error for tag create if inadequate permissions."""
@@ -87,6 +93,7 @@ def test_tag_create_403_if_not_authorized(client, django_user_model):
     response = client.get(reverse('dfs_tag_create'))
 
     assert response.status_code == 403
+
 
 @pytest.mark.django_db
 def test_tag_create_200_if_authorized(client, django_user_model):
@@ -106,6 +113,7 @@ def test_tag_create_200_if_authorized(client, django_user_model):
 
     assert response.status_code == 200
 
+
 @pytest.mark.django_db
 def test_tag_create_create_and_success(admin_client):
     """Tests that tag creation and success message works as expected."""
@@ -123,6 +131,7 @@ def test_tag_create_create_and_success(admin_client):
     assert messages[0].tags == 'success'
     assert messages[0].message == 'Tag successfully added'
 
+
 # TagUpdateView
 # -----------------------------------------------------------------------------
 @pytest.mark.django_db
@@ -138,6 +147,7 @@ def test_tag_update_template(admin_client):
         'subscriptions/tag_update.html' in [t.name for t in response.templates]
     )
 
+
 @pytest.mark.django_db
 def test_tag_update_403_if_not_authorized(client, django_user_model):
     """Tests for 403 error for tag update if inadequate permissions."""
@@ -151,6 +161,7 @@ def test_tag_update_403_if_not_authorized(client, django_user_model):
     ))
 
     assert response.status_code == 403
+
 
 @pytest.mark.django_db
 def test_tag_update_200_if_authorized(client, django_user_model):
@@ -174,6 +185,7 @@ def test_tag_update_200_if_authorized(client, django_user_model):
 
     assert response.status_code == 200
 
+
 @pytest.mark.django_db
 def test_tag_update_update_and_success(admin_client):
     """Tests that tag update and success message works as expected."""
@@ -194,6 +206,7 @@ def test_tag_update_update_and_success(admin_client):
     assert messages[0].tags == 'success'
     assert messages[0].message == 'Tag successfully updated'
 
+
 # TagDeleteView
 # -----------------------------------------------------------------------------
 @pytest.mark.django_db
@@ -209,6 +222,7 @@ def test_tag_delete_template(admin_client):
         'subscriptions/tag_delete.html' in [t.name for t in response.templates]
     )
 
+
 @pytest.mark.django_db
 def test_tag_delete_403_if_not_authorized(client, django_user_model):
     """Tests for 403 error for tag delete if inadequate permissions."""
@@ -222,6 +236,7 @@ def test_tag_delete_403_if_not_authorized(client, django_user_model):
     ))
 
     assert response.status_code == 403
+
 
 @pytest.mark.django_db
 def test_tag_delete_200_if_authorized(client, django_user_model):
@@ -244,6 +259,7 @@ def test_tag_delete_200_if_authorized(client, django_user_model):
     ))
 
     assert response.status_code == 200
+
 
 @pytest.mark.django_db
 def test_tag_delete_delete_and_success_message(admin_client):

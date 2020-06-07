@@ -1,6 +1,6 @@
 """Functions for general package configuration."""
 from decimal import Decimal, ROUND_HALF_UP
- 
+
 from django.conf import settings
 
 
@@ -167,6 +167,7 @@ class Currency():
 
         return formatted_currency
 
+
 def string_to_module_and_class(string):
     """Breaks a string to a module and class name component."""
     components = string.split('.')
@@ -177,6 +178,7 @@ def string_to_module_and_class(string):
         'module': component_module,
         'class': component_class,
     }
+
 
 def compile_settings():
     """Compiles and validates all package settings and defaults.
@@ -227,7 +229,9 @@ def compile_settings():
         'management_manager': management_manager,
     }
 
+
 SETTINGS = compile_settings()
+
 
 # Convenience values for sign positions
 SIGN_PARANTHESES = 0
@@ -235,6 +239,7 @@ SIGN_PRECEDE_VALUE_SYMBOL = 1
 SIGN_FOLLOW_VALUE_SYMBOL = 2
 SIGN_PRECEDE_VALUE = 3
 SIGN_FOLLOW_VALUE = 4
+
 
 CURRENCY = {
     'de_de': Currency(

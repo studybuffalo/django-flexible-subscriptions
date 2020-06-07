@@ -17,6 +17,7 @@ def test_plan_tag_minimal_model_creation():
 
     assert models.PlanTag.objects.all().count() == 1
 
+
 @pytest.mark.django_db
 def test_plan_tag_transaction_str():
     """Tests __str__ for the PlanTag model."""
@@ -25,6 +26,7 @@ def test_plan_tag_transaction_str():
     )
 
     assert str(tag) == 'Test Tag'
+
 
 # SubscriptionPlan Model
 # -----------------------------------------------------------------------------
@@ -38,6 +40,7 @@ def test_subscription_plan_minimal_model_creation():
 
     assert models.SubscriptionPlan.objects.all().count() == 1
 
+
 @pytest.mark.django_db
 def test_subscription_plan_transaction_str():
     "Tests __str__ for the SubscriptionPlan model."""
@@ -48,6 +51,7 @@ def test_subscription_plan_transaction_str():
 
     assert str(plan) == 'Test Plan'
 
+
 @pytest.mark.django_db
 def test_subscription_plan_transaction_display_tags_0():
     """Tests display_tags or SubscriptionPlan with 0 tags."""
@@ -57,6 +61,7 @@ def test_subscription_plan_transaction_display_tags_0():
     )
 
     assert plan.display_tags() == ''
+
 
 @pytest.mark.django_db
 def test_subscription_plan_transaction_display_tags_1():
@@ -70,6 +75,7 @@ def test_subscription_plan_transaction_display_tags_1():
     plan.tags.add(tag_1)
 
     assert plan.display_tags() == 'tag 1'
+
 
 @pytest.mark.django_db
 def test_subscription_plan_transaction_display_tags_2():
@@ -85,6 +91,7 @@ def test_subscription_plan_transaction_display_tags_2():
     plan.tags.add(tag_2)
 
     assert plan.display_tags() == 'tag 1, tag 2'
+
 
 @pytest.mark.django_db
 def test_subscription_plan_transaction_display_tags_3():
@@ -102,6 +109,7 @@ def test_subscription_plan_transaction_display_tags_3():
     plan.tags.add(tag_3)
 
     assert plan.display_tags() == 'tag 1, tag 2, tag 3'
+
 
 @pytest.mark.django_db
 def test_subscription_plan_transaction_display_tags_4():
@@ -122,6 +130,7 @@ def test_subscription_plan_transaction_display_tags_4():
 
     assert plan.display_tags() == 'tag 1, tag 2, tag 3, ...'
 
+
 # PlanCost Model
 # -----------------------------------------------------------------------------
 def test_plan_cost_convenience_unit_reference():
@@ -134,6 +143,7 @@ def test_plan_cost_convenience_unit_reference():
     assert models.WEEK == '5'
     assert models.MONTH == '6'
     assert models.YEAR == '7'
+
 
 @pytest.mark.django_db
 def test_plan_cost_minimal_model_creation():
@@ -152,6 +162,7 @@ def test_plan_cost_minimal_model_creation():
 
     assert models.PlanCost.objects.all().count() == 1
 
+
 @pytest.mark.django_db
 def test_plan_cost_display_recurrent_unit_text_0():
     """Tests display_recurrent_unit_text for value 0."""
@@ -165,6 +176,7 @@ def test_plan_cost_display_recurrent_unit_text_0():
     )
 
     assert cost.display_recurrent_unit_text == 'one-time'
+
 
 @pytest.mark.django_db
 def test_plan_cost_display_recurrent_unit_text_1():
@@ -180,6 +192,7 @@ def test_plan_cost_display_recurrent_unit_text_1():
 
     assert cost.display_recurrent_unit_text == 'per second'
 
+
 @pytest.mark.django_db
 def test_plan_cost_display_recurrent_unit_text_2():
     """Tests display_recurrent_unit_text for value 2."""
@@ -193,6 +206,7 @@ def test_plan_cost_display_recurrent_unit_text_2():
     )
 
     assert cost.display_recurrent_unit_text == 'per minute'
+
 
 @pytest.mark.django_db
 def test_plan_cost_display_recurrent_unit_text_3():
@@ -208,6 +222,7 @@ def test_plan_cost_display_recurrent_unit_text_3():
 
     assert cost.display_recurrent_unit_text == 'per hour'
 
+
 @pytest.mark.django_db
 def test_plan_cost_display_recurrent_unit_text_4():
     """Tests display_recurrent_unit_text for value 4."""
@@ -221,6 +236,7 @@ def test_plan_cost_display_recurrent_unit_text_4():
     )
 
     assert cost.display_recurrent_unit_text == 'per day'
+
 
 @pytest.mark.django_db
 def test_plan_cost_display_recurrent_unit_text_5():
@@ -236,6 +252,7 @@ def test_plan_cost_display_recurrent_unit_text_5():
 
     assert cost.display_recurrent_unit_text == 'per week'
 
+
 @pytest.mark.django_db
 def test_plan_cost_display_recurrent_unit_text_6():
     """Tests display_recurrent_unit_text for value 6."""
@@ -249,6 +266,7 @@ def test_plan_cost_display_recurrent_unit_text_6():
     )
 
     assert cost.display_recurrent_unit_text == 'per month'
+
 
 @pytest.mark.django_db
 def test_plan_cost_display_recurrent_unit_text_7():
@@ -264,6 +282,7 @@ def test_plan_cost_display_recurrent_unit_text_7():
 
     assert cost.display_recurrent_unit_text == 'per year'
 
+
 @pytest.mark.django_db
 def test_plan_cost_display_billing_frequency_text_once_singular():
     """Tests display_billing_frequency_text for singular one-time billing."""
@@ -277,6 +296,7 @@ def test_plan_cost_display_billing_frequency_text_once_singular():
     )
 
     assert cost.display_billing_frequency_text == 'one-time'
+
 
 @pytest.mark.django_db
 def test_plan_cost_display_billing_frequency_text_once_plural():
@@ -292,6 +312,7 @@ def test_plan_cost_display_billing_frequency_text_once_plural():
 
     assert cost.display_billing_frequency_text == 'one-time'
 
+
 @pytest.mark.django_db
 def test_plan_cost_display_billing_frequency_text_second_singular():
     """Tests display_billing_frequency_text for singular per second billing."""
@@ -305,6 +326,7 @@ def test_plan_cost_display_billing_frequency_text_second_singular():
     )
 
     assert cost.display_billing_frequency_text == 'per second'
+
 
 @pytest.mark.django_db
 def test_plan_cost_display_billing_frequency_text_second_plural():
@@ -320,6 +342,7 @@ def test_plan_cost_display_billing_frequency_text_second_plural():
 
     assert cost.display_billing_frequency_text == 'every 2 seconds'
 
+
 @pytest.mark.django_db
 def test_plan_cost_display_billing_frequency_text_minute_singular():
     """Tests display_billing_frequency_text for singular per minute billing."""
@@ -333,6 +356,7 @@ def test_plan_cost_display_billing_frequency_text_minute_singular():
     )
 
     assert cost.display_billing_frequency_text == 'per minute'
+
 
 @pytest.mark.django_db
 def test_plan_cost_display_billing_frequency_text_minute_plural():
@@ -348,6 +372,7 @@ def test_plan_cost_display_billing_frequency_text_minute_plural():
 
     assert cost.display_billing_frequency_text == 'every 2 minutes'
 
+
 @pytest.mark.django_db
 def test_plan_cost_display_billing_frequency_text_hour_singular():
     """Tests display_billing_frequency_text for singular per hour billing."""
@@ -361,6 +386,7 @@ def test_plan_cost_display_billing_frequency_text_hour_singular():
     )
 
     assert cost.display_billing_frequency_text == 'per hour'
+
 
 @pytest.mark.django_db
 def test_plan_cost_display_billing_frequency_text_hour_plural():
@@ -376,6 +402,7 @@ def test_plan_cost_display_billing_frequency_text_hour_plural():
 
     assert cost.display_billing_frequency_text == 'every 2 hours'
 
+
 @pytest.mark.django_db
 def test_plan_cost_display_billing_frequency_text_day_singular():
     """Tests display_billing_frequency_text for singular per day billing."""
@@ -389,6 +416,7 @@ def test_plan_cost_display_billing_frequency_text_day_singular():
     )
 
     assert cost.display_billing_frequency_text == 'per day'
+
 
 @pytest.mark.django_db
 def test_plan_cost_display_billing_frequency_text_day_plural():
@@ -404,6 +432,7 @@ def test_plan_cost_display_billing_frequency_text_day_plural():
 
     assert cost.display_billing_frequency_text == 'every 2 days'
 
+
 @pytest.mark.django_db
 def test_plan_cost_display_billing_frequency_text_week_singular():
     """Tests display_billing_frequency_text for singular per week billing."""
@@ -417,6 +446,7 @@ def test_plan_cost_display_billing_frequency_text_week_singular():
     )
 
     assert cost.display_billing_frequency_text == 'per week'
+
 
 @pytest.mark.django_db
 def test_plan_cost_display_billing_frequency_text_week_plural():
@@ -432,6 +462,7 @@ def test_plan_cost_display_billing_frequency_text_week_plural():
 
     assert cost.display_billing_frequency_text == 'every 2 weeks'
 
+
 @pytest.mark.django_db
 def test_plan_cost_display_billing_frequency_text_month_singular():
     """Tests display_billing_frequency_text for singular per month billing."""
@@ -445,6 +476,7 @@ def test_plan_cost_display_billing_frequency_text_month_singular():
     )
 
     assert cost.display_billing_frequency_text == 'per month'
+
 
 @pytest.mark.django_db
 def test_plan_cost_display_billing_frequency_text_month_plural():
@@ -460,6 +492,7 @@ def test_plan_cost_display_billing_frequency_text_month_plural():
 
     assert cost.display_billing_frequency_text == 'every 2 months'
 
+
 @pytest.mark.django_db
 def test_plan_cost_display_billing_frequency_text_year_singular():
     """Tests display_billing_frequency_text for singular per year billing."""
@@ -474,6 +507,7 @@ def test_plan_cost_display_billing_frequency_text_year_singular():
 
     assert cost.display_billing_frequency_text == 'per year'
 
+
 @pytest.mark.django_db
 def test_plan_cost_display_billing_frequency_text_year_plural():
     """Tests display_billing_frequency_text for plural per year billing."""
@@ -487,6 +521,7 @@ def test_plan_cost_display_billing_frequency_text_year_plural():
     )
 
     assert cost.display_billing_frequency_text == 'every 2 years'
+
 
 @pytest.mark.django_db
 def test_plan_cost_next_billing_datetime_seconds():
@@ -503,6 +538,7 @@ def test_plan_cost_next_billing_datetime_seconds():
 
     assert next_billing == datetime(2018, 1, 1, 1, 1, 2)
 
+
 @pytest.mark.django_db
 def test_plan_cost_next_billing_datetime_minutes():
     """Tests next_billing_datetime with 'minutes'."""
@@ -517,6 +553,7 @@ def test_plan_cost_next_billing_datetime_minutes():
     next_billing = cost.next_billing_datetime(current)
 
     assert next_billing == datetime(2018, 1, 1, 1, 2, 1)
+
 
 @pytest.mark.django_db
 def test_plan_cost_next_billing_datetime_hours():
@@ -533,6 +570,7 @@ def test_plan_cost_next_billing_datetime_hours():
 
     assert next_billing == datetime(2018, 1, 1, 2, 1, 1)
 
+
 @pytest.mark.django_db
 def test_plan_cost_next_billing_datetime_days():
     """Tests next_billing_datetime with 'days'."""
@@ -547,6 +585,7 @@ def test_plan_cost_next_billing_datetime_days():
     next_billing = cost.next_billing_datetime(current)
 
     assert next_billing == datetime(2018, 1, 2, 1, 1, 1)
+
 
 @pytest.mark.django_db
 def test_plan_cost_next_billing_datetime_weeks():
@@ -563,6 +602,7 @@ def test_plan_cost_next_billing_datetime_weeks():
 
     assert next_billing == datetime(2018, 1, 8, 1, 1, 1)
 
+
 @pytest.mark.django_db
 def test_plan_cost_next_billing_datetime_months():
     """Tests next_billing_datetime with 'months'."""
@@ -577,6 +617,7 @@ def test_plan_cost_next_billing_datetime_months():
     next_billing = cost.next_billing_datetime(current)
 
     assert next_billing == datetime(2018, 1, 31, 11, 30, 0, 520000)
+
 
 @pytest.mark.django_db
 def test_plan_cost_next_billing_datetime_12_months():
@@ -593,6 +634,7 @@ def test_plan_cost_next_billing_datetime_12_months():
 
     assert next_billing == datetime(2019, 1, 1, 6, 48, 55, 240000)
 
+
 @pytest.mark.django_db
 def test_plan_cost_next_billing_datetime_48_months():
     """Tests next_billing_datetime with 12 'months'."""
@@ -607,6 +649,7 @@ def test_plan_cost_next_billing_datetime_48_months():
     next_billing = cost.next_billing_datetime(current)
 
     assert next_billing == datetime(2022, 1, 1, 0, 12, 37, 960000)
+
 
 @pytest.mark.django_db
 def test_plan_cost_next_billing_datetime_years():
@@ -623,6 +666,7 @@ def test_plan_cost_next_billing_datetime_years():
 
     assert next_billing == datetime(2019, 1, 1, 6, 50, 13)
 
+
 @pytest.mark.django_db
 def test_plan_cost_next_billing_datetime_4_years():
     """Tests next_billing_datetime with 4 'years'."""
@@ -637,6 +681,7 @@ def test_plan_cost_next_billing_datetime_4_years():
     next_billing = cost.next_billing_datetime(current)
 
     assert next_billing == datetime(2022, 1, 1, 0, 17, 49)
+
 
 @pytest.mark.django_db
 def test_plan_cost_next_billing_datetime_once():
@@ -653,6 +698,7 @@ def test_plan_cost_next_billing_datetime_once():
 
     assert next_billing is None
 
+
 # PlanList Model
 # -----------------------------------------------------------------------------
 @pytest.mark.django_db
@@ -664,6 +710,7 @@ def test_plan_list_minimal_model_creation():
 
     assert models.PlanList.objects.all().count() == 1
 
+
 @pytest.mark.django_db
 def test_plan_list_str():
     """Tests __str__ for the PlanList model."""
@@ -672,6 +719,7 @@ def test_plan_list_str():
     )
 
     assert str(plan_list) == 'Test Title'
+
 
 # PlanListDetails Model
 # -----------------------------------------------------------------------------
@@ -691,6 +739,7 @@ def test_plan_list_details_minimal_model_creation():
     )
 
     assert models.PlanListDetail.objects.all().count() == 1
+
 
 @pytest.mark.django_db
 def test_plan_list_details_str_():

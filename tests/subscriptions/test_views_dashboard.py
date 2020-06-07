@@ -16,6 +16,7 @@ def test_dashboard_template(admin_client):
         'subscriptions/dashboard.html' in [t.name for t in response.templates]
     )
 
+
 @pytest.mark.django_db
 def test_dashboard_403_if_not_authorized(client, django_user_model):
     """Tests for 403 error for plan list if inadequate permissions."""
@@ -25,6 +26,7 @@ def test_dashboard_403_if_not_authorized(client, django_user_model):
     response = client.get(reverse('dfs_dashboard'))
 
     assert response.status_code == 403
+
 
 @pytest.mark.django_db
 def test_dashboard_200_if_authorized(client, django_user_model):
@@ -41,4 +43,3 @@ def test_dashboard_200_if_authorized(client, django_user_model):
     response = client.get(reverse('dfs_dashboard'))
 
     assert response.status_code == 200
-

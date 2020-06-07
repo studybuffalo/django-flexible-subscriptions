@@ -12,6 +12,7 @@ def test_template_view_get_context_data():
     assert 'template_extends' in context
     assert context['template_extends'] == 'subscriptions/base.html'
 
+
 def test_list_view_get_context_data():
     """Tests that context is properly extended."""
     view = abstract.ListView()
@@ -22,6 +23,7 @@ def test_list_view_get_context_data():
     assert 'template_extends' in context
     assert context['template_extends'] == 'subscriptions/base.html'
 
+
 def test_detail_view_get_context_data():
     """Tests that context is properly extended."""
     view = abstract.DetailView()
@@ -30,6 +32,7 @@ def test_detail_view_get_context_data():
 
     assert 'template_extends' in context
     assert context['template_extends'] == 'subscriptions/base.html'
+
 
 @patch('subscriptions.abstract.CreateView.get_queryset', lambda x: True)
 @patch('subscriptions.abstract.CreateView.get_form_class', lambda x: True)
@@ -44,6 +47,7 @@ def test_create_view_get_context_data():
     assert 'template_extends' in context
     assert context['template_extends'] == 'subscriptions/base.html'
 
+
 @patch('subscriptions.abstract.UpdateView.get_queryset', lambda x: True)
 @patch('subscriptions.abstract.UpdateView.get_form_class', lambda x: True)
 @patch('subscriptions.abstract.UpdateView.get_form_kwargs', lambda x: True)
@@ -56,6 +60,7 @@ def test_update_view_get_context_data():
 
     assert 'template_extends' in context
     assert context['template_extends'] == 'subscriptions/base.html'
+
 
 def test_delete_view_get_context_data():
     """Tests that context is properly extended."""
