@@ -7,21 +7,15 @@ jobs:
     # https://devguide.python.org/#status-of-python-branches
     # https://www.djangoproject.com/download/#supported-versions
     # https://docs.djangoproject.com/en/dev/faq/install/#what-python-version-can-i-use-with-django
-    # Python 3.5 and Django 1.11, 2.2
-    - python: 3.5
-      env: DJANGO="django>=1.11,<2.0"
+    # Python 3.5 and Django 2.2
     - python: 3.5
       env: DJANGO="django>=2.2,<3.0"
-    # Python 3.6 and Django 1.11, 2.2, 3.0
-    - python: 3.6
-      env: DJANGO="django>=1.11,<2.0"
+    # Python 3.6 and Django 2.2, 3.0
     - python: 3.6
       env: DJANGO="django>=2.2,<3.0"
     - python: 3.6
       env: DJANGO="django>=3.0,<3.1"
-    # Python 3.7 and Django 1.11, 2.2, 3.0
-    - python: 3.7
-      env: DJANGO="django>=1.11,<2.0"
+    # Python 3.7 and Django 2.2, 3.0
     - python: 3.7
       env: DJANGO="django>=2.2,<3.0"
     - python: 3.7
