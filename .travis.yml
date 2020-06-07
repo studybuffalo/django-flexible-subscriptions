@@ -41,3 +41,4 @@ install:
 script:
   - pipenv run pytest --cov=subscriptions
   - codecov
+  - pipenv run pycodestyle subscriptions/ sandbox/ tests/
