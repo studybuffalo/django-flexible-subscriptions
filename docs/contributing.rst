@@ -80,6 +80,28 @@ To check test coverage, you can use the following::
 You may specify the output of the coverage report by changing the
 ``--cov-report`` option to ``html`` or ``xml``.
 
+Running Linters
+===============
+
+This package makes use of two linters to improve code quality:
+`Pylint`_ and `pycodestyle`_. Any GitHub pull requests must pass all
+Linter requirements before they will be accepted.
+
+.. _Pylint: https://pylint.org/
+
+.. _pycodestyle: https://pypi.org/project/pycodestyle/
+
+You may run the linters within your IDE/editor or with the following
+commands::
+
+    $ pipenv run pylint subscriptions/ sandbox/
+    $ pipenv run pylint tests/ --min-similarity-lines=12
+    $ pipenv run pycodestyle --show-source subscriptions/ sandbox/ tests/
+
+Of note, tests have relaxed rules for duplicate code warnings. This is
+to minimize the level of abstraction that occurs within the tests with
+the intent to improve readability.
+
 ----------------------
 Updating documentation
 ----------------------
