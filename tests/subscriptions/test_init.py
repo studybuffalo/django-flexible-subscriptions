@@ -34,30 +34,30 @@ def test_other_python_versions_depreciation_warning(recwarn):
     assert len(recwarn) == 0
 
 
-@patch('subscriptions.sys.version', '3.6.0')
-@patch('subscriptions.django.__version__', '1.11.0')
-def test_django_111_depreciation_warning(recwarn):
-    """Tests that the depreciation warning fires for Django 1.11."""
-    reload(subscriptions)
+# @patch('subscriptions.sys.version', '3.6.0')
+# @patch('subscriptions.django.__version__', '1.11.0')
+# def test_django_111_depreciation_warning(recwarn):
+#     """Tests that the depreciation warning fires for Django 1.11."""
+#     reload(subscriptions)
 
-    assert len(recwarn) == 1
+#     assert len(recwarn) == 1
 
-    django_111_warning = recwarn.pop(DeprecationWarning)
-    assert issubclass(django_111_warning.category, DeprecationWarning)
+#     django_111_warning = recwarn.pop(DeprecationWarning)
+#     assert issubclass(django_111_warning.category, DeprecationWarning)
 
-    warning_text = (
-        'django-flexible-subscription will stop supporting Django 1.11 LTS '
-        'once it reaches end-of-life (approximately April 2020). '
-        'Ensure you have updated your Django version by then.'
-    )
+#     warning_text = (
+#         'django-flexible-subscription will stop supporting Django 1.11 LTS '
+#         'once it reaches end-of-life (approximately April 2020). '
+#         'Ensure you have updated your Django version by then.'
+#     )
 
-    assert str(django_111_warning.message) == warning_text
+#     assert str(django_111_warning.message) == warning_text
 
 
-@patch('subscriptions.sys.version', '3.6.0')
-@patch('subscriptions.django.__version__', '2.0.0')
-def test_other_django_versions_depreciation_warning(recwarn):
-    """Tests that warning doesn't fire for other Django versions."""
-    reload(subscriptions)
+# @patch('subscriptions.sys.version', '3.6.0')
+# @patch('subscriptions.django.__version__', '2.0.0')
+# def test_other_django_versions_depreciation_warning(recwarn):
+#     """Tests that warning doesn't fire for other Django versions."""
+#     reload(subscriptions)
 
-    assert len(recwarn) == 0
+#     assert len(recwarn) == 0
