@@ -43,6 +43,6 @@ script:
   - pipenv run pytest --cov=subscriptions
   - codecov
   # Run Linters
-  - pipenv run pylint subscriptions/ sandbox/ tests/
+  - pipenv run pylint subscriptions/ sandbox/
   - pipenv run pylint tests/ --min-similarity-lines=12
   - pipenv run pycodestyle --show-source subscriptions/ sandbox/ tests/
