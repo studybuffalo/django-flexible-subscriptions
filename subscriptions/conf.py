@@ -51,7 +51,8 @@ class Currency():
             3: The sign should immediately precede the value.
             4: The sign should immediately follow the value.
     """
-
+    # pylint: disable=too-many-instance-attributes, too-few-public-methods, too-many-locals
+    # TODO: refactor this block to improve code readability
     def __init__(self, **kwargs):
         self.currency_symbol = kwargs.get('currency_symbol', '')
         self.int_curr_symbol = kwargs.get('int_curr_symbol', '')
