@@ -204,39 +204,35 @@ class PlanCost(models.Model):
             Returns:
                 datetime: The next time billing will be due.
         """
-        # pylint: disable=too-many-return-statements
         if self.recurrence_unit == SECOND:
-            return current + timedelta(seconds=self.recurrence_period)
-
-        if self.recurrence_unit == MINUTE:
-            return current + timedelta(minutes=self.recurrence_period)
-
-        if self.recurrence_unit == HOUR:
-            return current + timedelta(hours=self.recurrence_period)
-
-        if self.recurrence_unit == DAY:
-            return current + timedelta(days=self.recurrence_period)
-
-        if self.recurrence_unit == WEEK:
-            return current + timedelta(weeks=self.recurrence_period)
-
-        if self.recurrence_unit == MONTH:
+            delta = timedelta(seconds=self.recurrence_period)
+        elif self.recurrence_unit == MINUTE:
+            delta = timedelta(minutes=self.recurrence_period)
+        elif self.recurrence_unit == HOUR:
+            delta = timedelta(hours=self.recurrence_period)
+        elif self.recurrence_unit == DAY:
+            delta = timedelta(days=self.recurrence_period)
+        elif self.recurrence_unit == WEEK:
+            delta = timedelta(weeks=self.recurrence_period)
+        elif self.recurrence_unit == MONTH:
             # Adds the average number of days per month as per:
             # http://en.wikipedia.org/wiki/Month#Julian_and_Gregorian_calendars
             # This handle any issues with months < 31 days and leap years
-            return current + timedelta(
+            delta = timedelta(
                 days=30.4368 * self.recurrence_period
             )
-
-        if self.recurrence_unit == YEAR:
+        elif self.recurrence_unit == YEAR:
             # Adds the average number of days per year as per:
             # http://en.wikipedia.org/wiki/Year#Calendar_year
             # This handle any issues with leap years
-            return current + timedelta(
+            delta = timedelta(
                 days=365.2425 * self.recurrence_period
             )
+        else:
+            # If no recurrence period, no next billing datetime
+            return None
 
-        return None
+        return current + delta
 
 
 class UserSubscription(models.Model):
