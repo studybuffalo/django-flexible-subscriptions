@@ -1,7 +1,7 @@
 """Template filters for Django Flexible Subscriptions."""
 from django import template
 
-from subscriptions.conf import CURRENCY, SETTINGS
+from subscriptions.conf import SETTINGS
 
 
 register = template.Library()
@@ -10,4 +10,4 @@ register = template.Library()
 @register.filter(name='currency')
 def currency(value):
     """Displays value as a currency based on the provided settings."""
-    return CURRENCY[SETTINGS['currency_locale']].format_currency(value)
+    return SETTINGS['currency'].format_currency(value)

@@ -5,7 +5,7 @@ from django.core import validators
 from django.forms import ModelForm
 from django.utils import timezone
 
-from subscriptions.conf import CURRENCY, SETTINGS
+from subscriptions.conf import SETTINGS
 from subscriptions.models import SubscriptionPlan, PlanCost
 
 
@@ -151,9 +151,7 @@ class SubscriptionPlanCostForm(forms.Form):
 
         for cost in costs:
             radio_text = '{} {}'.format(
-                CURRENCY[SETTINGS['currency_locale']].format_currency(
-                    cost.cost
-                ),
+                SETTINGS['currency'].format_currency(cost.cost),
                 cost.display_billing_frequency_text
             )
             PLAN_COST_CHOICES.append((cost.id, radio_text))

@@ -1,26 +1,137 @@
 """Tests for the conf module."""
-from decimal import Decimal
-
 from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
 from django.test import override_settings
 
 from subscriptions import conf
 
 
+def test__string_to_module_and_class__one_period():
+    """Tests handling of string with single period."""
+    string = 'a.b'
+    components = conf.string_to_module_and_class(string)
+
+    assert components['module'] == 'a'
+    assert components['class'] == 'b'
+
+
+def test__string_to_module_and_class__two_periods():
+    """Tests handling of string with more than one period."""
+    string = 'a.b.c'
+    components = conf.string_to_module_and_class(string)
+
+    assert components['module'] == 'a.b'
+    assert components['class'] == 'c'
+
+
+def test__validate_currency_settings__valid_str():
+    """Confirms no error when valid currency_locale string provided."""
+    try:
+        conf.validate_currency_settings('en_us')
+    except ImproperlyConfigured:
+        assert False
+    else:
+        assert True
+
+
+def test__validate_currency_settings__invalid_str():
+    """Confirms error when invalid currency_locale string provided."""
+    try:
+        conf.validate_currency_settings('1')
+    except ImproperlyConfigured as error:
+        assert str(error) == '1 is not a support DFS_CURRENCY_LOCALE value.'
+    else:
+        assert False
+
+
+def test__validate_currency_settings__valid_dict():
+    """Confirms no error when valid currency_locale string provided."""
+    try:
+        conf.validate_currency_settings({})
+    except ImproperlyConfigured:
+        assert False
+    else:
+        assert True
+
+
+def test__validate_currency_settings__invalid_type():
+    """Confirms error when invalid currency_locale string provided."""
+    try:
+        conf.validate_currency_settings(True)
+    except TypeError as error:
+        assert str(error) == (
+            "Invalid DFS_CURRENCY_LOCALE type: <class 'bool'>. Must be str or dict."
+        )
+    else:
+        assert False
+
+
+@override_settings(
+    DFS_CURRENCY='en_us',
+)
+def test__determine_currency_settings__dfs_currency_declared():
+    """Confirms handling when DFS_CURRENCY declared."""
+    # Clear any conflicting settings already provided
+    del settings.DFS_CURRENCY_LOCALE
+
+    currency_object = conf.determine_currency_settings()
+
+    # Confirm a currency object was returned
+    assert currency_object.locale == 'en_us'
+
+
+@override_settings(
+    DFS_CURRENCY_LOCALE={},
+)
+def test__determine_currency_settings__dfs_currency_locale_declared(recwarn):
+    """Confirms handling when DFS_CURRENCY_LOCALE declared."""
+    # Clear any conflicting settings already provided
+    del settings.DFS_CURRENCY
+
+    currency_object = conf.determine_currency_settings()
+
+    # Confirm a currency object was returned
+    assert currency_object.locale == 'custom'
+
+    # Confirm DeprecationWarning was raised
+    currency_warning = recwarn.pop(DeprecationWarning)
+    assert issubclass(currency_warning.category, DeprecationWarning)
+
+    warning_text = (
+        'DFS_CURRENCY_LOCALE is deprecated and has been replaced by '
+        'DFS_CURRENCY. DFS_CURRENCY_LOCALE will be removed in a '
+        'future version of django-flexible-subscription.'
+    )
+    assert str(currency_warning.message) == warning_text
+
+
+@override_settings()
+def test__determine_currency_settings__not_declared():
+    """Confirms handling when currency is not declared."""
+    # Clear any settings already provided
+    del settings.DFS_CURRENCY
+    del settings.DFS_CURRENCY_LOCALE
+
+    currency_object = conf.determine_currency_settings()
+
+    # Confirm the default currency object was returned
+    assert currency_object.locale == 'en_us'
+
+
 @override_settings(
     DFS_ENABLE_ADMIN=1,
-    DFS_CURRENCY_LOCALE=2,
+    DFS_CURRENCY='en_us',
     DFS_BASE_TEMPLATE='3',
     DFS_SUBSCRIBE_VIEW='a.b',
     DFS_MANAGER_CLASS='a.b',
 )
-def test_all_settings_populate_from_settings_properly():
+def test__compile_settings__assigned_properly():
     """Tests that Django settings all proper populate SETTINGS."""
     subscription_settings = conf.compile_settings()
 
     assert len(subscription_settings) == 5
     assert subscription_settings['enable_admin'] == 1
-    assert subscription_settings['currency_locale'] == '2'
+    assert subscription_settings['currency'].locale == 'en_us'
     assert subscription_settings['base_template'] == '3'
     assert subscription_settings['subscribe_view']['module'] == 'a'
     assert subscription_settings['subscribe_view']['class'] == 'b'
@@ -29,11 +140,11 @@ def test_all_settings_populate_from_settings_properly():
 
 
 @override_settings()
-def test_settings_defaults():
+def test__compile_settings__defaults():
     """Tests that SETTINGS adds all defaults properly."""
     # Clear any settings already provided
     del settings.DFS_ENABLE_ADMIN
-    del settings.DFS_CURRENCY_LOCALE
+    del settings.DFS_CURRENCY
     del settings.DFS_BASE_TEMPLATE
     del settings.DFS_SUBSCRIBE_VIEW
     del settings.DFS_MANAGER_CLASS
@@ -42,7 +153,7 @@ def test_settings_defaults():
 
     assert len(subscription_settings) == 5
     assert subscription_settings['enable_admin'] is False
-    assert subscription_settings['currency_locale'] == 'en_us'
+    assert subscription_settings['currency'].locale == 'en_us'
     assert subscription_settings['base_template'] == 'subscriptions/base.html'
     assert subscription_settings['subscribe_view']['module'] == (
         'subscriptions.views'
@@ -57,406 +168,3 @@ def test_settings_defaults():
         'Manager'
     )
 
-
-def test_format_currency_en_us():
-    """Tests that format currency works properly with the default."""
-    currency_value = conf.CURRENCY['en_us'].format_currency('1234567.987')
-
-    assert currency_value == '$1,234,567.99'
-
-
-def test_format_currency_rounding_string():
-    """Tests that rounding works as expected with string values."""
-    test_currency = conf.Currency()
-
-    assert test_currency.format_currency('0.506') == '0.51'
-    assert test_currency.format_currency('0.505') == '0.51'
-    assert test_currency.format_currency('0.5049') == '0.50'
-    assert test_currency.format_currency('0.005') == '0.01'
-    assert test_currency.format_currency('0.0049') == '0.00'
-    assert test_currency.format_currency('-0.0049') == '0.00'
-    assert test_currency.format_currency('-0.005') == '0.01'
-
-
-def test_format_currency_rounding_decimal():
-    """Tests that rounding works as expected with decimal values."""
-    test_currency = conf.Currency()
-
-    assert test_currency.format_currency(Decimal('0.506')) == '0.51'
-    assert test_currency.format_currency(Decimal('0.505')) == '0.51'
-    assert test_currency.format_currency(Decimal('0.5049')) == '0.50'
-    assert test_currency.format_currency(Decimal('0.005')) == '0.01'
-    assert test_currency.format_currency(Decimal('0.0049')) == '0.00'
-    assert test_currency.format_currency(Decimal('-0.0049')) == '0.00'
-    assert test_currency.format_currency(Decimal('-0.005')) == '0.01'
-
-
-def test_non_decimal_currency_format():
-    """Tests that using a non-decimal currency will give correct result."""
-    test_currency = conf.Currency(frac_digits=0)
-
-    assert test_currency.format_currency(10) == '10'
-    assert test_currency.format_currency('10') == '10'
-    assert test_currency.format_currency('-100') == '100'
-    assert test_currency.format_currency(-100) == '100'
-
-
-def test_non_decimal_currency_format_rounding():
-    """Tests that truncating the decimal part works as expected with decimal values."""
-    test_currency = conf.Currency(frac_digits=0)
-
-    assert test_currency.format_currency(Decimal('0.6')) == '1'
-    assert test_currency.format_currency(Decimal('0.5')) == '1'
-    assert test_currency.format_currency(Decimal('0.49')) == '0'
-    assert test_currency.format_currency(Decimal('-0.49')) == '0'
-    assert test_currency.format_currency(Decimal('-1.005')) == '1'
-    assert test_currency.format_currency(Decimal('-1.5')) == '2'
-
-
-def test_currency_format_grouping_by_1():
-    """Tests that grouping works properly for groups of 1."""
-    test_currency = conf.Currency(mon_grouping=1, mon_thousands_sep=',')
-
-    assert test_currency.format_currency('1.00') == '1.00'
-    assert test_currency.format_currency('10.00') == '1,0.00'
-    assert test_currency.format_currency('100.00') == '1,0,0.00'
-    assert test_currency.format_currency('1000.00') == '1,0,0,0.00'
-
-
-def test_currency_format_grouping_by_3():
-    """Tests that grouping works properly for groups of 3."""
-    test_currency = conf.Currency(mon_grouping=3, mon_thousands_sep=',')
-
-    assert test_currency.format_currency('1.00') == '1.00'
-    assert test_currency.format_currency('10.00') == '10.00'
-    assert test_currency.format_currency('100.00') == '100.00'
-    assert test_currency.format_currency('1000.00') == '1,000.00'
-    assert test_currency.format_currency('10000.00') == '10,000.00'
-    assert test_currency.format_currency('100000.00') == '100,000.00'
-    assert test_currency.format_currency('1000000.00') == '1,000,000.00'
-
-
-def test_currency_format_grouping_separator():
-    """Tests that the grouping separator is properly applied."""
-    test_currency = conf.Currency(mon_grouping=3, mon_thousands_sep='*')
-
-    assert test_currency.format_currency('1000000.00') == '1*000*000.00'
-
-
-def test_format_currency_symbol_precedes_positive():
-    """Tests currency symbol is applied preceding positive value."""
-    test_currency = conf.Currency(currency_symbol='$', p_cs_precedes=True)
-
-    assert test_currency.format_currency('1.00') == '$1.00'
-
-
-def test_format_currency_symbol_precedes_negative():
-    """Tests currency symbol is applied preceding negative value."""
-    test_currency = conf.Currency(currency_symbol='$', n_cs_precedes=True)
-
-    assert test_currency.format_currency('-1.00') == '$1.00'
-
-
-def test_format_currency_symbol_follows_positive():
-    """Tests currency symbol is applied following positive value."""
-    test_currency = conf.Currency(currency_symbol='$', p_cs_precedes=False)
-
-    assert test_currency.format_currency('1.00') == '1.00$'
-
-
-def test_format_currency_symbol_follows_negative():
-    """Tests currency symbol is applied following negative value."""
-    test_currency = conf.Currency(currency_symbol='$', n_cs_precedes=False)
-
-    assert test_currency.format_currency('-1.00') == '1.00$'
-
-
-def test_format_currency_symbol_precedes_with_space_positive():
-    """Tests currency symbol is applied preceding positive value with space."""
-    test_currency = conf.Currency(
-        currency_symbol='$', p_cs_precedes=True, p_sep_by_space=True
-    )
-
-    assert test_currency.format_currency('1.00') == '$ 1.00'
-
-
-def test_format_currency_symbol_precedes_with_space_negative():
-    """Tests currency symbol is applied preceding negative value with space."""
-    test_currency = conf.Currency(
-        currency_symbol='$', n_cs_precedes=True, n_sep_by_space=True
-    )
-
-    assert test_currency.format_currency('-1.00') == '$ 1.00'
-
-
-def test_format_currency_symbol_follows_with_space_positive():
-    """Tests currency symbol is applied following positive value with space."""
-    test_currency = conf.Currency(
-        currency_symbol='$', p_cs_precedes=False, p_sep_by_space=True
-    )
-
-    assert test_currency.format_currency('1.00') == '1.00 $'
-
-
-def test_format_currency_symbol_follows_with_space_negative():
-    """Tests currency symbol is applied following negative value with space."""
-    test_currency = conf.Currency(
-        currency_symbol='$', n_cs_precedes=False, n_sep_by_space=True
-    )
-
-    assert test_currency.format_currency('-1.00') == '1.00 $'
-
-
-def test_format_currency_symbol_international():
-    """Tests that international currency symbol works properly."""
-    test_currency = conf.Currency(int_curr_symbol='USD')
-
-    currency_string = test_currency.format_currency('1.00', international=True)
-
-    assert currency_string == 'USD1.00'
-
-
-def test_format_currency_sign_position_0_positive_preceding_cs():
-    """Tests sign position 0, positive value, and preceding symbol."""
-    test_currency = conf.Currency(
-        currency_symbol='$', positive_sign='+', p_sign_posn=0
-    )
-
-    assert test_currency.format_currency('1.00') == '($1.00)'
-
-
-def test_format_currency_sign_position_0_negative_preceding_cs():
-    """Tests sign position 0, negative value, and preceding symbol."""
-    test_currency = conf.Currency(
-        currency_symbol='$', negative_sign='-', n_sign_posn=0
-    )
-
-    assert test_currency.format_currency('-1.00') == '($1.00)'
-
-
-def test_format_currency_sign_position_0_positive_following_cs():
-    """Tests sign position 0, positive value, and following symbol."""
-    test_currency = conf.Currency(
-        currency_symbol='$', p_cs_precedes=False,
-        positive_sign='+', p_sign_posn=0
-    )
-
-    assert test_currency.format_currency('1.00') == '(1.00$)'
-
-
-def test_format_currency_sign_position_0_negative_following_cs():
-    """Tests sign position 0, negative value, and following symbol."""
-    test_currency = conf.Currency(
-        currency_symbol='$', n_cs_precedes=False,
-        negative_sign='-', n_sign_posn=0
-    )
-
-    assert test_currency.format_currency('-1.00') == '(1.00$)'
-
-
-def test_format_currency_sign_position_1_positive_preceding_cs():
-    """Tests sign position 1, positive value, and preceding symbol."""
-    test_currency = conf.Currency(
-        currency_symbol='$', positive_sign='+', p_sign_posn=1
-    )
-
-    assert test_currency.format_currency('1.00') == '+$1.00'
-
-
-def test_format_currency_sign_position_1_negative_preceding_cs():
-    """Tests sign position 1, negative value, and preceding symbol."""
-    test_currency = conf.Currency(
-        currency_symbol='$', negative_sign='-', n_sign_posn=1
-    )
-
-    assert test_currency.format_currency('-1.00') == '-$1.00'
-
-
-def test_format_currency_sign_position_1_positive_following_cs():
-    """Tests sign position 1, positive value, and following symbol."""
-    test_currency = conf.Currency(
-        currency_symbol='$', p_cs_precedes=False,
-        positive_sign='+', p_sign_posn=1
-    )
-
-    assert test_currency.format_currency('1.00') == '+1.00$'
-
-
-def test_format_currency_sign_position_1_negative_following_cs():
-    """Tests sign position 1, negative value, and following symbol."""
-    test_currency = conf.Currency(
-        currency_symbol='$', n_cs_precedes=False,
-        negative_sign='-', n_sign_posn=1
-    )
-
-    assert test_currency.format_currency('-1.00') == '-1.00$'
-
-
-def test_format_currency_sign_position_2_positive_preceding_cs():
-    """Tests sign position 2, positive value, and preceding symbol."""
-    test_currency = conf.Currency(
-        currency_symbol='$', positive_sign='+', p_sign_posn=2
-    )
-
-    assert test_currency.format_currency('1.00') == '$1.00+'
-
-
-def test_format_currency_sign_position_2_negative_preceding_cs():
-    """Tests sign position 2, negative value, and preceding symbol."""
-    test_currency = conf.Currency(
-        currency_symbol='$', negative_sign='-', n_sign_posn=2
-    )
-
-    assert test_currency.format_currency('-1.00') == '$1.00-'
-
-
-def test_format_currency_sign_position_2_positive_following_cs():
-    """Tests sign position 2, positive value, and following symbol."""
-    test_currency = conf.Currency(
-        currency_symbol='$', p_cs_precedes=False,
-        positive_sign='+', p_sign_posn=2
-    )
-
-    assert test_currency.format_currency('1.00') == '1.00$+'
-
-
-def test_format_currency_sign_position_2_negative_following_cs():
-    """Tests sign position 2, negative value, and following symbol."""
-    test_currency = conf.Currency(
-        currency_symbol='$', n_cs_precedes=False,
-        negative_sign='-', n_sign_posn=2
-    )
-
-    assert test_currency.format_currency('-1.00') == '1.00$-'
-
-
-def test_format_currency_sign_position_3_positive_preceding_cs():
-    """Tests sign position 3, positive value, and preceding symbol."""
-    test_currency = conf.Currency(
-        currency_symbol='$', positive_sign='+', p_sign_posn=3
-    )
-
-    assert test_currency.format_currency('1.00') == '$+1.00'
-
-
-def test_format_currency_sign_position_3_negative_preceding_cs():
-    """Tests sign position 3, negative value, and preceding symbol."""
-    test_currency = conf.Currency(
-        currency_symbol='$', negative_sign='-', n_sign_posn=3
-    )
-
-    assert test_currency.format_currency('-1.00') == '$-1.00'
-
-
-def test_format_currency_sign_position_3_positive_following_cs():
-    """Tests sign position 3, positive value, and following symbol."""
-    test_currency = conf.Currency(
-        currency_symbol='$', p_cs_precedes=False,
-        positive_sign='+', p_sign_posn=3
-    )
-
-    assert test_currency.format_currency('1.00') == '+1.00$'
-
-
-def test_format_currency_sign_position_3_negative_following_cs():
-    """Tests sign position 3, negative value, and following symbol."""
-    test_currency = conf.Currency(
-        currency_symbol='$', n_cs_precedes=False,
-        negative_sign='-', n_sign_posn=3
-    )
-
-    assert test_currency.format_currency('-1.00') == '-1.00$'
-
-
-def test_format_currency_sign_position_4_positive_preceding_cs():
-    """Tests sign position 4, positive value, and preceding symbol."""
-    test_currency = conf.Currency(
-        currency_symbol='$', positive_sign='+', p_sign_posn=4
-    )
-
-    assert test_currency.format_currency('1.00') == '$1.00+'
-
-
-def test_format_currency_sign_position_4_negative_preceding_cs():
-    """Tests sign position 4, positive value, and preceding symbol."""
-    test_currency = conf.Currency(
-        currency_symbol='$', negative_sign='-', n_sign_posn=4
-    )
-
-    assert test_currency.format_currency('-1.00') == '$1.00-'
-
-
-def test_format_currency_sign_position_4_positive_following_cs():
-    """Tests sign position 4, positive value, and following symbol."""
-    test_currency = conf.Currency(
-        currency_symbol='$', p_cs_precedes=False,
-        positive_sign='+', p_sign_posn=4
-    )
-
-    assert test_currency.format_currency('1.00') == '1.00+$'
-
-
-def test_format_currency_sign_position_4_negative_following_cs():
-    """Tests sign position 4, negative value, and following symbol."""
-    test_currency = conf.Currency(
-        currency_symbol='$', n_cs_precedes=False,
-        negative_sign='-', n_sign_posn=4
-    )
-
-    assert test_currency.format_currency('-1.00') == '1.00-$'
-
-
-def test_format_currency_sign_position_other_positive_preceding_cs():
-    """Tests 'other' sign position, positive value, and preceding symbol."""
-    test_currency = conf.Currency(
-        currency_symbol='$', positive_sign='+', p_sign_posn=None
-    )
-
-    assert test_currency.format_currency('1.00') == '+$1.00'
-
-
-def test_format_currency_sign_position_other_negative_preceding_cs():
-    """Tests 'other' sign position, negative value, and preceding symbol."""
-    test_currency = conf.Currency(
-        currency_symbol='$', negative_sign='-', n_sign_posn=None
-    )
-
-    assert test_currency.format_currency('-1.00') == '-$1.00'
-
-
-def test_format_currency_sign_position_other_positive_following_cs():
-    """Tests 'other' sign position, positive value, and following symbol."""
-    test_currency = conf.Currency(
-        currency_symbol='$', p_cs_precedes=False,
-        positive_sign='+', p_sign_posn=None
-    )
-
-    assert test_currency.format_currency('1.00') == '+1.00$'
-
-
-def test_format_currency_sign_position_other_negative_following_cs():
-    """Tests 'other' sign position, negative value, and following symbol."""
-    test_currency = conf.Currency(
-        currency_symbol='$', n_cs_precedes=False,
-        negative_sign='-', n_sign_posn=None
-    )
-
-    assert test_currency.format_currency('-1.00') == '-1.00$'
-
-
-def test_string_to_module_and_class_one_period():
-    """Tests handling of string with single period."""
-    string = 'a.b'
-    components = conf.string_to_module_and_class(string)
-
-    assert components['module'] == 'a'
-    assert components['class'] == 'b'
-
-
-def test_string_to_module_and_class_2_period():
-    """Tests handling of string with more than one period."""
-    string = 'a.b.c'
-    components = conf.string_to_module_and_class(string)
-
-    assert components['module'] == 'a.b'
-    assert components['class'] == 'c'
