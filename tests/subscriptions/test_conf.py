@@ -167,4 +167,3 @@ def test__compile_settings__defaults():
     assert subscription_settings['management_manager']['class'] == (
         'Manager'
     )
-

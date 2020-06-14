@@ -930,7 +930,6 @@ def test__currency__format_currency__output__sign_position_1_positive_following_
 
     test_currency = currency.Currency(conventions)
 
-
     assert test_currency.format_currency('1.00') == '+1.00$'
 
 
