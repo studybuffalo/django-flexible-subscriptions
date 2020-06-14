@@ -447,8 +447,6 @@ class Currency():
         # Rejoin whole and fractional numbers with decimal separator
         formatted_value = self._format_value(grouped_num_whole, num_frac)
 
-        # TODO: Handle zero values and signs
-
         # Add currency and positive/negative symbols
         formatted_currency = self.add_symbols(formatted_value, bool(value < 0))
 
