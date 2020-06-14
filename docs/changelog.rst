@@ -6,6 +6,14 @@ Changelog
 Version 0 (Beta)
 ----------------
 
+0.15.0 (YYYY-MMM-DD)
+====================
+
+* ``DFS_CURRENCY_LOCALE`` setting being deprecated in place of
+  ``DFS_CURRENCY``. This new setting allows either a language code
+  ``str`` or a ``dict` of currency formatting conventions to be passed.
+  This is then used for subsequent currency formatting operations.
+
 0.14.0 (2020-Jun-07)
 ====================
 
