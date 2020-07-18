@@ -52,7 +52,7 @@ The following ``str`` values are available:
 * ``it_it`` (Itality, Italian)
 * ``pl_pl`` (Republic of Poland, Polish)
 * ``pt_br`` (Federative Republic of Brazil, Portuguese)
-* ``en_us`` (India, English)
+* ``en_in`` (India, English)
 
 Additional values can be added by submitting a pull request with the
 details added to the ``CURRENCY`` dictionary in the
