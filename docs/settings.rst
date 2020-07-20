@@ -52,6 +52,7 @@ The following ``str`` values are available:
 * ``it_it`` (Itality, Italian)
 * ``pl_pl`` (Republic of Poland, Polish)
 * ``pt_br`` (Federative Republic of Brazil, Portuguese)
+* ``en_in`` (India, English)
 
 Additional values can be added by submitting a pull request with the
 details added to the ``CURRENCY`` dictionary in the
@@ -61,7 +62,7 @@ To specify a custom format, you can specify the following details
 in a dictionary:
 
 * ``currency_symbol`` (``str``): The symbol used for this currency.
-* ``int_currency_symbol (``str``): The symbol used for this currency
+* ``int_currency_symbol`` (``str``): The symbol used for this currency
   for international formatting.
 * ``p_cs_precedes`` (``bool``): Whether the currency symbol precedes
   positive values.
