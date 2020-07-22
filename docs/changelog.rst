@@ -6,13 +6,17 @@ Changelog
 Version 0 (Beta)
 ----------------
 
-0.15.0 (YYYY-MMM-DD)
+0.15.0 (2020-Jul-22)
 ====================
+
+Feature Updates
+---------------
 
 * ``DFS_CURRENCY_LOCALE`` setting being deprecated in place of
   ``DFS_CURRENCY``. This new setting allows either a language code
   ``str`` or a ``dict` of currency formatting conventions to be passed.
   This is then used for subsequent currency formatting operations.
+* Adding currency support for India (INR).
 
 0.14.0 (2020-Jun-07)
 ====================
@@ -30,7 +34,7 @@ Feature Updates
 Feature Updates
 ---------------
 
-* Adding currency support for Brazil (BRL)
+* Adding currency support for Brazil (BRL).
 
 0.12.1 (2020-May-07)
 ====================
@@ -48,9 +52,9 @@ Bug Fixes
 Feature Updates
 ---------------
 
-* Adding currency support for France (EUR)
-* Adding currency support for Italy (EUR)
-* Adding currency support for Swiss Franc (CHF)
+* Adding currency support for France (EUR).
+* Adding currency support for Italy (EUR).
+* Adding currency support for Swiss Franc (CHF).
 
 0.11.1 (2020-Apr-15)
 ====================
