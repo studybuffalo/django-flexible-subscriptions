@@ -338,7 +338,7 @@ class SubscriptionListView(PermissionRequiredMixin, abstract.ListView):
     permission_required = 'subscriptions.subscriptions'
     raise_exception = True
     context_object_name = 'users'
-    queryset = model.objects.all().exclude(subscriptions=None).order_by('username')
+    queryset = model.objects.all().exclude(subscriptions=None)
     paginate_by = 100
     template_name = 'subscriptions/subscription_list.html'
 
