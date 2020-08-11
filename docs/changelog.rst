@@ -6,6 +6,15 @@ Changelog
 Version 0 (Beta)
 ----------------
 
+0.15.1 (2020-Aug-10)
+====================
+
+Bug Fixes
+---------
+
+* Removing ``order_by`` command from the ``SubscriptionListView`` to
+  prevent errors with customized user models.
+
 0.15.0 (2020-Jul-22)
 ====================
 
