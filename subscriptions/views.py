@@ -90,7 +90,7 @@ class TagDeleteView(PermissionRequiredMixin, abstract.DeleteView):
     def delete(self, request, *args, **kwargs):
         """Override delete to allow success message to be added."""
         messages.success(self.request, self.success_message)
-        return super(TagDeleteView, self).delete(request, *args, **kwargs)
+        return super().delete(request, *args, **kwargs)
 
 
 # Subscription Plan Views
@@ -327,7 +327,7 @@ class PlanDeleteView(PermissionRequiredMixin, abstract.DeleteView):
     def delete(self, request, *args, **kwargs):
         """Override delete to allow success message to be added."""
         messages.success(self.request, self.success_message)
-        return super(PlanDeleteView, self).delete(request, *args, **kwargs)
+        return super().delete(request, *args, **kwargs)
 
 
 # User Subscription Views
@@ -396,7 +396,7 @@ class SubscriptionDeleteView(PermissionRequiredMixin, abstract.DeleteView):
     def delete(self, request, *args, **kwargs):
         """Override delete to allow success message to be added."""
         messages.success(self.request, self.success_message)
-        return super(SubscriptionDeleteView, self).delete(
+        return super().delete(
             request, *args, **kwargs
         )
 
@@ -484,7 +484,7 @@ class PlanListDeleteView(PermissionRequiredMixin, abstract.DeleteView):
     def delete(self, request, *args, **kwargs):
         """Override delete to allow success message to be added."""
         messages.success(self.request, self.success_message)
-        return super(PlanListDeleteView, self).delete(request, *args, **kwargs)
+        return super().delete(request, *args, **kwargs)
 
 
 # PlanListDetail Views
@@ -590,7 +590,7 @@ class PlanListDetailDeleteView(PermissionRequiredMixin, abstract.DeleteView):
     def delete(self, request, *args, **kwargs):
         """Override delete to allow success message to be added."""
         messages.success(self.request, self.success_message)
-        return super(PlanListDetailDeleteView, self).delete(
+        return super().delete(
             request, *args, **kwargs
         )
 
@@ -684,7 +684,7 @@ class SubscribeView(LoginRequiredMixin, abstract.TemplateView):
 
     def get_context_data(self, **kwargs):
         """Overriding get_context_data to add additional context."""
-        context = super(SubscribeView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         # Whether this is a preview or confirmation step
         context['confirmation'] = self.confirmation
@@ -953,7 +953,7 @@ class SubscribeThankYouView(LoginRequiredMixin, abstract.TemplateView):
 
     def get_context_data(self, **kwargs):
         """Overriding get_context_data to add additional context."""
-        context = super(SubscribeThankYouView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         # Adds the context object
         context[self.context_object_name] = self.get_object()

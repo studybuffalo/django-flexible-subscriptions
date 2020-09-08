@@ -17,7 +17,7 @@ class TemplateView(generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         """Overriding get_context_data to add additional context."""
-        context = super(TemplateView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         # Provides the base template to extend from
         context['template_extends'] = self.template_extends
@@ -36,7 +36,7 @@ class ListView(generic.ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):  # pylint: disable=unused-argument
         """Overriding get_context_data to add additional context."""
-        context = super(ListView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         # Provides the base template to extend from
         context['template_extends'] = self.template_extends
@@ -55,7 +55,7 @@ class DetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         """Overriding get_context_data to add additional context."""
-        context = super(DetailView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         # Provides the base template to extend from
         context['template_extends'] = self.template_extends
@@ -74,7 +74,7 @@ class CreateView(generic.CreateView):
 
     def get_context_data(self, **kwargs):
         """Overriding get_context_data to add additional context."""
-        context = super(CreateView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         # Provides the base template to extend from
         context['template_extends'] = self.template_extends
@@ -93,7 +93,7 @@ class UpdateView(generic.UpdateView):
 
     def get_context_data(self, **kwargs):
         """Overriding get_context_data to add additional context."""
-        context = super(UpdateView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         # Provides the base template to extend from
         context['template_extends'] = self.template_extends
@@ -112,7 +112,7 @@ class DeleteView(generic.DeleteView):
 
     def get_context_data(self, **kwargs):
         """Overriding get_context_data to add additional context."""
-        context = super(DeleteView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         # Provides the base template to extend from
         context['template_extends'] = self.template_extends
