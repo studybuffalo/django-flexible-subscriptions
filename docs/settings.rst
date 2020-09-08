@@ -53,6 +53,7 @@ The following ``str`` values are available:
 * ``pl_pl`` (Republic of Poland, Polish)
 * ``pt_br`` (Federative Republic of Brazil, Portuguese)
 * ``en_in`` (India, English)
+* ``en_ph`` (Philippines, English)
 
 Additional values can be added by submitting a pull request with the
 details added to the ``CURRENCY`` dictionary in the
