@@ -156,7 +156,7 @@ class SubscriptionPlanCostForm(forms.Form):
             )
             PLAN_COST_CHOICES.append((cost.id, radio_text))
 
-        super(SubscriptionPlanCostForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         # Update the radio widget with proper choices
         self.fields['plan_cost'].widget.choices = PLAN_COST_CHOICES
@@ -168,7 +168,7 @@ class SubscriptionPlanCostForm(forms.Form):
         """Validates that UUID is valid and returns model instance."""
         try:
             data = PlanCost.objects.get(id=self.cleaned_data['plan_cost'])
-        except PlanCost.DoesNotExist:
-            raise forms.ValidationError('Invalid plan cost submitted.')
+        except PlanCost.DoesNotExist as error:
+            raise forms.ValidationError('Invalid plan cost submitted.') from error
 
         return data
