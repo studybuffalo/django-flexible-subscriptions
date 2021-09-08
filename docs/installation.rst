@@ -26,7 +26,7 @@ Add django-flexible-subscriptions to your project
 1. Update ``django-flexible-subscriptions`` to your settings file.
    While not mandatory, it is very likely you will also want to include
    the ``django.contrib.auth`` and ``django.contrib.admin`` apps
-   as well (see Understanding a Description Plan for details).
+   as well (see Understanding a Subscription Plan for details).
 
 .. code-block:: python
 
