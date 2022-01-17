@@ -117,7 +117,7 @@ how it functions:
 * **Group**: The ``Group`` model(s) associated to this plan.
 * **Tag**: Custom tags associated with this plan. Can be used to
   organize or categorize related plans.
-* **Grade period**: The number of days a subscription will remain
+* **Grace period**: The number of days a subscription will remain
   active for a user after a plan ends (e.g. due to non-payment).
 * **Plan cost**: Describes the pricing details of the plan.
 
@@ -131,7 +131,7 @@ following details:
 * **Recurrence period**: How often the plan is billed per recurrence
   unit.
 * **Recurrence unit**: The unit of measurement for the recurrence
-  period. ``one-time``, ``second``, ``minute``, ``hour``, ``day``,
+  period. ``once``, ``second``, ``minute``, ``hour``, ``day``,
   ``week``, ``month``, and ``year`` are supported.
 * **Cost**: The amount to charge at each recurrence period.
 
@@ -162,21 +162,21 @@ Understanding a Subscription Plan List
 Django Flexible Subscriptions provides basic support to add a
 "Subscribe" page to your site to allow users to select a subscription
 plan. The plans listed on this page are controlled by the ``PlanList``
-model. The ``PlanList`` model includes the following details:
+model. The ``PlanList`` model includes the following properties:
 
-* **Title**: A title to display on the page (may include HTML content).
-* **Subttile**: A subtitle to display on the page (may include HTML
+* **title**: A title to display on the page (may include HTML content).
+* **subtitle**: A subtitle to display on the page (may include HTML
   content).
-* **Header**: Content to display before the subscription plans are
+* **header**: Content to display before the subscription plans are
   listed (may include HTML content).
-* **Header**: Content to display after the subscription plans are
+* **footer**: Content to display after the subscription plans are
   listed (may include HTML content).
-* **Active**: Whether this list is active or not.
+* **active**: Whether this list is active or not.
 
 .. note::
 
     The first active ``PlanList`` instance is used to populate the
-    subscribe page. You will need to inactivate or delete older
+    subscribe page. You will need to deactivate or delete older
     ``PlanList`` instances if you want a newer one to be used.
 
 Once a ``PlanList`` is created, you will be able to associate ``Plan``
