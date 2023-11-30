@@ -231,6 +231,23 @@ CURRENCY = {
         'p_sign_posn': SIGN_PRECEDE_VALUE,
         'n_sign_posn': SIGN_PARANTHESES,
     },
+    'no_no': {
+        'currency_symbol': 'kr ',
+        'int_curr_symbol': 'NOK',
+        'p_cs_precedes': True,
+        'n_cs_precedes': True,
+        'p_sep_by_space': False,
+        'n_sep_by_space': False,
+        'mon_decimal_point': ',',
+        'mon_thousands_sep': ' ',
+        'mon_grouping': 3,
+        'frac_digits': 2,
+        'int_frac_digits': 2,
+        'positive_sign': '',
+        'negative_sign': '-',
+        'p_sign_posn': SIGN_PRECEDE_VALUE,
+        'n_sign_posn': SIGN_PARANTHESES,
+    },
 }
 
 
