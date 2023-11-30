@@ -2,7 +2,7 @@
 from datetime import timedelta
 from uuid import uuid4
 
-from django.contrib.auth import get_user_model
+from django.conf import settings
 from django.contrib.auth.models import Group
 from django.core.validators import MinValueValidator
 from django.db import models
@@ -244,7 +244,7 @@ class UserSubscription(models.Model):
         verbose_name='ID',
     )
     user = models.ForeignKey(
-        get_user_model(),
+        settings.AUTH_USER_MODEL,
         help_text=_('the user this subscription applies to'),
         null=True,
         on_delete=models.CASCADE,
@@ -303,7 +303,7 @@ class SubscriptionTransaction(models.Model):
         verbose_name='ID',
     )
     user = models.ForeignKey(
-        get_user_model(),
+        settings.AUTH_USER_MODEL,
         help_text=_('the user that this subscription was billed for'),
         null=True,
         on_delete=models.SET_NULL,

@@ -54,6 +54,7 @@ The following ``str`` values are available:
 * ``pt_br`` (Federative Republic of Brazil, Portuguese)
 * ``en_in`` (India, English)
 * ``en_ph`` (Philippines, English)
+* ``no_no`` (Norway, Norwegian)
 
 Additional values can be added by submitting a pull request with the
 details added to the ``CURRENCY`` dictionary in the
